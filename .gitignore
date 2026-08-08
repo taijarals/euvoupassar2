@@ -49,3 +49,7 @@ Thumbs.db
 .local/
 data/*.db-wal
 data/*.db-shm
+
+# Databases
+sqlite.db
+*.db
