@@ -9,8 +9,8 @@ async function seed() {
   console.log('Checking for existing data...');
   const existingWeeks = await db.select().from(weeks);
   
-  if (existingWeeks.length === 0) {
-    console.log('Seeding initial data...');
+  if (!existingWeeks.some(w => w.number === 1)) {
+    console.log('Seeding Week 1...');
     
     // Create Week 1
     const insertedWeek = await db.insert(weeks).values({
@@ -111,7 +111,106 @@ async function seed() {
       { goalId: meta11[0].id, type: 'tarefa', description: 'Revisar Raciocínio Lógico' },
     ]);
     
-    console.log('Seed completed successfully!');
+    console.log('Week 1 seed completed successfully!');
+  }
+
+  if (!existingWeeks.some(w => w.number === 2)) {
+    console.log('Seeding Week 2...');
+    
+    // Create Week 2
+    const insertedWeek = await db.insert(weeks).values({
+      number: 2,
+      title: 'Semana 2'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    // Meta 1
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Língua Portuguesa', subject: 'Tipologias e Gêneros Textuais', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/wILK0p3Ni94%3D' },
+      { goalId: meta1[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/imtZcoCDYN0%3D' },
+      { goalId: meta1[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403702&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 2
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Direito Tributário', subject: 'Interpretação, Integração e Aplicação da Legislação Tributária', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/UNazm6MRBOc%3D' },
+      { goalId: meta2[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/ySeqLvk5bZ4%3D' },
+      { goalId: meta2[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=417848&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 3
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Contabilidade Geral', subject: 'Escrituração', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/Coo4wULrDLA%3D' },
+      { goalId: meta3[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/zvz8%2F66BXMo%3D' },
+      { goalId: meta3[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=416842%2C4327%2C4322%2C416805%2C104&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 4
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Direito Constitucional', subject: 'Direitos e Garantias Fundamentais – Parte I', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ey%2BIc25pgUg%3D' },
+      { goalId: meta4[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/%2Fpf4%2F6jyyoE%3D' },
+      { goalId: meta4[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=405217&qd=0&qa=0&q=&auth=force&auth=force' },
+    ]);
+
+    // Meta 5
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Tecnologia da Informação', subject: 'ITIL 4 – Parte II', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/chQx7r%2FgKkU%3D' },
+      { goalId: meta5[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/oh6a95TJMaw%3D' },
+      { goalId: meta5[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=432718&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 6
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Direito Administrativo', subject: 'Poderes Administrativos', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/1JZ5wXuaJsk%3D' },
+      { goalId: meta6[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/H8t%2FZ%2BUyPso%3D' },
+      { goalId: meta6[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=407952&qd=0&qa=0&q=&auth=force&auth=force' },
+    ]);
+
+    // Meta 7
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Raciocínio Lógico', subject: 'Raciocínio Sequencial', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/fUp%2FImIRTe4%3D' },
+      { goalId: meta7[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/ITIRQnU9DMI%3D' },
+      { goalId: meta7[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=404276&desatualizada=0&anulada=0&auth=force&auth=force' },
+    ]);
+
+    // Meta 8
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Contabilidade Geral', subject: 'Fatos Contábeis e Respectivas Variações Patrimoniais', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/GPP34HGVg1M%3D' },
+      { goalId: meta8[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/HaioHMk3L2U%3D' },
+      { goalId: meta8[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=4303%2C104&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 9
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Direito Tributário', subject: 'Processo Administrativo Tributário', type: 'teoria' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/wjAIhXkJc10%3D' },
+      { goalId: meta9[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/hT3HVLkfeV8%3D' },
+      { goalId: meta9[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=407216&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 10
+    const meta10 = await db.insert(goals).values({ weekId, number: 10, discipline: 'Revisão Geral', subject: 'Todas as disciplinas da semana', type: 'revisao' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Língua Portuguesa' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Tributário' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Contabilidade Geral' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Constitucional' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Tecnologia da Informação' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Administrativo' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Raciocínio Lógico' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Contabilidade Geral' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Tributário' },
+    ]);
+    
+    console.log('Week 2 seed completed successfully!');
   } else {
     console.log('Database already contains data, skipping seed.');
   }
