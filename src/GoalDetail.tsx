@@ -187,7 +187,7 @@ export default function GoalDetail() {
         {goal.studyTip && (
           <div className="mb-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 text-blue-800">
             <BookOpen className="w-5 h-5 flex-shrink-0 text-blue-500 mt-0.5" />
-            <div className="text-sm">
+            <div className="text-sm whitespace-pre-wrap">
               <span className="font-semibold block mb-1">Dica de Estudo</span>
               {goal.studyTip}
             </div>

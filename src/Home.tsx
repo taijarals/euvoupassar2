@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'wouter';
-import { Plus, ChevronRight, Video, FileText, CheckCircle2, Target, ExternalLink, CalendarDays, CheckSquare } from 'lucide-react';
+import { Plus, ChevronRight, Video, FileText, CheckCircle2, Target, ExternalLink, CalendarDays, CheckSquare, ChevronDown, ChevronUp } from 'lucide-react';
 
 type Material = {
   id: number;
@@ -32,6 +32,8 @@ type Week = {
 
 export default function Home() {
   const queryClient = useQueryClient();
+  const [expandedWeeks, setExpandedWeeks] = useState<Record<number, boolean>>({});
+  const [initialized, setInitialized] = useState(false);
 
   const { data: weeks, isLoading } = useQuery<Week[]>({
     queryKey: ['weeks'],
@@ -50,6 +52,24 @@ export default function Home() {
       return res.json();
     }
   });
+
+  React.useEffect(() => {
+    if (weeks && weeks.length > 0 && !initialized) {
+      let activeWeekId = weeks[weeks.length - 1].id; // fallback to last week
+      
+      for (const week of weeks) {
+        const totalMat = week.goals.reduce((acc, g) => acc + g.materials.length, 0);
+        const compMat = week.goals.reduce((acc, g) => acc + g.materials.filter(m => m.completed).length, 0);
+        if (totalMat === 0 || compMat < totalMat) {
+          activeWeekId = week.id;
+          break;
+        }
+      }
+      
+      setExpandedWeeks({ [activeWeekId]: true });
+      setInitialized(true);
+    }
+  }, [weeks, initialized]);
 
   if (isLoading) {
     return <div className="animate-pulse space-y-4">
@@ -168,65 +188,109 @@ export default function Home() {
           <h2 className="text-xl font-bold text-slate-800">Plano de Estudos</h2>
         </div>
 
-        {weeks?.map(week => (
-          <div key={week.id} className="mb-10">
-            <h3 className="text-lg font-bold text-slate-700 flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
-              <CalendarDays className="w-5 h-5 text-emerald-600" />
-              Semana {week.number} - {week.title}
-            </h3>
-            
-            <div className="space-y-3">
-              {week.goals.map(goal => {
-                const totalMat = goal.materials.length;
-                const completedMat = goal.materials.filter(m => m.completed).length;
-                const progress = totalMat > 0 ? Math.round((completedMat / totalMat) * 100) : 0;
-                
-                return (
-                  <Link href={`/metas/${goal.id}`} key={goal.id}>
-                    <div className="group bg-white border border-slate-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-md transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start sm:items-center gap-3">
-                          {progress === 100 ? (
-                            <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5 sm:mt-0" />
-                          ) : (
-                            <div className="w-5 h-5 flex-shrink-0 mt-0.5 sm:mt-0 flex items-center justify-center bg-slate-100 rounded-full text-xs font-bold text-slate-500">
-                              {goal.number}
-                            </div>
-                          )}
-                          <div>
-                            <h4 className={`font-semibold text-base sm:text-lg ${progress === 100 ? 'text-slate-500 line-through' : 'text-slate-800 group-hover:text-emerald-700'}`}>
-                              {goal.discipline}
-                            </h4>
-                            <p className="text-slate-500 text-sm mt-0.5 line-clamp-1">
-                              {goal.type === 'revisao' ? <span className="bg-amber-100 text-amber-800 text-[10px] uppercase font-bold px-1.5 py-0.5 rounded mr-2">Revisão</span> : null}
-                              {goal.subject}
-                            </p>
-                          </div>
-                        </div>
+        <div className="space-y-4">
+          {weeks?.map(week => {
+            const totalWeekMaterials = week.goals.reduce((acc, g) => acc + g.materials.length, 0);
+            const completedWeekMaterials = week.goals.reduce((acc, g) => acc + g.materials.filter(m => m.completed).length, 0);
+            const weekProgress = totalWeekMaterials > 0 ? Math.round((completedWeekMaterials / totalWeekMaterials) * 100) : 0;
+            const isExpanded = !!expandedWeeks[week.id];
+
+            return (
+              <div key={week.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <button 
+                  onClick={() => setExpandedWeeks(prev => ({ ...prev, [week.id]: !prev[week.id] }))}
+                  className="w-full px-4 sm:px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg flex-shrink-0 ${weekProgress === 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>
+                      <CalendarDays className="w-5 h-5" />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-800">Semana {week.number} - {week.title}</h3>
+                      <p className="text-xs sm:text-sm text-slate-500">
+                        {completedWeekMaterials}/{totalWeekMaterials} materiais concluídos
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4 sm:gap-6">
+                    <div className="hidden sm:block w-32">
+                      <div className="flex justify-between text-xs font-medium mb-1">
+                        <span className={weekProgress === 100 ? 'text-emerald-600' : 'text-slate-700'}>{weekProgress}%</span>
                       </div>
-                      
-                      <div className="flex items-center gap-6 sm:w-48 justify-between sm:justify-end pl-8 sm:pl-0">
-                        <div className="flex-1">
-                          <div className="flex justify-between text-xs font-medium mb-1">
-                            <span className="text-slate-500">{completedMat}/{totalMat}</span>
-                            <span className={progress === 100 ? 'text-emerald-600' : 'text-slate-700'}>{progress}%</span>
-                          </div>
-                          <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                            <div 
-                              className={`h-full rounded-full ${progress === 100 ? 'bg-emerald-500' : 'bg-emerald-400'}`}
-                              style={{ width: `${progress}%` }}
-                            />
-                          </div>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition-colors hidden sm:block" />
+                      <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${weekProgress === 100 ? 'bg-emerald-500' : 'bg-emerald-400'}`}
+                          style={{ width: `${weekProgress}%` }}
+                        />
                       </div>
                     </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+                    {isExpanded ? (
+                      <ChevronUp className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-slate-400 flex-shrink-0" />
+                    )}
+                  </div>
+                </button>
+                
+                {isExpanded && (
+                  <div className="p-4 sm:p-6 pt-2 border-t border-slate-100 bg-slate-50/50">
+                    <div className="space-y-3">
+                      {week.goals.map(goal => {
+                        const totalMat = goal.materials.length;
+                        const completedMat = goal.materials.filter(m => m.completed).length;
+                        const progress = totalMat > 0 ? Math.round((completedMat / totalMat) * 100) : 0;
+                        
+                        return (
+                          <Link href={`/metas/${goal.id}`} key={goal.id}>
+                            <div className="group bg-white border border-slate-200 rounded-xl p-4 hover:border-emerald-300 hover:shadow-md transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-start sm:items-center gap-3">
+                                  {progress === 100 ? (
+                                    <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5 sm:mt-0" />
+                                  ) : (
+                                    <div className="w-5 h-5 flex-shrink-0 mt-0.5 sm:mt-0 flex items-center justify-center bg-slate-100 rounded-full text-xs font-bold text-slate-500">
+                                      {goal.number}
+                                    </div>
+                                  )}
+                                  <div>
+                                    <h4 className={`font-semibold text-base sm:text-lg ${progress === 100 ? 'text-slate-500 line-through' : 'text-slate-800 group-hover:text-emerald-700'}`}>
+                                      {goal.discipline}
+                                    </h4>
+                                    <p className="text-slate-500 text-sm mt-0.5 line-clamp-1">
+                                      {goal.type === 'revisao' ? <span className="bg-amber-100 text-amber-800 text-[10px] uppercase font-bold px-1.5 py-0.5 rounded mr-2">Revisão</span> : null}
+                                      {goal.subject}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center gap-6 sm:w-48 justify-between sm:justify-end pl-8 sm:pl-0">
+                                <div className="flex-1">
+                                  <div className="flex justify-between text-xs font-medium mb-1">
+                                    <span className="text-slate-500">{completedMat}/{totalMat}</span>
+                                    <span className={progress === 100 ? 'text-emerald-600' : 'text-slate-700'}>{progress}%</span>
+                                  </div>
+                                  <div className="bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                    <div 
+                                      className={`h-full rounded-full ${progress === 100 ? 'bg-emerald-500' : 'bg-emerald-400'}`}
+                                      style={{ width: `${progress}%` }}
+                                    />
+                                  </div>
+                                </div>
+                                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-emerald-500 transition-colors hidden sm:block" />
+                              </div>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
 
         {weeks?.length === 0 && (
           <div className="text-center py-12 bg-white border border-dashed border-slate-300 rounded-2xl">
