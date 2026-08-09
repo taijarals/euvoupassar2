@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useRoute, useLocation } from 'wouter';
-import { ChevronLeft, Plus, ExternalLink, Video, FileText, CheckSquare, Square, Trash2, PenLine, BookOpen } from 'lucide-react';
+import { ChevronLeft, Plus, ExternalLink, Video, FileText, CheckSquare, Square, Trash2, PenLine, BookOpen, X, Sparkles } from 'lucide-react';
 import { format } from 'date-fns';
 
 type Material = {
@@ -30,6 +30,89 @@ type Goal = {
   };
 };
 
+type ResumoBlock = {
+  title?: string;
+  content: string;
+};
+
+type ParsedTip = {
+  dicas: string[];
+  resumoBlocks: ResumoBlock[];
+  rawFallback?: string;
+};
+
+function parseStudyTip(text?: string): ParsedTip {
+  if (!text || !text.trim()) {
+    return { dicas: [], resumoBlocks: [] };
+  }
+
+  const trimmed = text.trim();
+  const resumoMarkerRegex = /Resumo(?:\s+do\s+conteúdo)?:/i;
+  const dicasMarkerRegex = /Dicas?:/i;
+
+  const dicasMatch = trimmed.match(dicasMarkerRegex);
+  const resumoMatch = trimmed.match(resumoMarkerRegex);
+
+  let dicasText = '';
+  let resumoText = '';
+
+  if (dicasMatch && resumoMatch) {
+    if (dicasMatch.index! < resumoMatch.index!) {
+      dicasText = trimmed.substring(dicasMatch.index! + dicasMatch[0].length, resumoMatch.index!).trim();
+      resumoText = trimmed.substring(resumoMatch.index! + resumoMatch[0].length).trim();
+    } else {
+      resumoText = trimmed.substring(resumoMatch.index! + resumoMatch[0].length, dicasMatch.index!).trim();
+      dicasText = trimmed.substring(dicasMatch.index! + dicasMatch[0].length).trim();
+    }
+  } else if (dicasMatch) {
+    dicasText = trimmed.substring(dicasMatch.index! + dicasMatch[0].length).trim();
+  } else if (resumoMatch) {
+    resumoText = trimmed.substring(resumoMatch.index! + resumoMatch[0].length).trim();
+  } else {
+    return { dicas: [], resumoBlocks: [], rawFallback: trimmed };
+  }
+
+  const dicas = dicasText
+    .split(/\r?\n/)
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .map(line => line.replace(/^[\s\-\*\•\->\–\—]+/, '').trim())
+    .filter(line => line.length > 0);
+
+  const resumoLines = resumoText
+    .split(/\r?\n/)
+    .map(l => l.trim())
+    .filter(l => l.length > 0);
+
+  const resumoBlocks: ResumoBlock[] = [];
+  let currentBlock: ResumoBlock | null = null;
+
+  for (const line of resumoLines) {
+    const colonIndex = line.indexOf(':');
+    const isValidSubtitle =
+      colonIndex > 0 &&
+      colonIndex <= 70 &&
+      !line.substring(0, colonIndex).includes('http') &&
+      !line.substring(0, colonIndex).includes('//');
+
+    if (isValidSubtitle) {
+      const title = line.substring(0, colonIndex).trim();
+      const content = line.substring(colonIndex + 1).trim();
+      currentBlock = { title, content };
+      resumoBlocks.push(currentBlock);
+    } else {
+      if (currentBlock) {
+        currentBlock.content += (currentBlock.content ? '\n' : '') + line;
+      } else {
+        currentBlock = { content: line };
+        resumoBlocks.push(currentBlock);
+      }
+    }
+  }
+
+  return { dicas, resumoBlocks };
+}
+
 const TypeIcon = ({ type, className }: { type: string, className?: string }) => {
   switch (type) {
     case 'videoaula': return <Video className={className} />;
@@ -56,10 +139,23 @@ export default function GoalDetail() {
   const goalId = parseInt(params?.id || '0');
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showTipModal, setShowTipModal] = useState(false);
   const [editingMaterialId, setEditingMaterialId] = useState<number | null>(null);
   const [newMaterial, setNewMaterial] = useState<{description: string, type: Material['type'], link: string}>({ 
     description: '', type: 'videoaula', link: '' 
   });
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowTipModal(false);
+      }
+    };
+    if (showTipModal) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showTipModal]);
 
   const openAddMaterialModal = () => {
     setEditingMaterialId(null);
@@ -184,13 +280,16 @@ export default function GoalDetail() {
           </div>
         </div>
 
-        {goal.studyTip && (
-          <div className="mb-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 text-blue-800">
-            <BookOpen className="w-5 h-5 flex-shrink-0 text-blue-500 mt-0.5" />
-            <div className="text-sm whitespace-pre-wrap">
-              <span className="font-semibold block mb-1">Dica de Estudo</span>
-              {goal.studyTip}
-            </div>
+        {goal.studyTip && goal.studyTip.trim().length > 0 && (
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={() => setShowTipModal(true)}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-sm font-semibold transition-colors shadow-xs cursor-pointer"
+            >
+              <BookOpen className="w-4 h-4 text-blue-600 flex-shrink-0" />
+              <span>Ver dica de estudo</span>
+            </button>
           </div>
         )}
 
@@ -371,6 +470,108 @@ export default function GoalDetail() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Study Tip Modal */}
+      {showTipModal && goal.studyTip && (
+        <div 
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setShowTipModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl w-full max-w-2xl sm:max-w-3xl shadow-2xl border border-slate-200 flex flex-col max-h-[85vh] overflow-hidden animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100/80 rounded-xl text-blue-700">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">Dica de Estudo</h3>
+                  <p className="text-xs text-slate-500 font-medium">{goal.discipline} — {goal.subject}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTipModal(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                title="Fechar"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content Body with internal scroll */}
+            {(() => {
+              const parsedTip = parseStudyTip(goal.studyTip);
+              return (
+                <div className="p-6 overflow-y-auto space-y-6 flex-1">
+                  {/* Section: Dicas */}
+                  {parsedTip.dicas.length > 0 && (
+                    <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-4 sm:p-5">
+                      <div className="flex items-center gap-2 mb-3 text-blue-900 font-bold text-base">
+                        <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                        <span>Dicas Práticas</span>
+                      </div>
+                      <ul className="space-y-2.5">
+                        {parsedTip.dicas.map((dica, idx) => (
+                          <li key={idx} className="flex items-start gap-3 text-sm text-blue-950 leading-relaxed">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
+                            <span className="flex-1">{dica}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Section: Resumo do Conteúdo */}
+                  {parsedTip.resumoBlocks.length > 0 && (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2 text-slate-800 font-bold text-base mb-1">
+                        <FileText className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                        <span>Resumo do Conteúdo</span>
+                      </div>
+                      <div className="grid gap-3">
+                        {parsedTip.resumoBlocks.map((block, idx) => (
+                          <div key={idx} className="bg-slate-50 border border-slate-200/80 rounded-xl p-4">
+                            {block.title && (
+                              <h4 className="font-bold text-slate-900 text-sm mb-1.5 flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block flex-shrink-0"></span>
+                                {block.title}
+                              </h4>
+                            )}
+                            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                              {block.content}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Fallback if no sections matched */}
+                  {parsedTip.rawFallback && (
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                      {parsedTip.rawFallback}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
+            {/* Modal Footer */}
+            <div className="px-6 py-3 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowTipModal(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-xl transition-colors cursor-pointer"
+              >
+                Fechar
+              </button>
+            </div>
           </div>
         </div>
       )}

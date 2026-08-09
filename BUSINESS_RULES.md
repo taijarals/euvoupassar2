@@ -39,11 +39,20 @@ Ao carregar a tela inicial, todas as semanas começam recolhidas, exceto uma, qu
 4. Esse cálculo roda **uma única vez** ao carregar os dados (não reavalia a cada clique) — se o usuário fechar a semana atual manualmente, ela não reabre sozinha na mesma sessão.
 5. O usuário pode expandir/recolher qualquer semana manualmente a qualquer momento, independente da lógica de auto-expand.
 
+## Filtro por disciplina
+
+A tela inicial tem um seletor de disciplina, com "Todas as disciplinas" como opção padrão.
+
+- Com "Todas as disciplinas" selecionada, a tela funciona no modo padrão (accordion por semana, com a semana atual aberta automaticamente — ver seção "Navegação e 'semana atual'").
+- Ao selecionar uma disciplina específica, a tela troca para uma lista plana com todas as metas daquela disciplina de todas as semanas juntas, ordenadas por número de semana crescente. O accordion por semana é substituído por essa lista enquanto o filtro estiver ativo.
+- É um filtro puramente de exibição: não altera, cria nem apaga nada no banco de dados.
+- As disciplinas listadas no seletor são extraídas dinamicamente das metas existentes (não é uma lista fixa) — uma disciplina só aparece no filtro se houver pelo menos uma meta cadastrada com ela.
+
 ## Campo `studyTip`
 
 - É opcional — nem toda meta precisa ter.
 - Quando presente, contém dois blocos: **Dicas** (pontos de atenção práticos) e **Resumo do conteúdo** (teoria resumida por subtópico), extraídos do PDF original "Guia do Aprovado" de cada semana.
-- É só leitura na interface — o usuário não edita a dica pela tela do app hoje (se quiser mudar, precisa editar via API/banco ou pedir ajuste ao Gemini).
+- É só leitura na interface — o usuário não edita a dica pela tela do app hoje (se quiser mudar, precisa editar via API/banco ou pedir ajuste ao Gemini). Na tela de detalhe da meta, o studyTip não fica visível por padrão: aparece um botão/chip "Ver dica de estudo" que abre um modal com o conteúdo, separando visualmente as seções "Dicas" e "Resumo do conteúdo" (identificadas pelos marcadores de texto salvos no banco).
 
 ## Escopo e não-objetivos (o que o app não faz de propósito)
 
