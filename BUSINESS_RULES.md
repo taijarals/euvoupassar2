@@ -65,7 +65,7 @@ A tela inicial tem um seletor de disciplina, com "Todas as disciplinas" como op�
 
 ## Módulo de Questões (revisão com IA)
 
-- Página separada (`/questoes`) com filtro por semana, meta e disciplina.
+- Página separada (`/questoes`) com filtros por semana, disciplina e assunto — o filtro de assunto é importante porque uma disciplina pode ter mais de um assunto na mesma semana, e restringe a geração a uma única meta/assunto por vez quando usado. Quando o filtro ainda cobre mais de uma meta, a geração é feita separadamente por meta (não num lote genérico misturando assuntos), para manter as questões focadas.
 - Toda questão pertence a uma meta (`goalId`) e tem uma origem (`source`):
   - `ia_nova`: questão original gerada pela IA, sem tentar imitar nenhuma banca.
   - `ia_estilo_concurso`: questão gerada pela IA **no estilo** de uma banca (CESPE/CEBRASPE, FGV ou FCC) — formato de alternativas e padrão de cobrança daquela banca, mas **nunca uma reprodução ou afirmação de ser uma questão real** de uma prova específica. Não tem concurso, ano ou cargo associado, porque não é uma questão real.

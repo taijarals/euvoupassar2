@@ -30,6 +30,7 @@ export default function Questions() {
   const queryClient = useQueryClient();
   const [selectedDiscipline, setSelectedDiscipline] = useState<string>('');
   const [selectedWeek, setSelectedWeek] = useState<number | ''>('');
+  const [selectedSubject, setSelectedSubject] = useState<string>('');
   
   // Generator state
   const [source, setSource] = useState<'ia_nova' | 'ia_estilo_concurso'>('ia_nova');
@@ -60,6 +61,7 @@ export default function Questions() {
       const params = new URLSearchParams();
       if (selectedDiscipline) params.append('discipline', selectedDiscipline);
       if (selectedWeek) params.append('weekId', selectedWeek.toString());
+      if (selectedSubject) params.append('subject', selectedSubject);
       const res = await fetch(`/api/questions/stats?${params.toString()}`);
       return res.json();
     }
@@ -92,6 +94,7 @@ export default function Questions() {
   const filteredQuestions = questions.filter(q => {
     if (selectedDiscipline && q.goal?.discipline !== selectedDiscipline) return false;
     if (selectedWeek && q.goal?.weekId !== selectedWeek) return false;
+    if (selectedSubject && q.goal?.subject !== selectedSubject) return false;
     return true;
   }).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
@@ -118,10 +121,18 @@ export default function Questions() {
   const filteredGoals = goals.filter((g: any) => {
     if (selectedDiscipline && g.discipline !== selectedDiscipline) return false;
     if (selectedWeek && g.weekId !== selectedWeek) return false;
+    if (selectedSubject && g.subject !== selectedSubject) return false;
     return true;
   });
 
   const disciplines = Array.from(new Set(goals.map((g: any) => g.discipline))).sort();
+  
+  const goalsForSubjects = goals.filter((g: any) => {
+    if (selectedDiscipline && g.discipline !== selectedDiscipline) return false;
+    if (selectedWeek && g.weekId !== selectedWeek) return false;
+    return true;
+  });
+  const subjects = Array.from(new Set(goalsForSubjects.map((g: any) => g.subject))).sort() as string[];
 
   const handleGenerate = () => {
     const goalIds = filteredGoals.map((g: any) => g.id);
@@ -143,11 +154,14 @@ export default function Questions() {
 
       {/* Filters */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap gap-4 items-end shadow-xs">
-        <div className="space-y-1.5 flex-1 min-w-[200px]">
+        <div className="space-y-1.5 flex-1 min-w-[150px]">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Semana</label>
           <select 
             value={selectedWeek} 
-            onChange={e => setSelectedWeek(e.target.value ? Number(e.target.value) : '')}
+            onChange={e => {
+              setSelectedWeek(e.target.value ? Number(e.target.value) : '');
+              setSelectedSubject(''); // reset subject when week changes
+            }}
             className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
           >
             <option value="">Todas as Semanas</option>
@@ -157,16 +171,33 @@ export default function Questions() {
           </select>
         </div>
         
-        <div className="space-y-1.5 flex-1 min-w-[200px]">
+        <div className="space-y-1.5 flex-1 min-w-[150px]">
           <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Disciplina</label>
           <select 
             value={selectedDiscipline} 
-            onChange={e => setSelectedDiscipline(e.target.value)}
+            onChange={e => {
+              setSelectedDiscipline(e.target.value);
+              setSelectedSubject(''); // reset subject when discipline changes
+            }}
             className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
           >
             <option value="">Todas as Disciplinas</option>
             {disciplines.map((d: any) => (
               <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-1.5 flex-1 min-w-[150px]">
+          <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Assunto</label>
+          <select 
+            value={selectedSubject} 
+            onChange={e => setSelectedSubject(e.target.value)}
+            className="w-full h-10 px-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+          >
+            <option value="">Todos os Assuntos</option>
+            {subjects.map(s => (
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
@@ -242,7 +273,7 @@ export default function Questions() {
                   )}
                 </button>
                 <p className="text-center text-xs text-slate-400 mt-3 px-2">
-                  Usa os filtros ativos ({filteredGoals.length} assuntos) para gerar.
+                  Baseado nos filtros ativos ({filteredGoals.length} meta(s)/assunto(s)).
                 </p>
               </div>
             </div>

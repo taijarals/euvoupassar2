@@ -256,22 +256,31 @@ async function createServer() {
         return res.status(400).json({ error: 'Metas não encontradas' });
       }
 
-      const promptData = selectedGoals.map(g => `${g.discipline} - ${g.subject}`).join('; ');
+      const aiClient = getAiClient();
+      const savedQuestions = [];
+      let remainingQuantity = quantity;
       
-      let prompt = `Crie ${quantity} questões objetivas sobre os seguintes assuntos, focadas no que é cobrado no concurso SEFAZ-BA (Auditor Fiscal):\nAssuntos: ${promptData}\n\n`;
-      
-      if (source === 'ia_estilo_concurso' && banca) {
-        prompt += `As questões DEVEM ser inspiradas no estilo e padrão de cobrança da banca ${banca}. IMPORTANTE: NÃO afirme, não sugira e não inclua textos indicando que são questões reais de provas passadas. São questões INÉDITAS criadas agora, apenas imitando o estilo da banca ${banca}.\n`;
-        if (banca === 'CESPE/CEBRASPE') {
-          prompt += `No estilo CESPE/CEBRASPE, cada questão deve ter exatamente duas alternativas: "Certo" e "Errado".\n`;
+      for (let i = 0; i < selectedGoals.length; i++) {
+        const goal = selectedGoals[i];
+        
+        const qForThisGoal = Math.ceil(remainingQuantity / (selectedGoals.length - i));
+        
+        if (qForThisGoal <= 0) break;
+        
+        let prompt = `Crie ${qForThisGoal} questões objetivas sobre o seguinte assunto, focadas no que é cobrado no concurso SEFAZ-BA (Auditor Fiscal):\nDisciplina: ${goal.discipline}\nAssunto: ${goal.subject}\n\n`;
+        
+        if (source === 'ia_estilo_concurso' && banca) {
+          prompt += `As questões DEVEM ser inspiradas no estilo e padrão de cobrança da banca ${banca}. IMPORTANTE: NÃO afirme, não sugira e não inclua textos indicando que são questões reais de provas passadas. São questões INÉDITAS criadas agora, apenas imitando o estilo da banca ${banca}.\n`;
+          if (banca === 'CESPE/CEBRASPE') {
+            prompt += `No estilo CESPE/CEBRASPE, cada questão deve ter exatamente duas alternativas: "Certo" e "Errado".\n`;
+          } else {
+            prompt += `No estilo ${banca}, cada questão deve ter 5 alternativas (A, B, C, D, E).\n`;
+          }
         } else {
-          prompt += `No estilo ${banca}, cada questão deve ter 5 alternativas (A, B, C, D, E).\n`;
+          prompt += `Crie questões originais, com 5 alternativas (A, B, C, D, E).\n`;
         }
-      } else {
-        prompt += `Crie questões originais, com 5 alternativas (A, B, C, D, E).\n`;
-      }
 
-      prompt += `
+        prompt += `
 Para cada questão, forneça:
 1. O enunciado.
 2. As alternativas (array de strings).
@@ -289,45 +298,44 @@ Retorne APENAS um array JSON de objetos com esta exata estrutura:
 ]
 `;
 
-      const aiClient = getAiClient();
-      const response = await aiClient.models.generateContent({
-        model: 'gemini-3.6-flash',
-        contents: prompt,
-      });
+        const response = await aiClient.models.generateContent({
+          model: 'gemini-3.6-flash',
+          contents: prompt,
+        });
 
-      const responseText = response.text || '';
-      
-      const startIndex = responseText.indexOf('[');
-      const endIndex = responseText.lastIndexOf(']');
-      
-      if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
-         console.error('Failed to parse AI response as JSON:', responseText);
-         return res.status(500).json({ error: 'Erro ao analisar formato da resposta da IA', raw: responseText });
-      }
+        const responseText = response.text || '';
+        
+        const startIndex = responseText.indexOf('[');
+        const endIndex = responseText.lastIndexOf(']');
+        
+        if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
+           console.error('Failed to parse AI response as JSON:', responseText);
+           continue;
+        }
 
-      const jsonString = responseText.substring(startIndex, endIndex + 1);
-      let generatedQuestions;
-      try {
-        generatedQuestions = JSON.parse(jsonString);
-      } catch (parseError) {
-        console.error('JSON Parse error:', parseError, 'Raw string:', jsonString);
-        return res.status(500).json({ error: 'Erro ao analisar formato da resposta da IA' });
-      }
-      
-      const savedQuestions = [];
-      for (const q of generatedQuestions) {
-         // assign to a random goal from the selected ones to simplify, or the first one
-         const goalId = goalIds[Math.floor(Math.random() * goalIds.length)];
-         const result = await db.insert(questions).values({
-           goalId,
-           source,
-           banca: source === 'ia_estilo_concurso' ? banca : null,
-           statement: q.statement,
-           options: JSON.stringify(q.options),
-           correctIndex: q.correctIndex,
-           explanations: JSON.stringify(q.explanations)
-         }).returning();
-         savedQuestions.push(result[0]);
+        const jsonString = responseText.substring(startIndex, endIndex + 1);
+        let generatedQuestions;
+        try {
+          generatedQuestions = JSON.parse(jsonString);
+        } catch (parseError) {
+          console.error('JSON Parse error:', parseError, 'Raw string:', jsonString);
+          continue;
+        }
+        
+        for (const q of generatedQuestions) {
+           const result = await db.insert(questions).values({
+             goalId: goal.id,
+             source,
+             banca: source === 'ia_estilo_concurso' ? banca : null,
+             statement: q.statement,
+             options: JSON.stringify(q.options),
+             correctIndex: q.correctIndex,
+             explanations: JSON.stringify(q.explanations)
+           }).returning();
+           savedQuestions.push(result[0]);
+        }
+        
+        remainingQuantity -= qForThisGoal;
       }
       
       res.json(savedQuestions);
