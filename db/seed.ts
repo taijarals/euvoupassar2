@@ -3,9 +3,6 @@ import { weeks, goals, materials } from './schema.js';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 
 async function seed() {
-  console.log('Running migrations...');
-  await migrate(db, { migrationsFolder: './drizzle' });
-  
   console.log('Checking for existing data...');
   const existingWeeks = await db.select().from(weeks);
   
