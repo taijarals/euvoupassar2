@@ -54,6 +54,15 @@ A tela inicial tem um seletor de disciplina, com "Todas as disciplinas" como op�
 - Quando presente, contém dois blocos: **Dicas** (pontos de atenção práticos) e **Resumo do conteúdo** (teoria resumida por subtópico), extraídos do PDF original "Guia do Aprovado" de cada semana.
 - É só leitura na interface — o usuário não edita a dica pela tela do app hoje (se quiser mudar, precisa editar via API/banco ou pedir ajuste ao Gemini). Na tela de detalhe da meta, o studyTip não fica visível por padrão: aparece um botão/chip "Ver dica de estudo" que abre um modal com o conteúdo, separando visualmente as seções "Dicas" e "Resumo do conteúdo" (identificadas pelos marcadores de texto salvos no banco).
 
+## Campo `aiSummary` (Resumo de IA)
+
+- É gerado dinamicamente pela API do Gemini (prompt server-side) a partir da disciplina e do assunto da meta.
+- O resumo foca no que costuma ser cobrado em concursos fiscais/SEFAZ, formatado de maneira objetiva e didática.
+- Não usa o conteúdo dos PDFs nem o `studyTip` como base, apenas a disciplina e o assunto.
+- Uma vez gerado, é salvo no banco de dados na coluna `aiSummary` da respectiva meta para não precisar chamar a IA novamente.
+- Na interface (tela de detalhe da meta), fica acessível através do botão "Resumo de IA", que abre um modal com um aviso de isenção (disclaimer) alertando que o conteúdo foi gerado por IA e pode conter imprecisões.
+- (Geralmente) não é necessário nem gerado para as metas do tipo "Revisão Geral".
+
 ## Escopo e não-objetivos (o que o app não faz de propósito)
 
 - **Sem autenticação/login.** É uma ferramenta de uso pessoal de uma única pessoa. Não adicionar sistema de contas a menos que explicitamente solicitado.

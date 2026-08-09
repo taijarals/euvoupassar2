@@ -14,6 +14,7 @@ export const goals = sqliteTable("goals", {
   subject: text("subject").notNull(),
   type: text("type").notNull(), // 'teoria', 'revisao'
   studyTip: text("study_tip"),
+  aiSummary: text("ai_summary"),
 });
 
 export const materials = sqliteTable("materials", {

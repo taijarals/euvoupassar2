@@ -22,6 +22,7 @@ type Goal = {
   subject: string;
   type: 'teoria' | 'revisao';
   studyTip?: string;
+  aiSummary?: string;
   materials: Material[];
   week: {
     id: number;
@@ -140,6 +141,7 @@ export default function GoalDetail() {
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showTipModal, setShowTipModal] = useState(false);
+  const [showAiSummaryModal, setShowAiSummaryModal] = useState(false);
   const [editingMaterialId, setEditingMaterialId] = useState<number | null>(null);
   const [newMaterial, setNewMaterial] = useState<{description: string, type: Material['type'], link: string}>({ 
     description: '', type: 'videoaula', link: '' 
@@ -149,13 +151,14 @@ export default function GoalDetail() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setShowTipModal(false);
+        setShowAiSummaryModal(false);
       }
     };
-    if (showTipModal) {
+    if (showTipModal || showAiSummaryModal) {
       window.addEventListener('keydown', handleKeyDown);
     }
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showTipModal]);
+  }, [showTipModal, showAiSummaryModal]);
 
   const openAddMaterialModal = () => {
     setEditingMaterialId(null);
@@ -230,6 +233,32 @@ export default function GoalDetail() {
     }
   });
 
+  const generateAiSummary = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/goals/${goalId}/ai-summary`, { method: 'POST' });
+      if (!res.ok) throw new Error('Falha ao gerar resumo');
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['goal', goalId] });
+    },
+    onError: (error) => {
+      alert('Houve um erro ao gerar o resumo. ' + error.message);
+    }
+  });
+
+  const handleOpenAiSummary = () => {
+    if (goal?.aiSummary) {
+      setShowAiSummaryModal(true);
+    } else {
+      generateAiSummary.mutate(undefined, {
+        onSuccess: () => {
+          setShowAiSummaryModal(true);
+        }
+      });
+    }
+  };
+
   if (isLoading) {
     return <div className="animate-pulse space-y-4">
       <div className="h-10 w-32 bg-slate-200 rounded"></div>
@@ -280,15 +309,27 @@ export default function GoalDetail() {
           </div>
         </div>
 
-        {goal.studyTip && goal.studyTip.trim().length > 0 && (
-          <div className="mb-6">
+        {(goal.studyTip && goal.studyTip.trim().length > 0 || goal.type !== 'revisao') && (
+          <div className="mb-6 flex flex-wrap gap-3">
+            {goal.studyTip && goal.studyTip.trim().length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowTipModal(true)}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-sm font-semibold transition-colors shadow-xs cursor-pointer"
+              >
+                <BookOpen className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                <span>Ver dica de estudo</span>
+              </button>
+            )}
+            
             <button
               type="button"
-              onClick={() => setShowTipModal(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-sm font-semibold transition-colors shadow-xs cursor-pointer"
+              onClick={handleOpenAiSummary}
+              disabled={generateAiSummary.isPending}
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-sm font-semibold transition-colors shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <BookOpen className="w-4 h-4 text-blue-600 flex-shrink-0" />
-              <span>Ver dica de estudo</span>
+              <Sparkles className="w-4 h-4 text-purple-600 flex-shrink-0" />
+              <span>{generateAiSummary.isPending ? 'Gerando...' : 'Resumo de IA'}</span>
             </button>
           </div>
         )}
@@ -567,6 +608,63 @@ export default function GoalDetail() {
               <button
                 type="button"
                 onClick={() => setShowTipModal(false)}
+                className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-xl transition-colors cursor-pointer"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Summary Modal */}
+      {showAiSummaryModal && goal.aiSummary && (
+        <div 
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setShowAiSummaryModal(false)}
+        >
+          <div 
+            className="bg-white rounded-2xl w-full max-w-2xl sm:max-w-3xl shadow-2xl border border-slate-200 flex flex-col max-h-[85vh] overflow-hidden animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100/80 rounded-xl text-purple-700">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900">Resumo de IA</h3>
+                  <p className="text-xs text-slate-500 font-medium">{goal.discipline} — {goal.subject}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAiSummaryModal(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                title="Fechar"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content Body with internal scroll */}
+            <div className="p-6 overflow-y-auto space-y-4 flex-1">
+              <div className="bg-purple-50/70 border border-purple-200/80 rounded-xl p-3 text-xs text-purple-800 flex items-start gap-2">
+                <Sparkles className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <p>Conteúdo gerado por IA — pode conter imprecisões. Sempre confira com o material oficial do curso.</p>
+              </div>
+              
+              <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
+                {goal.aiSummary}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-3 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setShowAiSummaryModal(false)}
                 className="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 Fechar

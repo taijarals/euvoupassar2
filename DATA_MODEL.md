@@ -19,6 +19,7 @@
 | subject    | text    | Assunto específico da meta                                          |
 | type       | text    | `"teoria"` ou `"revisao"`                                          |
 | studyTip   | text    | Texto livre com dica de estudo + resumo do conteúdo (opcional)     |
+| aiSummary  | text    | Resumo objetivo gerado por IA (Gemini) sobre o assunto (opcional)  |
 
 ### `materials` (materiais de estudo)
 | Coluna      | Tipo    | Descrição                                                         |
@@ -58,9 +59,10 @@ Esse campo é opcional e foi preenchido incrementalmente, semana a semana, via p
 | DELETE | `/api/weeks/:id`     | Remove uma semana (cascade em metas/materiais) |
 | GET    | `/api/goals/:id`     | Detalhe de uma meta específica                |
 | POST   | `/api/goals`         | Cria uma nova meta                            |
-| PUT    | `/api/goals/:id`     | Atualiza uma meta (incluindo `studyTip`)      |
-| DELETE | `/api/goals/:id`     | Remove uma meta                               |
-| POST   | `/api/materials`     | Cria um novo material                         |
+| PUT    | `/api/goals/:id`             | Atualiza uma meta (incluindo `studyTip`)      |
+| DELETE | `/api/goals/:id`             | Remove uma meta                               |
+| POST   | `/api/goals/:id/ai-summary`  | Gera ou retorna o resumo via Gemini API       |
+| POST   | `/api/materials`             | Cria um novo material                         |
 | PUT    | `/api/materials/:id` | Atualiza um material (ex: marcar `completed`) |
 | DELETE | `/api/materials/:id` | Remove um material                            |
 | GET    | `/api/stats`         | Estatísticas gerais de progresso              |

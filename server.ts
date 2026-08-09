@@ -6,9 +6,41 @@ import { eq } from 'drizzle-orm';
 import { createServer as createViteServer } from 'vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import * as fs from 'fs';
+import { GoogleGenAI } from '@google/genai';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Handle __dirname for both ESM and CJS
+let _dirname: string;
+if (typeof __dirname !== 'undefined') {
+  _dirname = __dirname;
+} else {
+  const _filename = fileURLToPath(import.meta.url);
+  _dirname = path.dirname(_filename);
+}
+
+// Lazy initialization of Gemini API client
+let ai: GoogleGenAI | null = null;
+function getAiClient() {
+  if (!ai) {
+    let key = process.env.GEMINI_API_KEY;
+    if (!key || key === 'MY_GEMINI_API_KEY' || key === 'undefined') {
+      try {
+        const envData = fs.readFileSync('/app/.dev.env.json', 'utf8');
+        const parsed = JSON.parse(envData);
+        if (parsed.GEMINI_API_KEY) {
+          key = parsed.GEMINI_API_KEY;
+        }
+      } catch (e) {
+        console.error('Failed to read .dev.env.json', e);
+      }
+    }
+    
+    ai = new GoogleGenAI({
+      apiKey: key,
+    });
+  }
+  return ai;
+}
 
 async function createServer() {
   const app = express();
@@ -79,6 +111,38 @@ async function createServer() {
       res.json({ ...goal, week: goalWeek, materials: goalMaterials });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao buscar meta' });
+    }
+  });
+
+  app.post('/api/goals/:id/ai-summary', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const goal = await db.select().from(goals).where(eq(goals.id, id)).get();
+      
+      if (!goal) {
+        return res.status(404).json({ error: 'Meta não encontrada' });
+      }
+
+      if (goal.aiSummary) {
+        return res.json({ aiSummary: goal.aiSummary });
+      }
+
+      const prompt = `Crie um resumo objetivo e didático sobre o seguinte assunto, focado no que costuma ser cobrado em concursos fiscais/SEFAZ. Escreva em português do Brasil, com no máximo 3 a 4 parágrafos curtos ou uma lista de pontos-chave.\n\nDisciplina: ${goal.discipline}\nAssunto: ${goal.subject}`;
+
+      const aiClient = getAiClient();
+      const response = await aiClient.models.generateContent({
+        model: 'gemini-3.6-flash',
+        contents: prompt,
+      });
+
+      const generatedSummary = response.text || '';
+      
+      await db.update(goals).set({ aiSummary: generatedSummary }).where(eq(goals.id, id));
+      
+      res.json({ aiSummary: generatedSummary });
+    } catch (error: any) {
+      console.error('Error generating AI summary:', error);
+      res.status(500).json({ error: 'Erro ao gerar resumo da IA', details: error.message });
     }
   });
 
@@ -201,9 +265,9 @@ async function createServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, 'dist')));
+    app.use(express.static(path.join(_dirname, 'dist')));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, 'dist/index.html'));
+      res.sendFile(path.join(_dirname, 'dist/index.html'));
     });
   }
 
