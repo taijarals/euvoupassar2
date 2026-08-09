@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import { db } from './db/index.js';
-import { weeks, goals, materials } from './db/schema.js';
-import { eq } from 'drizzle-orm';
+import { weeks, goals, materials, questions, questionAttempts } from './db/schema.js';
+import { eq, inArray } from 'drizzle-orm';
 import { createServer as createViteServer } from 'vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -212,6 +212,201 @@ async function createServer() {
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao excluir material' });
+    }
+  });
+
+  app.get('/api/questions', async (req, res) => {
+    try {
+      const allQuestions = await db.select().from(questions);
+      const allAttempts = await db.select().from(questionAttempts);
+      
+      const allGoals = await db.select().from(goals);
+      const allWeeks = await db.select().from(weeks);
+
+      const enrichedQuestions = allQuestions.map(q => {
+        const goal = allGoals.find(g => g.id === q.goalId);
+        const week = goal ? allWeeks.find(w => w.id === goal.weekId) : undefined;
+        return {
+          ...q,
+          options: JSON.parse(q.options),
+          explanations: JSON.parse(q.explanations),
+          attempts: allAttempts.filter(a => a.questionId === q.id),
+          goal,
+          week
+        };
+      });
+
+      res.json(enrichedQuestions);
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar questões' });
+    }
+  });
+
+  app.post('/api/questions/generate', async (req, res) => {
+    try {
+      const { goalIds, source, banca, quantity = 5 } = req.body;
+      
+      if (!goalIds || !goalIds.length) {
+        return res.status(400).json({ error: 'Nenhuma meta selecionada' });
+      }
+
+      const selectedGoals = await db.select().from(goals).where(inArray(goals.id, goalIds));
+
+      if (!selectedGoals.length) {
+        return res.status(400).json({ error: 'Metas não encontradas' });
+      }
+
+      const promptData = selectedGoals.map(g => `${g.discipline} - ${g.subject}`).join('; ');
+      
+      let prompt = `Crie ${quantity} questões objetivas sobre os seguintes assuntos, focadas no que é cobrado no concurso SEFAZ-BA (Auditor Fiscal):\nAssuntos: ${promptData}\n\n`;
+      
+      if (source === 'ia_estilo_concurso' && banca) {
+        prompt += `As questões DEVEM ser inspiradas no estilo e padrão de cobrança da banca ${banca}. IMPORTANTE: NÃO afirme, não sugira e não inclua textos indicando que são questões reais de provas passadas. São questões INÉDITAS criadas agora, apenas imitando o estilo da banca ${banca}.\n`;
+        if (banca === 'CESPE/CEBRASPE') {
+          prompt += `No estilo CESPE/CEBRASPE, cada questão deve ter exatamente duas alternativas: "Certo" e "Errado".\n`;
+        } else {
+          prompt += `No estilo ${banca}, cada questão deve ter 5 alternativas (A, B, C, D, E).\n`;
+        }
+      } else {
+        prompt += `Crie questões originais, com 5 alternativas (A, B, C, D, E).\n`;
+      }
+
+      prompt += `
+Para cada questão, forneça:
+1. O enunciado.
+2. As alternativas (array de strings).
+3. O índice (0 a N-1) da alternativa correta.
+4. O comentário/explicação detalhada para CADA alternativa (array de strings na mesma ordem das alternativas), explicando o motivo de estar certa ou errada.
+
+Retorne APENAS um array JSON de objetos com esta exata estrutura:
+[
+  {
+    "statement": "texto do enunciado",
+    "options": ["alt 1", "alt 2", ...],
+    "correctIndex": 0,
+    "explanations": ["explicação da alt 1", "explicação da alt 2", ...]
+  }
+]
+`;
+
+      const aiClient = getAiClient();
+      const response = await aiClient.models.generateContent({
+        model: 'gemini-3.6-flash',
+        contents: prompt,
+      });
+
+      const responseText = response.text || '';
+      
+      const startIndex = responseText.indexOf('[');
+      const endIndex = responseText.lastIndexOf(']');
+      
+      if (startIndex === -1 || endIndex === -1 || endIndex < startIndex) {
+         console.error('Failed to parse AI response as JSON:', responseText);
+         return res.status(500).json({ error: 'Erro ao analisar formato da resposta da IA', raw: responseText });
+      }
+
+      const jsonString = responseText.substring(startIndex, endIndex + 1);
+      let generatedQuestions;
+      try {
+        generatedQuestions = JSON.parse(jsonString);
+      } catch (parseError) {
+        console.error('JSON Parse error:', parseError, 'Raw string:', jsonString);
+        return res.status(500).json({ error: 'Erro ao analisar formato da resposta da IA' });
+      }
+      
+      const savedQuestions = [];
+      for (const q of generatedQuestions) {
+         // assign to a random goal from the selected ones to simplify, or the first one
+         const goalId = goalIds[Math.floor(Math.random() * goalIds.length)];
+         const result = await db.insert(questions).values({
+           goalId,
+           source,
+           banca: source === 'ia_estilo_concurso' ? banca : null,
+           statement: q.statement,
+           options: JSON.stringify(q.options),
+           correctIndex: q.correctIndex,
+           explanations: JSON.stringify(q.explanations)
+         }).returning();
+         savedQuestions.push(result[0]);
+      }
+      
+      res.json(savedQuestions);
+    } catch (error: any) {
+      console.error('Error generating questions:', error);
+      res.status(500).json({ error: 'Erro ao gerar questões', details: error.message });
+    }
+  });
+
+  app.post('/api/questions/:id/answer', async (req, res) => {
+    try {
+      const questionId = parseInt(req.params.id);
+      const { selectedIndex } = req.body;
+      
+      const question = await db.select().from(questions).where(eq(questions.id, questionId)).get();
+      if (!question) {
+        return res.status(404).json({ error: 'Questão não encontrada' });
+      }
+
+      const isCorrect = selectedIndex === question.correctIndex;
+
+      await db.insert(questionAttempts).values({
+        questionId,
+        selectedIndex,
+        isCorrect
+      });
+
+      res.json({
+        isCorrect,
+        correctIndex: question.correctIndex,
+        explanations: JSON.parse(question.explanations)
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao registrar tentativa' });
+    }
+  });
+
+  app.get('/api/questions/stats', async (req, res) => {
+    try {
+      // In a real app we'd filter by the query params, 
+      // but for simplicity we fetch all attempts and questions and filter in JS
+      const { weekId, goalId, discipline, subject, source } = req.query;
+
+      const allAttempts = await db.select().from(questionAttempts);
+      const allQuestions = await db.select().from(questions);
+      const allGoals = await db.select().from(goals);
+
+      // Join data manually for the stats
+      let validAttempts = allAttempts.map(a => {
+        const q = allQuestions.find(q => q.id === a.questionId);
+        const g = q ? allGoals.find(g => g.id === q.goalId) : undefined;
+        return { ...a, question: q, goal: g };
+      }).filter(a => a.question && a.goal);
+
+      // Apply filters
+      if (weekId) validAttempts = validAttempts.filter(a => a.goal.weekId === parseInt(weekId as string));
+      if (goalId) validAttempts = validAttempts.filter(a => a.goal.id === parseInt(goalId as string));
+      if (discipline) validAttempts = validAttempts.filter(a => a.goal.discipline === discipline);
+      if (subject) validAttempts = validAttempts.filter(a => a.goal.subject === subject);
+      if (source) validAttempts = validAttempts.filter(a => a.question.source === source);
+
+      const totalAttempts = validAttempts.length;
+      const correctAttempts = validAttempts.filter(a => a.isCorrect).length;
+      
+      const byDiscipline: Record<string, { total: number, correct: number }> = {};
+      validAttempts.forEach(a => {
+        const d = a.goal.discipline;
+        if (!byDiscipline[d]) byDiscipline[d] = { total: 0, correct: 0 };
+        byDiscipline[d].total++;
+        if (a.isCorrect) byDiscipline[d].correct++;
+      });
+
+      res.json({
+        total: totalAttempts,
+        correct: correctAttempts,
+        byDiscipline
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Erro ao buscar estatísticas' });
     }
   });
 

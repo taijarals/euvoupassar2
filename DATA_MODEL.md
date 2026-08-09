@@ -50,6 +50,28 @@ Contém dois blocos de texto extraídos do PDF "Guia do Aprovado" de cada semana
 
 Esse campo é opcional e foi preenchido incrementalmente, semana a semana, via prompts colados no AI Studio (ver `PROGRESSO.md`).
 
+### `questions` (questões geradas por IA)
+| Coluna      | Tipo    | Descrição                                                         |
+|-------------|---------|-------------------------------------------------------------------|
+| id          | integer | Chave primária (auto incremento)                                  |
+| goalId      | integer | Chave estrangeira para `goals.id` (ON DELETE CASCADE)             |
+| source      | text    | `"ia_nova"` ou `"ia_estilo_concurso"`                             |
+| banca       | text    | Ex: `"CESPE/CEBRASPE"`, `"FGV"`, `"FCC"` (pode ser nulo)          |
+| statement   | text    | Enunciado da questão                                              |
+| options     | text    | Array JSON com as alternativas                                    |
+| correctIndex| integer | Índice da alternativa correta no array                            |
+| explanations| text    | Array JSON com o comentário/explicação de cada alternativa        |
+| createdAt   | text    | Data ISO de criação                                               |
+
+### `question_attempts` (tentativas de resolução)
+| Coluna      | Tipo    | Descrição                                                         |
+|-------------|---------|-------------------------------------------------------------------|
+| id          | integer | Chave primária (auto incremento)                                  |
+| questionId  | integer | Chave estrangeira para `questions.id` (ON DELETE CASCADE)         |
+| selectedIndex| integer| Índice da alternativa escolhida pelo usuário                      |
+| isCorrect   | integer | Booleano indicando se acertou                                     |
+| answeredAt  | text    | Data ISO da tentativa                                             |
+
 ## API (Express, `server.ts`)
 
 | Método | Rota                | Descrição                                  |
@@ -65,6 +87,10 @@ Esse campo é opcional e foi preenchido incrementalmente, semana a semana, via p
 | POST   | `/api/materials`             | Cria um novo material                         |
 | PUT    | `/api/materials/:id` | Atualiza um material (ex: marcar `completed`) |
 | DELETE | `/api/materials/:id` | Remove um material                            |
+| GET    | `/api/questions`             | Lista questões, aceita filtros opcionais      |
+| POST   | `/api/questions/generate`    | Gera lote de novas questões usando Gemini API |
+| POST   | `/api/questions/:id/answer`  | Registra tentativa e verifica acerto          |
+| GET    | `/api/questions/stats`       | Retorna estatísticas de questões respondidas  |
 | GET    | `/api/stats`         | Estatísticas gerais de progresso              |
 
 ## Banco de dados: geração e reset

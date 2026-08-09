@@ -2,7 +2,8 @@ import React from 'react';
 import { Route, Switch, Link, useLocation } from 'wouter';
 import Home from './Home';
 import GoalDetail from './GoalDetail';
-import { Target, BarChart2 } from 'lucide-react';
+import Questions from './Questions';
+import { Target, CheckSquare } from 'lucide-react';
 
 export default function App() {
   const [location] = useLocation();
@@ -19,6 +20,9 @@ export default function App() {
             <Link href="/" className={`text-sm font-medium transition-colors ${location === '/' ? 'text-emerald-700' : 'text-slate-500 hover:text-slate-900'}`}>
               Metas
             </Link>
+            <Link href="/questoes" className={`text-sm font-medium transition-colors ${location.startsWith('/questoes') ? 'text-emerald-700' : 'text-slate-500 hover:text-slate-900'}`}>
+              Questões
+            </Link>
           </nav>
         </div>
       </header>
@@ -27,6 +31,7 @@ export default function App() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/metas/:id" component={GoalDetail} />
+          <Route path="/questoes" component={Questions} />
           <Route>
             <div className="text-center py-20 text-slate-500">
               <h2 className="text-2xl font-bold text-slate-700 mb-2">Página não encontrada</h2>

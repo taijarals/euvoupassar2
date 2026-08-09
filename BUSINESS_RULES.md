@@ -63,6 +63,17 @@ A tela inicial tem um seletor de disciplina, com "Todas as disciplinas" como op�
 - Na interface (tela de detalhe da meta), fica acessível através do botão "Resumo de IA", que abre um modal com um aviso de isenção (disclaimer) alertando que o conteúdo foi gerado por IA e pode conter imprecisões.
 - (Geralmente) não é necessário nem gerado para as metas do tipo "Revisão Geral".
 
+## Módulo de Questões (revisão com IA)
+
+- Página separada (`/questoes`) com filtro por semana, meta e disciplina.
+- Toda questão pertence a uma meta (`goalId`) e tem uma origem (`source`):
+  - `ia_nova`: questão original gerada pela IA, sem tentar imitar nenhuma banca.
+  - `ia_estilo_concurso`: questão gerada pela IA **no estilo** de uma banca (CESPE/CEBRASPE, FGV ou FCC) — formato de alternativas e padrão de cobrança daquela banca, mas **nunca uma reprodução ou afirmação de ser uma questão real** de uma prova específica. Não tem concurso, ano ou cargo associado, porque não é uma questão real.
+- Toda questão tem gabarito comentado completo: explicação da alternativa correta **e** de cada alternativa errada, não apenas um comentário genérico.
+- Questões são geradas sob demanda (botão "Gerar questões") e ficam salvas — não são descartadas depois de respondidas.
+- Cada resposta do usuário gera um registro de tentativa (`question_attempts`); a mesma questão pode ser respondida mais de uma vez (não há bloqueio de "já respondida"), o que permite revisão espaçada.
+- Estatísticas de desempenho (percentual de acerto geral e por disciplina) são calculadas a partir do histórico de tentativas, respeitando os filtros ativos na tela.
+
 ## Escopo e não-objetivos (o que o app não faz de propósito)
 
 - **Sem autenticação/login.** É uma ferramenta de uso pessoal de uma única pessoa. Não adicionar sistema de contas a menos que explicitamente solicitado.
