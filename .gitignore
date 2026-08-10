@@ -52,4 +52,4 @@ data/*.db-shm
 
 # Databases
 *.db
-!sqlite.db
+

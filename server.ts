@@ -250,7 +250,7 @@ async function createServer() {
         return res.status(400).json({ error: 'Nenhuma meta selecionada' });
       }
 
-      const selectedGoals = await db.select().from(goals).where(inArray(goals.id, goalIds));
+      console.log("goalIds is:", goalIds, typeof goalIds, Array.isArray(goalIds)); const selectedGoals = await db.select().from(goals).where(inArray(goals.id, goalIds));
 
       if (!selectedGoals.length) {
         return res.status(400).json({ error: 'Metas não encontradas' });
