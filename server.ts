@@ -468,9 +468,10 @@ Retorne APENAS um array JSON de objetos com esta exata estrutura:
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(_dirname, 'dist')));
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(_dirname, 'dist/index.html'));
+    const distPath = path.join(process.cwd(), 'dist');
+    app.use(express.static(distPath));
+    app.get('*all', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
