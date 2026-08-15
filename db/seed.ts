@@ -523,6 +523,234 @@ COMO CAI EM PROVA: A banca cobra conceitos, fases e efeitos. O ponto mais sensí
   }
 
   
+  if (!existingWeeks.some(w => w.number === 3)) {
+    console.log('Seeding Week 3...');
+
+    // Create Week 3
+    const insertedWeek = await db.insert(weeks).values({
+      number: 3,
+      title: 'Semana 3'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    // Meta 1
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Língua Portuguesa', subject: 'Coesão e Coerência, Semântica, Figuras e Vícios de Linguagem, Reescrita', type: 'teoria', studyTip: `Dicas:
+Coesão é ligação formal entre partes do texto; coerência é compatibilidade de sentido. A banca adora alternativa que troca uma pela outra. Um texto pode ter conectivos e ainda assim ser incoerente.
+Em coesão referencial, acompanhe quem retoma quem. Pronomes, sinônimos, hiperônimos, elipses e expressões equivalentes precisam manter a referência sem ambiguidade.
+Em coesão sequencial, conectivo não é enfeite. "Portanto", "contudo", "além disso", "embora" e "porque" mudam a relação lógica entre ideias. Trocar conectivo costuma mudar causa, oposição, conclusão ou concessão.
+Semântica deve ser lida pelo contexto. Sinônimo, antônimo, polissemia, ambiguidade e sentido figurado não são resolvidos por dicionário isolado.
+Em reescrita, preserve sentido, correção gramatical e relação lógica. A alternativa pode parecer elegante, mas se mudar foco, agente, tempo, pressuposto ou intensidade, está errada.
+Figuras e vícios de linguagem aparecem como efeito de sentido. Não decore nomes soltos: pergunte o que aquela escolha produz no texto. Resumo do conteúdo:
+COESÃO TEXTUAL: Coesão é o conjunto de mecanismos linguísticos que ligam palavras, frases, períodos e parágrafos. Ela permite que o leitor acompanhe a progressão do texto. A coesão pode ocorrer por referência, substituição, elipse, repetição, conexão, emprego de pronomes, advérbios, conjunções e expressões equivalentes.
+COESÃO REFERENCIAL: Na coesão referencial, um termo aponta para outro. A retomada pode ser anafórica, quando volta a elemento anterior, ou catafórica, quando antecipa elemento posterior. Pronomes pessoais, demonstrativos, relativos, possessivos, sinônimos, hiperônimos e expressões resumidoras são recursos comuns.
+COESÃO SEQUENCIAL: Coesão sequencial organiza a progressão das ideias. Conectores indicam adição, oposição, causa, consequência, conclusão, explicação, condição, concessão e comparação. Trocar conector pode alterar o sentido do período inteiro.
+COERÊNCIA TEXTUAL: Coerência é a lógica global do texto. Depende de compatibilidade entre ideias, ausência de contradição, progressão temática, adequação ao contexto e relação com o conhecimento compartilhado. Um texto coerente não é apenas gramaticalmente correto; ele precisa fazer sentido como unidade.
+SEMÂNTICA: Semântica estuda o sentido das palavras e expressões. Envolve sinonímia, antonímia, hiperonímia, hiponímia, polissemia, ambiguidade, homonímia, paronímia, denotação e conotação. Em prova, o sentido contextual prevalece sobre o significado isolado.
+FIGURAS E VÍCIOS DE LINGUAGEM: Figuras de linguagem criam efeitos expressivos, como comparação, metáfora, metonímia, ironia, hipérbole, eufemismo e personificação. Vícios de linguagem prejudicam clareza ou correção, como ambiguidade indesejada, cacofonia, pleonasmo vicioso e barbarismo.
+REESCRITA: Reescrever exige manter o sentido original com correção. É preciso observar pontuação, conectores, pronomes, paralelismo, voz verbal, ordem dos termos e equivalência semântica.
+COMO CAI EM PROVA: A cobrança costuma vir em reescrita sem alteração de sentido, substituição de conectivos, retomada pronominal, ambiguidade e sentido contextual de palavras. Pegadinhas comuns: trocar conector e mudar a relação lógica; aceitar sinônimo que não funciona no contexto; perder referente de pronome; transformar sentido figurado em literal; escolher reescrita gramaticalmente correta, mas semanticamente diferente. Como resolver: compare a alternativa com o trecho original por partes — referente, tempo verbal, conectivo, intensidade e pressuposto. Se qualquer eixo mudou, a reescrita não preservou o sentido.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/FUZ8d71Px8A%3D' },
+      { goalId: meta1[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/IuLnBB1xyGs%3D' },
+      { goalId: meta1[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403712&desatualizada=0&anulada=0&query=coesao+coerencia+semantica+vicios&auth=force&auth=force' },
+    ]);
+
+    // Meta 2
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Direito Tributário', subject: 'Responsabilidade Tributária', type: 'teoria', studyTip: `Dicas:
+Responsabilidade tributária não é sinônimo de sujeição passiva comum. O responsável não pratica necessariamente o fato gerador, mas a lei o coloca no polo passivo.
+O art. 128 do CTN é ponto de partida: a lei pode atribuir responsabilidade a terceiro vinculado ao fato gerador, excluindo ou mantendo a responsabilidade do contribuinte.
+Separe substituição de transferência. Na substituição, a responsabilidade nasce desde o início com terceiro. Na transferência, ela passa ao terceiro depois, por sucessão, solidariedade ou ato posterior.
+Responsabilidade por sucessão tem blocos próprios: imóveis, sucessão pessoal, sucessão empresarial, fusão, incorporação, transformação e aquisição de estabelecimento.
+Terceiros do art. 134 respondem em situações específicas e, em regra, por impossibilidade de exigência do contribuinte. O art. 135 exige excesso de poderes, infração de lei, contrato social ou estatuto.
+Denúncia espontânea exclui responsabilidade por infração, mas exige pagamento do tributo e juros quando cabível. Não confunda com mero parcelamento ou confissão tardia. Resumo do conteúdo:
+CONCEITO: Responsabilidade tributária ocorre quando a lei atribui a terceiro a obrigação de pagar tributo ou penalidade, ainda que ele não seja o contribuinte direto do fato gerador. O contribuinte tem relação pessoal e direta com o fato gerador. O responsável tem vínculo previsto em lei.
+ART. 128 DO CTN: A lei pode atribuir responsabilidade pelo crédito tributário a terceira pessoa vinculada ao fato gerador. Pode excluir a responsabilidade do contribuinte ou atribuí-la em caráter supletivo. Essa regra exige previsão legal e vínculo com a situação tributada.
+SUBSTITUIÇÃO E TRANSFERÊNCIA: Na responsabilidade por substituição, o responsável já ocupa o polo passivo desde a ocorrência do fato gerador. Na transferência, a obrigação nasce com o contribuinte e depois passa a terceiro. Sucessão, responsabilidade de terceiros e responsabilidade por infrações são formas clássicas de transferência.
+RESPONSABILIDADE POR SUCESSÃO: Na aquisição de imóvel, o adquirente pode responder por tributos relativos ao bem. Na sucessão pessoal, espólio, sucessores e meeiro podem responder nos limites da herança, monte ou quinhão. Na sucessão empresarial, fusão, transformação, incorporação e aquisição de estabelecimento podem transferir responsabilidade conforme o CTN.
+RESPONSABILIDADE DE TERCEIROS: O art. 134 trata de hipóteses como pais, tutores, administradores de bens, inventariante, síndico, tabeliães e sócios em liquidação, nos atos em que intervierem ou pelas omissões de que forem responsáveis. O art. 135 trata de responsabilidade pessoal por atos praticados com excesso de poderes ou infração de lei, contrato social ou estatuto.
+RESPONSABILIDADE POR INFRAÇÕES: Em regra, a responsabilidade por infrações independe da intenção do agente, salvo disposição de lei em contrário. Há responsabilidade pessoal em hipóteses específicas, especialmente dolo, fraude, simulação ou infrações qualificadas.
+DENÚNCIA ESPONTÂNEA: A denúncia espontânea exclui a responsabilidade por infração se acompanhada, quando for o caso, do pagamento do tributo devido e juros de mora. Não basta confessar se a fiscalização já começou ou se os requisitos legais não foram cumpridos.
+COMO CAI EM PROVA: A banca cobra CTN quase literal, mas com casos práticos: compra de imóvel, sucessão empresarial, sócio administrador, infração, denúncia espontânea e solidariedade. Pegadinhas comuns: chamar responsável de contribuinte; confundir substituição com transferência; aplicar art. 135 sem excesso de poderes ou infração; esquecer limites da sucessão; tratar denúncia espontânea como simples parcelamento. Como resolver: identifique quem praticou o fato gerador, quem a lei colocou como responsável e qual artigo do CTN explica a transferência ou substituição.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/SmpEvvR2Puo%3D' },
+      { goalId: meta2[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/XT%2FqpLYBuN4%3D' },
+      { goalId: meta2[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=407156%2C416082%2C416083%2C417881%2C417882%2C417885%2C417891&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 3
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Contabilidade Geral', subject: 'Elaboração de Demonstrações Contábeis', type: 'teoria', studyTip: `Dicas:
+Demonstrações contábeis não são só nomes de relatórios. Cada demonstração tem finalidade: posição patrimonial, desempenho, mutações do PL, caixa, valor adicionado e explicações complementares.
+Lei n. 6.404/1976 e CPC 26 precisam conversar. A banca costuma cobrar lista de demonstrações, estrutura mínima e critérios de apresentação.
+Balanço Patrimonial é fotografia patrimonial em uma data. DRE mostra desempenho por competência. DFC mostra fluxos de caixa. DMPL/DLPA explicam movimentos no patrimônio líquido.
+Notas explicativas não são acessório decorativo. Elas integram o conjunto das demonstrações e esclarecem critérios, políticas contábeis, riscos e detalhes relevantes.
+Cuidado com circulante e não circulante. A classificação depende de ciclo operacional, expectativa de realização/liquidação e prazo.
+Em contabilidade, "obrigatória" pode variar conforme tipo societário, porte e norma aplicável. Leia o comando antes de marcar lista fechada. Resumo do conteúdo:
+OBJETIVO DAS DEMONSTRAÇÕES: Demonstrações contábeis apresentam, de forma estruturada, a posição patrimonial e financeira, o desempenho e os fluxos de caixa da entidade. Servem aos usuários na tomada de decisão e na avaliação de recursos, obrigações, resultado e capacidade de geração de caixa.
+CONJUNTO DAS DEMONSTRAÇÕES: O conjunto pode incluir Balanço Patrimonial, Demonstração do Resultado, Demonstração do Resultado Abrangente, Demonstração das Mutações do Patrimônio Líquido, Demonstração dos Fluxos de Caixa, Demonstração do Valor Adicionado e Notas Explicativas. A exigência concreta depende da Lei das S.A., CPC aplicável e características da entidade.
+BALANÇO PATRIMONIAL: O Balanço Patrimonial evidencia ativos, passivos e patrimônio líquido em determinada data. Ativos e passivos são classificados em circulante e não circulante. A estrutura mostra recursos controlados, obrigações presentes e participação residual dos proprietários.
+DRE E RESULTADO ABRANGENTE: A DRE evidencia receitas, despesas, ganhos e perdas do período, permitindo apurar o resultado. O regime de competência é central. Resultado abrangente inclui itens que afetam o patrimônio líquido, mas não transitam imediatamente pelo resultado do período.
+DMPL, DLPA, DFC E DVA: DMPL evidencia alterações nas contas do patrimônio líquido. DLPA foca lucros ou prejuízos acumulados. DFC apresenta entradas e saídas de caixa por atividades operacionais, de investimento e de financiamento. DVA demonstra a riqueza gerada e sua distribuição entre empregados, governo, financiadores, acionistas e retenções.
+NOTAS EXPLICATIVAS: Notas explicativas complementam as demonstrações, descrevendo políticas contábeis, critérios de mensuração, julgamentos relevantes, riscos e detalhamentos necessários à compreensão.
+APRESENTAÇÃO E CLASSIFICAÇÃO: As demonstrações devem observar continuidade, competência, materialidade, comparabilidade, consistência e apresentação adequada. A classificação entre circulante e não circulante depende do ciclo operacional e do prazo esperado de realização ou liquidação.
+COMO CAI EM PROVA: A banca cobra listas de demonstrações, finalidade de cada relatório, classificação no balanço, notas explicativas e literalidade do CPC 26. Pegadinhas comuns: confundir DRE com DFC; esquecer notas explicativas; trocar DMPL por DLPA; classificar tudo por prazo de 12 meses sem observar ciclo operacional; marcar demonstração como obrigatória sem considerar o tipo de entidade. Como resolver: associe cada demonstração ao que ela responde — posição, desempenho, caixa, PL, valor adicionado ou explicação complementar.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/e1uy0Y5DGus%3D' },
+      { goalId: meta3[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/nOA%2FDhptV18%3D' },
+      { goalId: meta3[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=4448%2C416865%2C104&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 4
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Direito Constitucional', subject: 'Direitos e Garantias Fundamentais – Parte II', type: 'teoria', studyTip: `Dicas:
+Esta parte muda o eixo: saímos dos direitos individuais e entramos em direitos sociais, nacionalidade, direitos políticos e partidos políticos.
+Direitos sociais têm forte literalidade constitucional. Art. 6º e art. 7º precisam ser lidos com atenção, especialmente direitos dos trabalhadores.
+Nacionalidade exige separar nato e naturalizado. A banca cobra cargos privativos, perda da nacionalidade e hipóteses de naturalização.
+Direitos políticos giram em torno de alistabilidade, elegibilidade, inelegibilidades, perda e suspensão. Não confunda idade mínima com condição de alistamento.
+Partidos políticos têm autonomia, caráter nacional, vedação a organização paramilitar e regras sobre recursos e funcionamento parlamentar.
+Em prova, cuidado com "cassação de direitos políticos": a Constituição veda cassação, mas admite perda ou suspensão nas hipóteses previstas. Resumo do conteúdo:
+DIREITOS SOCIAIS: Direitos sociais são prestações e garantias ligadas à igualdade material e à proteção de condições mínimas de vida. Incluem educação, saúde, alimentação, trabalho, moradia, transporte, lazer, segurança, previdência social, proteção à maternidade e infância e assistência aos desamparados. O art. 7º detalha direitos dos trabalhadores urbanos e rurais.
+DIREITOS DOS TRABALHADORES: Entre os principais direitos estão salário mínimo, piso salarial, irredutibilidade salarial, décimo terceiro, adicional noturno, jornada máxima, repouso semanal, férias, licença gestante, licença-paternidade, aviso-prévio e proteção contra despedida arbitrária. O estudo deve separar direitos de todos os trabalhadores, direitos dos domésticos e normas sindicais.
+DIREITO SINDICAL: A Constituição assegura liberdade sindical, mas adota unicidade sindical por base territorial. A criação de sindicato independe de autorização estatal, vedada interferência do Poder Público. A contribuição sindical não pode ser tratada como obrigatória automática após a reforma trabalhista.
+NACIONALIDADE: Brasileiros natos decorrem de hipóteses constitucionais ligadas ao nascimento, território, serviço da República Federativa do Brasil e opção. Naturalizados dependem de requisitos constitucionais e legais. Certos cargos são privativos de brasileiros natos, como Presidente e Vice-Presidente da República, Presidente da Câmara, Presidente do Senado, Ministro do STF, carreira diplomática, oficial das Forças Armadas e Ministro de Estado da Defesa.
+PERDA DA NACIONALIDADE: A perda pode ocorrer em hipóteses constitucionais, observadas exceções. A matéria exige leitura literal, pois a banca costuma trocar aquisição voluntária, imposição de naturalização e reconhecimento de nacionalidade originária.
+DIREITOS POLÍTICOS: Direitos políticos envolvem participação na vida política, especialmente votar, ser votado, plebiscito, referendo e iniciativa popular. Condições de elegibilidade incluem nacionalidade brasileira, pleno exercício dos direitos políticos, alistamento eleitoral, domicílio eleitoral, filiação partidária e idade mínima.
+INELEGIBILIDADES E PERDA/SUSPENSÃO: Inelegibilidades podem ser absolutas ou relativas. Inalistáveis e analfabetos são inelegíveis. Há restrições por parentesco, cargo e situações previstas em lei complementar. A Constituição veda cassação de direitos políticos, mas admite perda ou suspensão em hipóteses específicas.
+PARTIDOS POLÍTICOS: Partidos possuem autonomia, devem ter caráter nacional, prestar contas à Justiça Eleitoral e não podem utilizar organização paramilitar. Funcionamento parlamentar e acesso a recursos seguem regras constitucionais e legais.
+COMO CAI EM PROVA: A cobrança costuma ser literal e comparativa: direitos sociais, cargos privativos de nato, idades mínimas, perda/suspensão de direitos políticos e regras partidárias. Pegadinhas comuns: confundir nato com naturalizado; errar cargo privativo de brasileiro nato; falar em cassação de direitos políticos; trocar alistabilidade por elegibilidade; misturar direitos sociais do art. 6º com direitos trabalhistas do art. 7º. Como resolver: faça quadros mentais — art. 6º, art. 7º, nato/naturalizado, elegibilidade/inelegibilidade e perda/suspensão. Constitucional aqui é muito de categoria correta.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ey%2BIc25pgUg%3D' },
+      { goalId: meta4[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/NcMHbRjZaXY%3D' },
+      { goalId: meta4[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=405229%2C407576%2C407577%2C405228%2C407578%2C407579%2C407580%2C407581%2C407582%2C407583%2C421770&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 5
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Tecnologia da Informação', subject: 'PMBOK 7', type: 'teoria', studyTip: `Dicas:
+PMBOK 7 mudou o foco de processos para princípios, domínios de desempenho e entrega de valor. Não estude como se fosse apenas a sexta edição com outro nome.
+O centro da abordagem é valor. Projeto não existe só para entregar produto; existe para gerar resultado, benefício e valor para a organização e partes interessadas.
+Princípios orientam comportamento. Domínios de desempenho organizam áreas críticas que precisam funcionar bem durante o projeto.
+Tailoring é essencial: a abordagem deve ser adaptada ao contexto, complexidade, risco, equipe, cultura e objetivo do projeto.
+Não confunda ciclo de vida, abordagem de desenvolvimento e cadência. Preditivo, adaptativo e híbrido aparecem com frequência.
+Em prova, cuidado com palavras rígidas. PMBOK 7 trabalha adaptação e contexto; alternativas com receita única costumam ser suspeitas. Resumo do conteúdo:
+VISÃO GERAL DO PMBOK 7: O PMBOK 7 apresenta uma abordagem orientada a princípios, domínios de desempenho e entrega de valor. O projeto é visto dentro de um sistema de entrega de valor. A gestão de projetos deve produzir resultados que gerem benefícios e valor.
+SISTEMA DE ENTREGA DE VALOR: O sistema de entrega de valor integra portfólios, programas, projetos, produtos e operações. Esses componentes trabalham alinhados à estratégia organizacional. Resultado é consequência produzida. Benefício é ganho percebido. Valor é utilidade, importância ou vantagem para partes interessadas.
+PRINCÍPIOS: Os princípios orientam a conduta em projetos: ser administrador diligente, criar ambiente colaborativo, envolver partes interessadas, focar em valor, reconhecer interações sistêmicas, demonstrar liderança, adaptar, incorporar qualidade, navegar na complexidade, otimizar respostas a riscos, abraçar adaptabilidade e permitir mudança. Eles não são etapas, mas diretrizes de comportamento.
+DOMÍNIOS DE DESEMPENHO: Domínios de desempenho são áreas interativas e interdependentes que precisam funcionar para o projeto entregar valor. Incluem partes interessadas, equipe, abordagem de desenvolvimento e ciclo de vida, planejamento, trabalho do projeto, entrega, medição e incerteza.
+PARTES INTERESSADAS E EQUIPE: Partes interessadas influenciam ou são influenciadas pelo projeto. O engajamento precisa ser contínuo. Equipes eficazes exigem colaboração, liderança, comunicação, responsabilidade e cultura adequada.
+ABORDAGEM, CICLO DE VIDA E PLANEJAMENTO: A abordagem pode ser preditiva, adaptativa ou híbrida. O ciclo de vida organiza fases do projeto. O planejamento deve ser suficiente para orientar o trabalho, sem ignorar incerteza e adaptação.
+MEDIÇÃO E INCERTEZA: Medição acompanha desempenho, progresso e valor. Incerteza envolve riscos, ambiguidades, complexidade e eventos que podem afetar objetivos.
+TAILORING: Tailoring é adaptação da abordagem ao contexto. O gerenciamento de projetos deve considerar ambiente, cultura, maturidade, restrições, produto, equipe e grau de incerteza.
+COMO CAI EM PROVA: A banca cobra diferença entre PMBOK 7 e visão processual antiga, princípios, domínios de desempenho, valor, tailoring e abordagens de desenvolvimento. Pegadinhas comuns: tratar princípios como fases; decorar domínio como sequência fixa; confundir resultado, benefício e valor; ignorar tailoring; afirmar que todo projeto deve ser preditivo. Como resolver: quando a questão trouxer PMBOK 7, procure a lógica de valor, adaptação e desempenho. Desconfie de alternativas engessadas.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ieqXzJ2k2n8%3D' },
+      { goalId: meta5[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/Zoa9I62O8SQ%3D' },
+      { goalId: meta5[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=8275%2C14&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 6
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Direito Administrativo', subject: 'Organização Administrativa', type: 'teoria', studyTip: `Dicas:
+Organização Administrativa é uma das bases mais importantes de Administrativo. Se você confundir centralização, descentralização, concentração e desconcentração, vai errar várias questões em cadeia.
+Centralização e descentralização tratam de quem exerce a atividade. Concentração e desconcentração tratam da distribuição interna de competências.
+Administração direta é formada pelos entes federativos. Administração indireta envolve autarquias, fundações públicas, empresas públicas e sociedades de economia mista.
+Autarquia tem personalidade de direito público; empresa pública e sociedade de economia mista têm personalidade de direito privado. Essa diferença muda regime, bens, pessoal, responsabilidade e prerrogativas.
+Não confunda empresa pública com sociedade de economia mista: capital integralmente público na empresa pública; capital misto, com maioria votante pública, na sociedade de economia mista.
+Terceiro setor não integra a Administração Pública, mas coopera com ela. OS, OSCIP e serviços sociais autônomos aparecem em pegadinhas. Resumo do conteúdo:
+CENTRALIZAÇÃO E DESCENTRALIZAÇÃO: Centralização ocorre quando o próprio ente político desempenha a atividade administrativa por seus órgãos. Descentralização ocorre quando a atividade é transferida ou atribuída a outra pessoa. A descentralização pode ocorrer por outorga, quando há criação de entidade da Administração indireta, ou por delegação, quando particular executa serviço mediante contrato ou ato administrativo.
+CONCENTRAÇÃO E DESCONCENTRAÇÃO: Concentração é ausência de distribuição interna relevante. Desconcentração é distribuição interna de competências dentro da mesma pessoa jurídica, criando órgãos. Órgãos não têm personalidade jurídica própria.
+ADMINISTRAÇÃO DIRETA E INDIRETA: Administração direta é composta por União, Estados, Distrito Federal e Municípios. Administração indireta é composta por autarquias, fundações públicas, empresas públicas e sociedades de economia mista. Cada entidade da Administração indireta possui personalidade jurídica própria.
+AUTARQUIAS: Autarquias são pessoas jurídicas de direito público criadas por lei específica para desempenhar atividade típica de Estado. Possuem prerrogativas públicas, bens públicos, regime de precatórios e pessoal estatutário em regra. Agências reguladoras e conselhos profissionais costumam ser tratados como autarquias especiais, com peculiaridades.
+FUNDAÇÕES PÚBLICAS: Fundações públicas podem ter natureza de direito público ou de direito privado, conforme regime de criação e disciplina legal. Exercem atividades de interesse social.
+EMPRESAS PÚBLICAS E SOCIEDADES DE ECONOMIA MISTA: Empresa pública tem capital integralmente público e pode adotar qualquer forma societária admitida em direito. Sociedade de economia mista tem forma de sociedade anônima e capital misto, com controle público. Ambas têm personalidade de direito privado e podem explorar atividade econômica ou prestar serviço público.
+TERCEIRO SETOR: Entidades do terceiro setor são privadas, sem fins lucrativos, e colaboram com o Estado em atividades de interesse público. OS, OSCIP e serviços sociais autônomos possuem regimes próprios. Elas não integram a Administração Pública, embora possam receber incentivos, parcerias ou controle finalístico.
+COMO CAI EM PROVA: A banca cobra distinções conceituais e natureza jurídica das entidades. Questões costumam trocar descentralização por desconcentração e autarquia por empresa estatal. Pegadinhas comuns: dizer que órgão tem personalidade jurídica; confundir outorga com delegação; tratar empresa pública e sociedade de economia mista como iguais; inserir terceiro setor dentro da Administração indireta; esquecer que autarquia é criada por lei específica. Como resolver: pergunte — mudou a pessoa jurídica? Se sim, há descentralização. Ficou dentro da mesma pessoa, com órgãos? Há desconcentração.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/IAVJim7EKoY%3D' },
+      { goalId: meta6[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/JWTh2v9lu0M%3D' },
+      { goalId: meta6[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=404342%2C404343%2C404344&qd=0&qa=0&q=&auth=force&auth=force' },
+    ]);
+
+    // Meta 7
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Raciocínio Lógico', subject: 'Orientação Temporal e Espacial', type: 'teoria', studyTip: `Dicas:
+Esta meta é prática. Em orientação temporal, domine conversão de unidades, relógio, calendário, ciclos e resto da divisão.
+Problemas de relógio geralmente pedem diferença entre horas, ângulo, atraso, adiantamento ou encontro de ponteiros. Organize a informação antes de calcular.
+Em calendário, a semana é ciclo de 7 dias. Para datas futuras ou passadas, o resto da divisão por 7 costuma resolver o dia da semana.
+Orientação espacial exige visualizar posição, deslocamento, plano cartesiano e distância. Desenhar o problema quase sempre economiza tempo.
+Em plano cartesiano, eixo x é horizontal e eixo y é vertical. Trocar coordenadas muda completamente o ponto.
+A banca tenta transformar questão simples em confusão verbal. Traduza o enunciado para desenho, tabela ou linha do tempo. Resumo do conteúdo:
+ORIENTAÇÃO TEMPORAL: Orientação temporal envolve problemas com horas, dias, semanas, meses, calendários, ciclos, atrasos, adiantamentos e velocidade do tempo. Conversões básicas são indispensáveis: 1 dia tem 24 horas, 1 hora tem 60 minutos e 1 minuto tem 60 segundos.
+RELÓGIO: Questões de relógio podem envolver horário após determinado intervalo, diferença entre horários, relógio atrasado ou adiantado e posição dos ponteiros. O cuidado principal é transformar tudo para a mesma unidade antes de operar.
+CALENDÁRIO: Calendário trabalha com ciclos. Como a semana tem 7 dias, muitos problemas são resolvidos com resto da divisão por 7. Se o resto for 0, o dia da semana se mantém. Se o resto for 1, avança um dia, e assim sucessivamente.
+VELOCIDADE E TEMPO: Algumas questões misturam raciocínio temporal com velocidade. A relação básica é distância, velocidade e tempo. Use unidades compatíveis.
+ORIENTAÇÃO ESPACIAL: Orientação espacial envolve posição, deslocamento, direção, sentido e representação gráfica. Problemas podem aparecer com mapas, malhas, quadriculados e trajetos. Desenhar o percurso evita erros de leitura.
+PLANO CARTESIANO: No plano cartesiano, cada ponto é representado por par ordenado. A primeira coordenada indica deslocamento horizontal; a segunda, vertical. Trocar a ordem das coordenadas altera o ponto.
+DISTÂNCIAS: Distância entre pontos pode ser visual, por contagem em malha ou por fórmula quando houver coordenadas. Em questões simples, contar deslocamentos horizontais e verticais costuma bastar.
+ESTRATÉGIA: Transforme texto em representação: linha do tempo, calendário, tabela, desenho ou plano. Depois aplique o cálculo.
+COMO CAI EM PROVA: A cobrança aparece em questões de calendário, relógio, deslocamento, coordenadas e trajetos. É uma área em que erro de leitura pesa tanto quanto erro de cálculo. Pegadinhas comuns: esquecer o ciclo de 7 dias; somar horas sem converter minutos; trocar direita/esquerda ou norte/sul; inverter coordenadas do plano cartesiano; fazer cálculo mental sem desenhar. Como resolver: padronize unidades, desenhe a situação e use resto da divisão quando houver ciclo. Em RLM, organização visual é metade da questão.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/fUp%2FImIRTe4%3D' },
+      { goalId: meta7[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/REfzFSOGVFU%3D' },
+      { goalId: meta7[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=411113%2C425357&desatualizada=0&anulada=0&auth=force&auth=force' },
+    ]);
+
+    // Meta 8
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Contabilidade Geral', subject: 'Critérios de Avaliação de Ativos', type: 'teoria', studyTip: `Dicas:
+Avaliação de ativos mistura Lei n. 6.404/1976, CPCs e lógica contábil. Não basta decorar: entenda o que está sendo mensurado e por qual critério.
+Custo histórico, valor justo, valor realizável líquido, valor presente e perda por recuperabilidade aparecem em contextos diferentes.
+Estoques costumam ser avaliados pelo menor valor entre custo e valor realizável líquido. Esse é um ponto clássico.
+Aplicações financeiras, direitos, estoques e imobilizado não seguem sempre o mesmo critério. A natureza do ativo manda na avaliação.
+Ajuste a valor presente não é atualização monetária genérica. Ele traz fluxos futuros a valor presente quando o efeito financeiro é relevante.
+Cuidado com impairment: se o valor contábil superar o valor recuperável, há perda por desvalorização. Resumo do conteúdo:
+AVALIAÇÃO DE ATIVOS: Critérios de avaliação de ativos definem como bens e direitos serão mensurados nas demonstrações contábeis. A avaliação busca representar adequadamente o potencial de geração de benefícios econômicos.
+CUSTO HISTÓRICO: Custo histórico é o valor pago ou equivalente para aquisição ou produção do ativo. É base frequente de registro inicial. Pode incluir gastos necessários para colocar o ativo em condição de uso ou venda, conforme a natureza do item.
+VALOR JUSTO: Valor justo é preço que seria recebido pela venda de ativo ou pago pela transferência de passivo em transação não forçada entre participantes do mercado na data de mensuração. É comum em instrumentos financeiros e situações específicas previstas em norma.
+ESTOQUES: Estoques devem ser avaliados pelo menor valor entre custo e valor realizável líquido. O custo pode envolver aquisição, transformação e outros gastos necessários para trazer o estoque à condição e localização atuais. Valor realizável líquido é o preço estimado de venda no curso normal dos negócios menos custos estimados para conclusão e venda.
+APLICAÇÕES E DIREITOS: Aplicações financeiras, direitos e créditos podem exigir reconhecimento de rendimentos, ajuste a valor presente, perdas estimadas e mensuração conforme classificação contábil. A natureza do ativo e o prazo influenciam o critério.
+AJUSTE A VALOR PRESENTE: O ajuste a valor presente reconhece o efeito financeiro do tempo sobre fluxos futuros. Deve ser considerado quando relevante, especialmente em operações de longo prazo ou com financiamento embutido.
+REDUÇÃO AO VALOR RECUPERÁVEL: O teste de recuperabilidade verifica se o valor contábil do ativo supera seu valor recuperável. Se superar, reconhece-se perda por desvalorização. Valor recuperável é o maior entre valor justo líquido de despesas de venda e valor em uso.
+ESSÊNCIA CONTÁBIL: Avaliar ativo exige observar substância econômica, expectativa de realização, risco de perda, prazo e norma aplicável.
+COMO CAI EM PROVA: A banca cobra critérios por tipo de ativo, menor valor para estoques, ajuste a valor presente, valor justo e impairment. Pegadinhas comuns: aplicar um único critério para todos os ativos; confundir valor justo com valor de custo; esquecer o menor valor entre custo e valor realizável líquido nos estoques; tratar ajuste a valor presente como correção monetária; ignorar perda por recuperabilidade. Como resolver: primeiro identifique o ativo, depois escolha o critério aplicável. Em contabilidade, a conta vem antes da fórmula.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/Coo4wULrDLA%3D' },
+      { goalId: meta8[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/mYF1qvnbm1k%3D' },
+      { goalId: meta8[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=400780%2C416790%2C104&desatualizada=0&anulada=0&query=&auth=force&auth=force' },
+    ]);
+
+    // Meta 9
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Matemática Financeira', subject: 'Juros Simples', type: 'teoria', studyTip: `Dicas:
+Juros simples é o início da matemática financeira, mas não subestime. A fórmula é simples; o erro está em taxa, prazo e unidade.
+A relação central é J = C x i x n. Montante é M = C + J ou M = C x (1 + i x n).
+Taxa e prazo precisam estar na mesma unidade. Taxa ao mês com prazo em anos exige conversão antes do cálculo.
+Em juros simples, os juros incidem sempre sobre o capital inicial. Não há juros sobre juros.
+Taxas proporcionais funcionam em juros simples. Taxa de 2% ao mês corresponde a 24% ao ano, quando o regime é simples.
+Em questões, destaque capital, taxa, tempo, juros e montante. Se o enunciado der montante, não trate automaticamente como juros. Resumo do conteúdo:
+CONCEITO: Juros simples é regime em que os juros incidem sempre sobre o capital inicial. O valor dos juros cresce linearmente com o tempo. Não há capitalização de juros sobre juros.
+ELEMENTOS: Capital é o valor inicial aplicado ou emprestado. Juros é a remuneração pelo uso do capital. Taxa é o percentual aplicado. Tempo é o período da operação. Montante é capital mais juros.
+FÓRMULAS: A fórmula dos juros simples é J = C x i x n. O montante pode ser calculado por M = C + J ou M = C x (1 + i x n).
+UNIDADE DE TAXA E TEMPO: Taxa e tempo devem estar na mesma unidade. Se a taxa é mensal, o tempo deve estar em meses. Se a taxa é anual, o tempo deve estar em anos. Esse é o erro mais comum em prova.
+TAXAS PROPORCIONAIS: No regime simples, taxas proporcionais são equivalentes para efeitos práticos. Uma taxa mensal pode ser multiplicada por 12 para obter taxa anual simples, e uma taxa anual pode ser dividida por 12 para obter taxa mensal simples.
+CRESCIMENTO LINEAR: Como os juros incidem sobre o capital inicial, o crescimento do montante é linear. A cada período, o acréscimo de juros é constante.
+PROBLEMAS INVERSOS: A fórmula pode ser reorganizada para encontrar capital, taxa ou tempo. O ponto é identificar o que o enunciado forneceu e qual variável está sendo pedida.
+COMO CAI EM PROVA: A banca cobra cálculo direto, conversão de taxa, prazo, montante, juros e comparação com juros compostos. Pegadinhas comuns: usar montante no lugar do capital; esquecer de converter prazo; tratar juros simples como composto; confundir taxa percentual com decimal; não perceber que o enunciado pede juros, não montante. Como resolver: monte uma tabela C, J, i, n e M antes da conta. Converta taxa e prazo para a mesma unidade e só depois aplique a fórmula.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'videoaula', description: 'Videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/PcQF1Bo2RQQ%3D' },
+      { goalId: meta9[0].id, type: 'pdf', description: 'PDF completo', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/bV%2BRQ%2BiEuM4%3D' },
+      { goalId: meta9[0].id, type: 'questoes', description: 'Questões', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403800%2C403801&desatualizada=0&anulada=0&auth=force&auth=force' },
+    ]);
+
+    // Meta 10
+    const meta10 = await db.insert(goals).values({ weekId, number: 10, discipline: 'Revisão Geral', subject: 'Todas as disciplinas da semana', type: 'revisao' }).returning();
+    await db.insert(materials).values([
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Língua Portuguesa' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Tributário' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Contabilidade Geral' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Constitucional' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Tecnologia da Informação' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Direito Administrativo' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Raciocínio Lógico' },
+      { goalId: meta10[0].id, type: 'tarefa', description: 'Revisar Matemática Financeira' },
+    ]);
+    
+    console.log('Week 3 seed completed successfully!');
+  }
+
   if (!existingWeeks.some(w => w.number === 4)) {
     console.log('Seeding Week 4...');
     
@@ -747,6 +975,225 @@ COMO CAI EM PROVA: A banca cobra cálculo direto e interpretação: média simpl
   }
 
   
+
+  if (!existingWeeks.some(w => w.number === 5)) {
+    console.log('Seeding Week 5...');
+    
+    const insertedWeek = await db.insert(weeks).values({
+      number: 5,
+      title: 'Semana 5'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Revisão Geral', subject: 'Revisão das Semanas 1 a 4 + Caderno de Erros', type: 'revisao', studyTip: `Organização do dia: Tempo total: 5 a 6 horas líquidas. Objetivo: revisar o Bloco 1 sem tentar reler todos os PDFs. A prioridade é trabalhar erros, questões marcadas, pontos frágeis e assuntos que ficaram com baixa segurança. Divisão sugerida:
+Bloco 1: Direito Tributário + Contabilidade Geral
+Bloco 2: Língua Portuguesa + Direito Constitucional
+Bloco 3: Tecnologia da Informação + Direito Administrativo
+Bloco 4: Raciocínio Lógico + Matemática Financeira + Estatística
+Fechamento: caderno de erros + prioridades do Bloco 2 Metodologia de revisão (dentro de cada bloco):
+10 min: releia marcações, resumos ou esquemas dos PDFs mais importantes.
+15 a 25 min: refaça questões erradas e marcadas das semanas anteriores.
+10 min: resolva questões novas do mesmo assunto, especialmente nos temas em que errou.
+5 min: registre no caderno de erros a causa do erro (conceito fraco, troca de instituto, fórmula, procedimento, interpretação do enunciado, distração ou falta de treino). Regra da revisão: não revise primeiro o que já está confortável. Revise primeiro o que ainda está derrubando seu desempenho. Destaques por disciplina:
+DIREITO TRIBUTÁRIO: Foque em limitações ao poder de tributar, responsabilidade tributária e crédito tributário. Separe obrigação tributária, lançamento e crédito. Revise anterioridade, noventena, legalidade, imunidades, decadência e prescrição.
+CONTABILIDADE GERAL: Reforce débito/crédito, contas, fatos contábeis, escrituração, demonstrações, avaliação de ativos e imobilizado. Em Contabilidade, erro repetido quase sempre indica que a base ainda precisa de ajuste.
+TECNOLOGIA DA INFORMAÇÃO: Separe os frameworks por finalidade: COBIT = governança; ITIL = serviços; PMBOK = projetos; Engenharia de Software = desenvolvimento, requisitos, testes, qualidade e métodos ágeis.
+DIREITO CONSTITUCIONAL: Revise princípios fundamentais, direitos e garantias fundamentais e organização político-administrativa. Dê atenção às exceções, competências e remédios constitucionais.
+DIREITO ADMINISTRATIVO: Compare princípios, poderes, organização administrativa e atos administrativos. Foque em atributos, elementos, anulação, revogação e convalidação.
+LÍNGUA PORTUGUESA: Refaça questões de interpretação, tipologia, coesão, coerência, semântica, figuras de linguagem, reescrita, acentuação e ortografia. Português melhora muito quando o aluno revisa pelo erro real.
+RACIOCÍNIO LÓGICO: Não transforme a revisão em releitura passiva. Refaça questões de operadores, negação, equivalências, sequências, orientação espacial/temporal e diagramas.
+MATEMÁTICA FINANCEIRA: Refaça contas de juros simples e compostos sem olhar a resolução. Confira taxa, prazo, capital, montante e unidade de tempo.
+ESTATÍSTICA: Revise média, mediana, moda, separatrizes e leitura de tabelas. O objetivo é evitar confusão de procedimento. Fechamento do bloco (preencher no caderno de erros): 3 assuntos que evoluíram; 3 assuntos que ainda estão frágeis; 3 prioridades para as Semanas 5 a 8. Lembre-se: esta revisão não existe para provar que você lembra de tudo. Ela existe para mostrar onde o estudo virou domínio e onde ainda há ruído. O aluno que revisa com honestidade para de estudar no escuro. A partir daqui, cada erro corrigido vira direção para o próximo bloco. Constância constrói!` }).returning();
+
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Tributário' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Contabilidade Geral' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Língua Portuguesa' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Constitucional' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Tecnologia da Informação' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Administrativo' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Raciocínio Lógico' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Matemática Financeira' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Revisar Estatística' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Preencher caderno de erros (evoluções, fragilidades e prioridades)' },
+    ]);
+
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Língua Portuguesa', subject: 'Estrutura e Processos de Formação de Palavras', type: 'teoria', studyTip: `Dicas:
+Comece sempre pelo radical. Ele é a parte que concentra o sentido básico da palavra. Depois observe o que foi acrescentado antes ou depois dele.
+Não confunda estrutura com processo de formação: radical, prefixo, sufixo e desinência são peças; derivação e composição são formas de construir novas palavras.
+Parassíntese é uma das maiores pegadinhas: prefixo e sufixo precisam entrar ao mesmo tempo. Se a palavra existe sem um deles, não é parassintética.
+Derivação regressiva costuma formar substantivos a partir de verbos, com redução da forma. Derivação imprópria muda a classe gramatical sem mudar a forma da palavra.
+Em composição, a pergunta é: os radicais permaneceram reconhecíveis? Se sim, tende à justaposição. Se houve perda ou alteração fonética, pense em aglutinação.
+
+Resumo do conteúdo:
+MORFEMAS E ESTRUTURA DAS PALAVRAS: A palavra pode ser dividida em morfemas, unidades mínimas dotadas de valor significativo ou gramatical. O radical carrega o núcleo de sentido. Prefixos e sufixos modificam esse sentido ou alteram a classe da palavra. Vogal temática prepara o radical para receber desinências. Desinências indicam flexões nominais ou verbais.
+RADICAL, TEMA, AFIXOS E DESINÊNCIAS: Radical é a base significativa. Tema é a soma de radical e vogal temática. Afixos são elementos que se unem ao radical: prefixos antes, sufixos depois. Desinências nominais indicam gênero e número; desinências verbais indicam modo, tempo, número e pessoa.
+DERIVAÇÃO: A derivação cria palavras a partir de uma palavra primitiva. Pode ser prefixal, sufixal, prefixal e sufixal, parassintética, regressiva ou imprópria. A diferença entre prefixal/sufixal e parassintética é essencial: na parassíntese, prefixo e sufixo são simultâneos.
+COMPOSIÇÃO: Na composição, há união de radicais. A justaposição preserva a autonomia fonética dos elementos. A aglutinação altera a forma sonora ou gráfica de ao menos um dos elementos.
+COMO CAI EM PROVA: A banca costuma pedir o processo de formação, a identificação de morfemas ou a distinção entre processos parecidos. Pegadinhas comuns: chamar toda palavra com prefixo e sufixo de parassintética; confundir vogal temática com desinência; classificar composição olhando apenas para o hífen; esquecer que derivação imprópria depende do uso no contexto. Como resolver: isole o radical, retire prefixos e sufixos mentalmente e veja se a palavra continua existindo. Depois identifique se houve acréscimo, redução, mudança de classe ou união de radicais.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/8GfHz9X3dKQ%3D', description: 'Acessar PDF' },
+      { goalId: meta2[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=419345&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Direito Tributário', subject: 'Garantias e Privilégios do Crédito Tributário', type: 'teoria', studyTip: `Dicas:
+Garantias aumentam a segurança de recebimento do crédito; privilégios tratam da preferência do Fisco em relação a outros credores.
+O patrimônio do sujeito passivo responde pelo crédito tributário, mas sempre observe as limitações legais e as regras de impenhorabilidade.
+A alienação de bens por devedor inscrito em dívida ativa pode gerar presunção de fraude, salvo se forem reservados bens suficientes ao pagamento integral.
+A preferência tributária é forte, mas não é absoluta. Créditos trabalhistas e decorrentes de acidente de trabalho têm tratamento prioritário.
+Em falência, inventário, arrolamento e liquidação, a banca cobra a regra especial: quem recebe antes, quando se exige prova de quitação e qual é o papel da Fazenda.
+
+Resumo do conteúdo:
+GARANTIAS DO CRÉDITO TRIBUTÁRIO: Garantias são instrumentos que protegem a satisfação do crédito tributário. O CTN prevê garantias próprias, mas a enumeração legal não exclui outras que sejam expressamente previstas em lei.
+RESPONSABILIDADE PATRIMONIAL: Em regra, todos os bens e rendas do sujeito passivo respondem pelo crédito tributário. Essa regra reforça a possibilidade de cobrança, mas convive com limites legais, como hipóteses de impenhorabilidade.
+FRAUDE À COBRANÇA: A alienação ou oneração de bens por sujeito passivo em débito inscrito em dívida ativa presume-se fraudulenta quando não restam bens ou rendas suficientes ao pagamento integral do crédito. O ponto decisivo é a inscrição em dívida ativa e a reserva patrimonial suficiente.
+PRIVILÉGIOS DO CRÉDITO TRIBUTÁRIO: Privilégio é preferência. O crédito tributário goza de preferência sobre muitos créditos, mas não supera todos. A lei preserva prioridade de créditos trabalhistas e de acidente de trabalho, entre outras regras especiais.
+COMO CAI EM PROVA: A cobrança costuma vir em assertivas curtas sobre fraude, preferência e prova de quitação. Pegadinhas comuns: dizer que o rol de garantias é fechado; afirmar que o crédito tributário vence qualquer crédito; ignorar a inscrição em dívida ativa; esquecer a exceção da reserva de bens suficientes; confundir garantia com privilégio. Como resolver: separe a pergunta em duas etapas — primeiro veja se o tema é proteção da cobrança ou ordem de preferência; depois aplique a regra do CTN com atenção às exceções.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/eqdpa2NwFB4%3D', description: 'Assistir Videoaula' },
+      { goalId: meta3[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/wy0j1Ux4cn4%3D', description: 'Acessar PDF' },
+      { goalId: meta3[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=407181&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Contabilidade Geral', subject: 'Ganhos ou Perdas de Capital, CPC 01 e Ativo Intangível', type: 'teoria', studyTip: `Dicas:
+Em alienação ou baixa, a conta-chave é simples: valor líquido recebido menos valor contábil. O resultado será ganho ou perda.
+Valor contábil não é custo histórico puro. É custo ajustado por depreciação, amortização e perdas por redução ao valor recuperável.
+No CPC 01, o ativo não pode ficar registrado acima do que a entidade consegue recuperar por uso ou venda.
+Valor recuperável é o maior entre valor justo líquido de despesas de venda e valor em uso. A banca adora inverter para "menor".
+No intangível, não basta não ter substância física. É preciso identificabilidade, controle e benefícios econômicos futuros.
+
+Resumo do conteúdo:
+ALIENAÇÃO E BAIXA DE ATIVOS: Quando um ativo é vendido, descartado ou deixa de gerar benefícios econômicos futuros, deve ser baixado. O ganho ou perda é apurado pela diferença entre o valor líquido obtido e o valor contábil do ativo na data da baixa.
+CPC 01 – IMPAIRMENT: O CPC 01 busca evitar ativos superavaliados. A entidade deve comparar o valor contábil com o valor recuperável. Se o valor contábil excede o valor recuperável, reconhece-se perda por desvalorização.
+VALOR RECUPERÁVEL: Valor recuperável é o maior entre valor justo líquido de despesas de venda e valor em uso. Valor em uso envolve fluxos de caixa futuros esperados trazidos a valor presente. Valor justo líquido considera venda em condições normais, deduzidas despesas de venda.
+ATIVO INTANGÍVEL – CPC 04: Ativo intangível é ativo não monetário identificável sem substância física. Para reconhecimento, exige identificabilidade, controle e benefício econômico futuro. Pesquisa costuma ir ao resultado; desenvolvimento pode ser ativado se cumprir critérios específicos.
+COMO CAI EM PROVA: A banca cobra cálculo de baixa, reconhecimento de impairment, reversão e requisitos do intangível. Pegadinhas comuns: calcular ganho/perda com base no custo original; escolher o menor valor como recuperável; reconhecer goodwill gerado internamente como ativo; amortizar intangível de vida útil indefinida; confundir despesa de pesquisa com desenvolvimento ativável. Como resolver: atualize o valor contábil, compare com venda ou recuperável, classifique o efeito no resultado e verifique se o ativo cumpre os critérios de reconhecimento.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/Coo4wULrDLA%3D', description: 'Assistir Videoaula' },
+      { goalId: meta4[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/DDks7h3bwms%3D', description: 'Acessar PDF' },
+      { goalId: meta4[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=416779%2C416879%2C416844%2C104&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Direito Constitucional', subject: 'Administração Pública', type: 'teoria', studyTip: `Dicas:
+O art. 37 é leitura obrigatória: princípios, concurso público, cargos em comissão, teto, acumulação e responsabilidade civil aparecem com frequência.
+LIMPE não é apenas mnemônico. Cada princípio tem consequência prática: legalidade limita, impessoalidade veda favorecimento, moralidade controla legitimidade, publicidade permite controle e eficiência exige resultado.
+Concurso é regra para cargo e emprego público. Cargo em comissão é exceção e deve se vincular a direção, chefia e assessoramento.
+Acumulação de cargos só é possível nas hipóteses constitucionais e sempre com compatibilidade de horários.
+Responsabilidade objetiva do Estado não elimina ação regressiva: contra o agente, exige dolo ou culpa.
+
+Resumo do conteúdo:
+REGIME CONSTITUCIONAL DA ADMINISTRAÇÃO PÚBLICA: A Constituição disciplina a Administração Pública direta e indireta de todos os Poderes e entes federativos. A base está no art. 37, que organiza princípios, acesso a cargos, remuneração, acumulação, publicidade e responsabilidade.
+PRINCÍPIOS EXPRESSOS: Legalidade, impessoalidade, moralidade, publicidade e eficiência são princípios expressos. Eles orientam a validade dos atos, o controle da Administração e a interpretação das regras administrativas.
+ACESSO, CONCURSO E CARGOS: Cargos, empregos e funções são acessíveis aos brasileiros que preencham os requisitos legais e aos estrangeiros na forma da lei. A investidura em cargo ou emprego público depende de concurso, salvo cargo em comissão.
+RESPONSABILIDADE CIVIL: Pessoas jurídicas de direito público e pessoas jurídicas de direito privado prestadoras de serviço público respondem objetivamente por danos causados por seus agentes. O direito de regresso contra o agente depende de dolo ou culpa.
+COMO CAI EM PROVA: A banca cobra literalidade constitucional e troca pequenos requisitos. Pegadinhas comuns: confundir função de confiança com cargo em comissão; esquecer compatibilidade de horários na acumulação; aplicar cargo em comissão a atribuições técnicas comuns; dizer que regressiva independe de dolo ou culpa. Como resolver: identifique o sujeito da regra, depois o requisito e só então a consequência. Em Administração Pública constitucional, a troca de uma palavra costuma mudar a resposta.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/K%2BZ5eUKza4Y%3D', description: 'Assistir Videoaula' },
+      { goalId: meta5[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/tNmgxwV3M6w%3D', description: 'Acessar PDF' },
+      { goalId: meta5[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=405240&qd=0&qa=0&q=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Tecnologia da Informação', subject: 'CMMI-DEV 2.0', type: 'teoria', studyTip: `Dicas:
+CMMI é modelo de melhoria de processos, não metodologia ágil, não linguagem e não ferramenta de desenvolvimento.
+CMMI-DEV foca desenvolvimento de produtos e serviços. A ideia é aumentar previsibilidade, qualidade e controle dos processos.
+Diferencie maturidade organizacional de capacidade de processo. A banca mistura os termos para testar conceito.
+Níveis mais altos indicam processos mais definidos, medidos e otimizados, não simplesmente mais documentação.
+Compare com cuidado: ITIL trata serviços, COBIT trata governança, PMBOK trata projetos, CMMI trata maturidade/capacidade de processos.
+
+Resumo do conteúdo:
+IDEIA CENTRAL DO CMMI: CMMI é um modelo de referência para melhoria de processos. Ele orienta organizações a avaliar práticas, corrigir lacunas, institucionalizar processos e aumentar a qualidade dos resultados.
+CMMI-DEV: A vertente de desenvolvimento está voltada à criação, manutenção e entrega de produtos e serviços. O foco é tornar o desenvolvimento menos dependente de improviso e mais apoiado por processos definidos, acompanhados e melhorados.
+MATURIDADE E CAPACIDADE: Maturidade olha a organização em estágios de evolução. Capacidade observa o desempenho de processos específicos. Em prova, a pergunta pode trocar o nível da organização pelo nível de uma área de processo.
+COMPARAÇÃO COM OUTROS FRAMEWORKS: CMMI não substitui ITIL, COBIT ou PMBOK. Ele conversa com eles, mas tem foco próprio: melhoria da capacidade/maturidade dos processos.
+COMO CAI EM PROVA: A banca cobra finalidade, níveis, capacidade, maturidade e comparação com frameworks. Pegadinhas comuns: tratar CMMI como metodologia de gerenciamento de projetos; confundir melhoria de processo com governança de TI; achar que CMMI é só para software; inverter maturidade e capacidade. Como resolver: leia a palavra-chave do enunciado — se fala em melhoria/maturidade/capacidade de processos, pense em CMMI. Depois veja se a cobrança é conceitual, comparativa ou sobre níveis.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ogmxMTMNi2o%3D', description: 'Assistir Videoaula' },
+      { goalId: meta6[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/lfRQLAUew30%3D', description: 'Acessar PDF' },
+      { goalId: meta6[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=8273%2C428904&desatualizada=0&anulada=0&query=DEV+2.0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Direito Administrativo', subject: 'Responsabilidade Civil do Estado', type: 'teoria', studyTip: `Dicas:
+Na ação da vítima contra o Estado, a regra para ato comissivo é responsabilidade objetiva: dano, conduta e nexo causal.
+Culpa do agente não é requisito para a vítima receber indenização. Ela importa na ação regressiva do Estado contra o agente.
+Omissão estatal exige cuidado: muitas questões cobram falha do serviço, dever específico de agir e responsabilidade subjetiva.
+Risco administrativo admite excludentes ou atenuantes. Risco integral é excepcional.
+Prestadora privada de serviço público também pode responder objetivamente quando o dano decorre da prestação do serviço.
+
+Resumo do conteúdo:
+FUNDAMENTO CONSTITUCIONAL: A Constituição prevê responsabilidade das pessoas jurídicas de direito público e das pessoas jurídicas de direito privado prestadoras de serviço público pelos danos que seus agentes causarem a terceiros.
+RESPONSABILIDADE OBJETIVA: Na responsabilidade objetiva, a vítima deve provar conduta estatal, dano e nexo causal. Não precisa provar culpa do agente. Essa é a lógica da teoria do risco administrativo.
+OMISSÃO DO ESTADO: Na omissão, a prova costuma exigir mais cuidado. A banca pode trabalhar omissão genérica, omissão específica, dever legal de agir e falha do serviço.
+AÇÃO REGRESSIVA: A relação vítima-Estado é diferente da relação Estado-agente. O Estado pode indenizar objetivamente a vítima, mas só cobra regressivamente do agente se provar dolo ou culpa.
+COMO CAI EM PROVA: A banca costuma narrar um caso e perguntar quem responde, qual teoria se aplica e se cabe regressiva. Pegadinhas comuns: exigir culpa do agente contra a vítima; dizer que responsabilidade objetiva não admite excludentes; aplicar risco integral como regra; esquecer dolo ou culpa na regressiva. Como resolver: separe a relação jurídica — primeiro vítima contra Estado; depois Estado contra agente. Identifique ação/omissão, dano, nexo e eventual excludente.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/qyHS9Ba7dlM%3D', description: 'Assistir Videoaula' },
+      { goalId: meta7[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/nAj65PVESJ4%3D', description: 'Acessar PDF' },
+      { goalId: meta7[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=404402%2C404403%2C404399&qd=0&qa=0&q=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Raciocínio Lógico', subject: 'Lógica de Argumentação', type: 'teoria', studyTip: `Dicas:
+Validade não é verdade. Um argumento pode ter frases materialmente estranhas e ainda ser válido pela forma lógica.
+Procure premissas e conclusão antes de calcular. Conectores como logo, portanto, assim e conclui-se indicam a conclusão.
+Para testar validade, tente derrubar o argumento: premissas verdadeiras e conclusão falsa. Se não conseguir, o argumento é válido.
+Condicional é campo minado: afirmar o consequente e negar o antecedente são erros clássicos.
+Quantificadores mudam tudo: todo, nenhum, algum, somente, pelo menos e exatamente precisam ser tratados com precisão.
+
+Resumo do conteúdo:
+ARGUMENTO: Argumento é conjunto de proposições em que uma ou mais funcionam como premissas e outra como conclusão. A lógica de argumentação avalia se a conclusão decorre das premissas.
+VALIDADE: Um argumento é válido quando é impossível que todas as premissas sejam verdadeiras e a conclusão falsa ao mesmo tempo. A validade depende da forma lógica, não da aparência realista do conteúdo.
+MÉTODOS DE TESTE: É possível testar argumentos por tabela-verdade, equivalências, diagramas, análise de casos ou tentativa controlada. A escolha depende do tipo de proposição e do número de variáveis.
+FALÁCIAS FORMAIS: Falácias comuns envolvem inversões indevidas de condicionais, negação incorreta de proposições compostas e conclusão que parece razoável, mas não decorre logicamente das premissas.
+COMO CAI EM PROVA: A banca cobra conclusão válida, argumento equivalente, falhas de raciocínio e análise de premissas. Pegadinhas comuns: confundir validade com verdade; inverter "se P, então Q"; negar condicional de forma errada; aceitar conclusão apenas por senso comum. Como resolver: traduza o texto para estrutura lógica, marque premissas e conclusão, depois procure um contraexemplo. Se premissas verdadeiras com conclusão falsa forem impossíveis, o argumento é válido.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/fUp%2FImIRTe4%3D', description: 'Assistir Videoaula' },
+      { goalId: meta8[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/95igJrnrX%2Fk%3D', description: 'Acessar PDF' },
+      { goalId: meta8[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=404266&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Matemática Financeira', subject: 'Descontos', type: 'teoria', studyTip: `Dicas:
+Antes de fórmula, nomeie as variáveis: valor nominal, valor atual, desconto, taxa e prazo.
+Desconto comercial simples é "por fora": calcula o desconto sobre o valor nominal.
+Desconto racional simples é "por dentro": parte do valor atual e trabalha a lógica inversa dos juros simples.
+Desconto composto exige coerência com capitalização composta. Não misture regime simples com fórmula composta.
+Taxa e prazo precisam estar na mesma unidade. Esse detalhe derruba mais questões do que a fórmula em si.
+
+Resumo do conteúdo:
+CONCEITOS INICIAIS: Desconto é abatimento por antecipação de um título. Valor nominal é o valor no vencimento. Valor atual é o valor presente ou antecipado. Desconto é a diferença entre valor nominal e valor atual.
+DESCONTO COMERCIAL SIMPLES: Também chamado desconto bancário ou por fora, calcula o desconto sobre o valor nominal. A lógica é direta: quanto maior o valor nominal, a taxa e o prazo, maior o desconto.
+DESCONTO RACIONAL SIMPLES: Também chamado desconto por dentro, usa o valor atual como base econômica. Ele corresponde à lógica de juros simples vista de trás para frente.
+DESCONTO COMPOSTO E EQUIVALÊNCIA: No regime composto, o valor atual é obtido trazendo o valor nominal a valor presente pela taxa composta. Muitas questões pedem comparação de valores em datas diferentes; para comparar corretamente, todos os valores devem ser levados para uma mesma data focal.
+COMO CAI EM PROVA: A banca cobra cálculo direto, troca de regime e equivalência de capitais. Pegadinhas comuns: usar valor nominal no desconto racional; usar valor atual no desconto comercial; esquecer conversão de prazo; comparar capitais sem data focal. Como resolver: monte N, A, D, i e n. Identifique "por fora" ou "por dentro", simples ou composto. Ajuste unidades e só então calcule.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/PcQF1Bo2RQQ%3D', description: 'Assistir Videoaula' },
+      { goalId: meta9[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/afVY%2Bi1ri1M%3D', description: 'Acessar PDF' },
+      { goalId: meta9[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403809%2C403811%2C403812%2C403816%2C425371%2C425372&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta10 = await db.insert(goals).values({ weekId, number: 10, discipline: 'Revisão Geral', subject: 'Revisão da Semana 5', type: 'revisao', studyTip: `Organização do dia: Tempo total: 4 a 5 horas líquidas. A Semana 5 começou com revisão de bloco e avançou em conteúdos novos. Por isso, a revisão final deve ser objetiva: feche os erros da semana sem tentar refazer a revisão das Semanas 1 a 4. Ordem sugerida: Língua Portuguesa, Direito Tributário, Contabilidade Geral, Direito Constitucional, Tecnologia da Informação, Direito Administrativo, Raciocínio Lógico, Matemática Financeira. Metodologia de revisão (dentro de cada disciplina):
+10 min: releia marcações e esquemas do PDF completo.
+10 min: revise os pontos que geraram dúvida, chute ou erro.
+15 a 25 min: resolva questões selecionadas, priorizando erradas e marcadas.
+5 a 10 min: atualize o caderno de erros com a causa do erro (conceito, fórmula, troca de instituto, leitura apressada ou falta de treino). Destaques da semana:
+LÍNGUA PORTUGUESA: Revise radical, tema, afixos, derivação, composição, parassíntese, regressiva e imprópria.
+DIREITO TRIBUTÁRIO: Foque em garantias, privilégios, fraude à cobrança, dívida ativa, preferência e exceções.
+CONTABILIDADE GERAL: Retome baixa de ativos, ganho/perda de capital, CPC 01, valor recuperável, impairment e CPC 04.
+DIREITO CONSTITUCIONAL: Revise princípios do art. 37, concurso, cargos em comissão, acumulação, teto e responsabilidade objetiva.
+TECNOLOGIA DA INFORMAÇÃO: Organize CMMI como modelo de maturidade/capacidade para melhoria de processos.
+DIREITO ADMINISTRATIVO: Consolide responsabilidade objetiva, omissão estatal, excludentes, culpa concorrente e ação regressiva.
+RACIOCÍNIO LÓGICO: Refaça argumentos válidos e inválidos, premissas, conclusão, condicionais e quantificadores.
+MATEMÁTICA FINANCEIRA: Treine valor nominal, valor atual, desconto comercial, desconto racional, desconto composto e data focal. Lembre-se: a revisão de bloco mostrou o mapa. A revisão da semana ajusta a rota. Uma não substitui a outra; juntas, elas impedem que o estudo vire acúmulo sem retenção. Feche a semana com honestidade: o que ficou claro, o que ainda está frágil e o que precisa voltar nas próximas revisões. Constância constrói!` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Língua Portuguesa' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Tributário' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Contabilidade Geral' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Constitucional' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Tecnologia da Informação' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Administrativo' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Raciocínio Lógico' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Matemática Financeira' },
+    ]);
+  }
+
   if (!existingWeeks.some(w => w.number === 6)) {
     console.log('Seeding Week 6...');
     

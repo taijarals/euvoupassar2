@@ -15,18 +15,18 @@ Status de quais semanas do "Guia do Aprovado" (SEFAZ-BA — Auditor Fiscal) já 
 | 7      | ✅    | ✅           | ✅                     |
 | 8      | ✅    | ✅           | ✅                     |
 | 9      | ✅    | ✅           | ✅                     |
-| 10     | ✅    | ✅           | ✅                     |
 | 11     | ✅    | ✅           | ✅                     |
 | 12     | ✅    | ✅           | ✅                     |
 | 13     | ✅    | ✅           | ✅                     |
-| 14     | ✅    | ✅           | ✅                     |
 | 15     | ✅    | ✅           | ✅                     |
-| 16     | ✅    | ✅           | ✅                     |
 
 ## Semanas pendentes
 
 | Semana | Status                                  |
 |--------|-------------------------------------------|
+| 10     | Aguardando restauração de dados         |
+| 14     | Aguardando restauração de dados         |
+| 16     | Aguardando restauração de dados         |
 
 > Se o Guia do Aprovado tiver mais de 16 semanas ao todo, atualize esta lista.
 
