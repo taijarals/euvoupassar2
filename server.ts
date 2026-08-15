@@ -3,6 +3,7 @@ import cors from 'cors';
 import { db } from './db/index.js';
 import { weeks, goals, materials, questions, questionAttempts } from './db/schema.js';
 import { eq, inArray } from 'drizzle-orm';
+import { migrate } from 'drizzle-orm/libsql/migrator';
 import { createServer as createViteServer } from 'vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -42,7 +43,35 @@ function getAiClient() {
   return ai;
 }
 
+async function generateContentWithRetry(aiClient: any, prompt: string, retries = 5) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await aiClient.models.generateContent({
+        model: 'gemini-3.6-flash',
+        contents: prompt,
+      });
+    } catch (error: any) {
+      console.error(`Attempt ${i + 1} failed:`, error.message || error);
+      if (i === retries - 1) throw error;
+      const errorStr = String(error.message || error);
+      if (errorStr.includes('503') || errorStr.includes('UNAVAILABLE') || errorStr.includes('429')) {
+        const delay = 3000 * (i + 1); // 3s, 6s, 9s, 12s
+        console.log(`Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+
 async function createServer() {
+  try {
+    await migrate(db, { migrationsFolder: path.join(_dirname, 'drizzle') });
+  } catch (err) {
+    console.error('Migration on server start error:', err);
+  }
+
   const app = express();
   const PORT = 3000;
 
@@ -130,12 +159,9 @@ async function createServer() {
       const prompt = `Crie um resumo objetivo e didático sobre o seguinte assunto, focado no que costuma ser cobrado em concursos fiscais/SEFAZ. Escreva em português do Brasil, com no máximo 3 a 4 parágrafos curtos ou uma lista de pontos-chave.\n\nDisciplina: ${goal.discipline}\nAssunto: ${goal.subject}`;
 
       const aiClient = getAiClient();
-      const response = await aiClient.models.generateContent({
-        model: 'gemini-3.6-flash',
-        contents: prompt,
-      });
+      const response = await generateContentWithRetry(aiClient, prompt);
 
-      const generatedSummary = response.text || '';
+      const generatedSummary = response!.text || '';
       
       await db.update(goals).set({ aiSummary: generatedSummary }).where(eq(goals.id, id));
       
@@ -298,12 +324,9 @@ Retorne APENAS um array JSON de objetos com esta exata estrutura:
 ]
 `;
 
-        const response = await aiClient.models.generateContent({
-          model: 'gemini-3.6-flash',
-          contents: prompt,
-        });
+        const response = await generateContentWithRetry(aiClient, prompt);
 
-        const responseText = response.text || '';
+        const responseText = response!.text || '';
         
         const startIndex = responseText.indexOf('[');
         const endIndex = responseText.lastIndexOf(']');
