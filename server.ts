@@ -68,8 +68,16 @@ async function generateContentWithRetry(aiClient: any, prompt: string, retries =
 async function createServer() {
   try {
     await migrate(db, { migrationsFolder: path.join(_dirname, 'drizzle') });
+    
+    // Auto-seed if database is empty (e.g. after container restart)
+    const weeksCount = await db.select().from(weeks).limit(1);
+    if (weeksCount.length === 0) {
+      console.log('Database is empty. Auto-seeding...');
+      const { seed } = await import('./db/seed.js');
+      await seed();
+    }
   } catch (err) {
-    console.error('Migration on server start error:', err);
+    console.error('Migration/Seeding on server start error:', err);
   }
 
   const app = express();
@@ -101,7 +109,7 @@ async function createServer() {
       
       res.json(weeksData);
     } catch (error) {
-      res.status(500).json({ error: 'Erro ao buscar dados' });
+      console.error(error); res.status(500).json({ error: 'Erro ao buscar dados' });
     }
   });
 

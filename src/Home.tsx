@@ -210,6 +210,108 @@ export default function Home() {
         )}
       </section>
 
+      {/* Progresso por Tipo de Material */}
+      {stats && (
+        <section className="mb-8">
+          <h2 className="text-lg font-bold text-slate-800 mb-4">Progresso por Tipo de Material</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            {/* Vídeos */}
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <Video className="w-5 h-5 text-emerald-600" />
+                  <span className="font-semibold text-sm">Vídeos</span>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{stats.byType.videoaula.completed}/{stats.byType.videoaula.total}</span>
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-slate-500 font-medium">Progresso</span>
+                  <span className="text-xs font-bold text-emerald-700">{stats.byType.videoaula.total > 0 ? Math.round((stats.byType.videoaula.completed / stats.byType.videoaula.total) * 100) : 0}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${stats.byType.videoaula.total > 0 && stats.byType.videoaula.completed === stats.byType.videoaula.total ? 'bg-emerald-500' : 'bg-emerald-400'}`} 
+                    style={{ width: `${stats.byType.videoaula.total > 0 ? Math.round((stats.byType.videoaula.completed / stats.byType.videoaula.total) * 100) : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* PDFs */}
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <FileText className="w-5 h-5 text-emerald-600" />
+                  <span className="font-semibold text-sm">PDFs</span>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{stats.byType.pdf.completed}/{stats.byType.pdf.total}</span>
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-slate-500 font-medium">Progresso</span>
+                  <span className="text-xs font-bold text-emerald-700">{stats.byType.pdf.total > 0 ? Math.round((stats.byType.pdf.completed / stats.byType.pdf.total) * 100) : 0}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${stats.byType.pdf.total > 0 && stats.byType.pdf.completed === stats.byType.pdf.total ? 'bg-emerald-500' : 'bg-emerald-400'}`} 
+                    style={{ width: `${stats.byType.pdf.total > 0 ? Math.round((stats.byType.pdf.completed / stats.byType.pdf.total) * 100) : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Questões */}
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  <span className="font-semibold text-sm">Questões</span>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{stats.byType.questoes.completed}/{stats.byType.questoes.total}</span>
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-slate-500 font-medium">Progresso</span>
+                  <span className="text-xs font-bold text-emerald-700">{stats.byType.questoes.total > 0 ? Math.round((stats.byType.questoes.completed / stats.byType.questoes.total) * 100) : 0}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${stats.byType.questoes.total > 0 && stats.byType.questoes.completed === stats.byType.questoes.total ? 'bg-emerald-500' : 'bg-emerald-400'}`} 
+                    style={{ width: `${stats.byType.questoes.total > 0 ? Math.round((stats.byType.questoes.completed / stats.byType.questoes.total) * 100) : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Tarefas */}
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-slate-700">
+                  <CheckSquare className="w-5 h-5 text-emerald-600" />
+                  <span className="font-semibold text-sm">Tarefas</span>
+                </div>
+                <span className="text-sm font-bold text-slate-900">{stats.byType.tarefa.completed}/{stats.byType.tarefa.total}</span>
+              </div>
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-slate-500 font-medium">Progresso</span>
+                  <span className="text-xs font-bold text-emerald-700">{stats.byType.tarefa.total > 0 ? Math.round((stats.byType.tarefa.completed / stats.byType.tarefa.total) * 100) : 0}%</span>
+                </div>
+                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-500 ${stats.byType.tarefa.total > 0 && stats.byType.tarefa.completed === stats.byType.tarefa.total ? 'bg-emerald-500' : 'bg-emerald-400'}`} 
+                    style={{ width: `${stats.byType.tarefa.total > 0 ? Math.round((stats.byType.tarefa.completed / stats.byType.tarefa.total) * 100) : 0}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+      )}
+
       {/* Weeks & Goals List */}
       <section>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

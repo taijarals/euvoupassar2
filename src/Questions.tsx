@@ -104,8 +104,6 @@ export default function Questions() {
   const { data: goals = [] } = useQuery({
     queryKey: ['goals'],
     queryFn: async () => {
-      const res = await fetch('/api/stats'); // Actually /api/stats only has aggregated data, wait we need /api/goals, but we don't have a GET /api/goals endpoint?
-      // Let's use weeks data, which has goals inside it.
       const weeksRes = await fetch('/api/weeks');
       const weeksData = await weeksRes.json();
       const allGoals: any[] = [];
@@ -385,7 +383,8 @@ function QuestionCard({ question }: { question: Question }) {
 
   const getOptionLabel = (index: number) => {
     if (question.banca === 'CESPE/CEBRASPE') {
-      return index === 0 ? 'Certo' : 'Errado'; // Wait, let's just use the option text
+      const optionText = question.options[index] || '';
+      return optionText.charAt(0).toUpperCase();
     }
     return String.fromCharCode(65 + index); // A, B, C, D, E
   };

@@ -2478,7 +2478,10 @@ COMO CAI EM PROVA: A banca cobra competências, fases, indenização, modalidade
 
 }
 
-seed().catch((e) => {
+export { seed };
+
+/* seed().catch((e) => {
   console.error('Seeding failed:', e);
   process.exit(1);
 });
+*/
