@@ -2079,6 +2079,245 @@ COMO CAI EM PROVA: A banca cobra conceitos fundamentais, custo de oportunidade, 
   }
 
 
+
+  if (!existingWeeks.some(w => w.number === 10)) {
+    console.log('Seeding Week 10...');
+    
+    const insertedWeek = await db.insert(weeks).values({
+      number: 10,
+      title: 'Semana 10'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Língua Portuguesa', subject: 'A Sintaxe do Período Composto', type: 'teoria', studyTip: `Dicas:
+Comece contando as orações pelos verbos e locuções verbais. Depois identifique a relação entre elas; classificar conjunções antes de delimitar as orações costuma gerar erro.
+Coordenação reúne orações sintaticamente independentes. Subordinação cria dependência sintática: a oração subordinada exerce função dentro da principal.
+Não classifique conjunção apenas pela palavra. "Como", "que", "se", "porque" e "quando" mudam de valor conforme o contexto.
+Nas subordinadas substantivas, substitua a oração por "isso". Em seguida, descubra qual função esse termo exerceria: sujeito, objeto, complemento nominal, predicativo ou aposto.
+Nas adjetivas, a pontuação muda o alcance: a restritiva seleciona parte do conjunto e não recebe vírgulas; a explicativa acrescenta comentário sobre todo o antecedente e fica isolada.
+Nas adverbiais, procure a relação lógica entre os fatos, especialmente causa, consequência, condição, concessão e finalidade. A banca explora a troca entre relações próximas.
+
+Resumo do conteúdo:
+PERÍODO COMPOSTO: Período composto possui duas ou mais orações. A relação pode ocorrer por coordenação, quando as orações mantêm independência sintática, ou por subordinação, quando uma oração exerce função sintática em relação a outra.
+ORAÇÕES COORDENADAS: Orações coordenadas assindéticas não possuem conjunção; sindéticas são introduzidas por conjunção. As sindéticas podem ser aditivas, adversativas, alternativas, conclusivas ou explicativas. A classificação depende do valor no contexto: aditivas somam; adversativas contrapõem; alternativas apresentam escolha ou alternância; conclusivas exprimem consequência lógica; explicativas justificam ordem ou afirmação anterior.
+SUBORDINADAS SUBSTANTIVAS: Exercem funções próprias de substantivo. Podem ser subjetivas, objetivas diretas, objetivas indiretas, completivas nominais, predicativas ou apositivas. A substituição por "isso" ajuda a localizar a função, mas a análise da estrutura continua necessária.
+SUBORDINADAS ADJETIVAS: São introduzidas por pronome relativo e caracterizam termo antecedente. A restritiva delimita o referente e não é isolada por vírgulas. A explicativa acrescenta informação acessória e recebe pontuação. O pronome relativo retoma antecedente e exerce função sintática dentro da oração; "que", "quem", "o qual", "cujo" e "onde" possuem condições próprias de emprego.
+SUBORDINADAS ADVERBIAIS: Exprimem circunstâncias como causa, consequência, condição, concessão, conformidade, comparação, finalidade, proporção e tempo. A classificação resulta da relação semântica entre a subordinada e a principal.
+PONTUAÇÃO E SENTIDO: Deslocamentos de orações adverbiais podem exigir vírgula. Nas adjetivas, inserir ou retirar vírgulas pode mudar o conjunto a que a afirmação se aplica e, portanto, alterar o sentido.
+COMO CAI EM PROVA: A banca cobra classificação de orações, valor das conjunções, função do pronome relativo, pontuação e manutenção de sentido em reescritas. Pegadinhas comuns: contar verbos auxiliares de uma locução como orações diferentes; classificar conjunção sem considerar o contexto; confundir oração explicativa coordenada com causal subordinada; tratar todo "que" como pronome relativo; retirar vírgulas de oração adjetiva sem alterar o sentido; confundir concessão com condição ou causa. Como resolver: delimite as orações, identifique o conectivo e teste a relação lógica. Em subordinadas, determine a função exercida; em adjetivas, localize o antecedente e verifique o efeito das vírgulas.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/pyImdSYft7M%3D', description: 'Assistir Videoaula' },
+      { goalId: meta1[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/IwXJmcaHs0k%3D', description: 'Acessar PDF' },
+      { goalId: meta1[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=419436&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Auditoria Fiscal', subject: 'Fraude e Erro em Auditoria', type: 'teoria', studyTip: `Dicas:
+Evidência adequada trata de qualidade, relevância e confiabilidade; evidência suficiente trata de quantidade. Risco maior costuma exigir evidência mais persuasiva.
+Fontes externas e independentes tendem a ser mais confiáveis que fontes internas. Evidência obtida diretamente pelo auditor costuma superar a recebida indiretamente.
+Materialidade depende da magnitude e da natureza da distorção. Não existe percentual universal aplicável a qualquer entidade.
+Fraude envolve ato intencional; erro é não intencional. A intenção distingue os conceitos, mas ambos podem gerar distorção relevante.
+A responsabilidade primária pela prevenção e detecção de fraude pertence à administração e à governança. O auditor busca segurança razoável, não garantia absoluta.
+Diante de indícios de fraude, o auditor deve ampliar procedimentos, avaliar impactos, comunicar aos responsáveis e documentar as conclusões.
+
+Resumo do conteúdo:
+EVIDÊNCIA DE AUDITORIA: Evidência é a informação usada para fundamentar conclusões e opinião. Deve ser suficiente e apropriada. Suficiência refere-se à quantidade; adequação envolve relevância e confiabilidade. A confiabilidade varia conforme fonte e natureza. Evidência externa, documental e obtida diretamente tende a ser mais forte, embora nenhuma característica deva ser analisada isoladamente.
+MATERIALIDADE: Uma informação é material quando sua omissão ou distorção pode influenciar decisões dos usuários. O auditor define materialidade para as demonstrações, pode estabelecer materialidade de execução e revê-la quando surgem novas informações. Materialidade quantitativa não elimina fatores qualitativos. Fraude, descumprimento legal ou distorção em área sensível pode ser relevante mesmo com valor menor.
+FRAUDE E ERRO: Fraude é ato intencional praticado para obter vantagem injusta ou ilegal e pode envolver manipulação de registros ou apropriação indevida de ativos. Erro decorre de equívoco, omissão ou aplicação incorreta sem intenção.
+RESPONSABILIDADES: Administração e governança respondem primariamente pela prevenção e detecção, por meio de cultura ética e controles internos. O auditor deve obter segurança razoável de que não existem distorções relevantes por fraude ou erro. Fraude pode ser mais difícil de detectar por envolver conluio, falsificação, omissão deliberada ou burla de controles pela administração.
+RESPOSTA DO AUDITOR: Ao identificar risco ou indício, o auditor adapta procedimentos, avalia implicações para outras áreas, comunica em nível adequado e documenta julgamentos. Dependendo da gravidade, pode haver impacto na continuidade do trabalho e em obrigações legais.
+COMO CAI EM PROVA: A prova explora distinções conceituais, hierarquia de evidências, materialidade, responsabilidades e condutas diante de indícios. Pegadinhas comuns: trocar suficiência por adequação; considerar evidência interna sempre confiável; afirmar que materialidade é apenas quantitativa; atribuir ao auditor responsabilidade primária pela prevenção de fraude; exigir segurança absoluta; tratar qualquer falha como fraude. Como resolver: identifique se a questão trata de quantidade, qualidade, intenção, responsabilidade ou resposta profissional. Procure expressões absolutas e compare-as com a lógica de julgamento e segurança razoável.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/BpUmHr1Hles%3D', description: 'Assistir Videoaula' },
+      { goalId: meta2[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/8w4wvawZi0E%3D', description: 'Acessar PDF' },
+      { goalId: meta2[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=4674&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Direito Tributário', subject: 'Simples Nacional', type: 'teoria', studyTip: `Dicas:
+O Simples Nacional é regime compartilhado de arrecadação, fiscalização e cobrança para microempresas e empresas de pequeno porte; não é um tributo novo.
+Separe enquadramento empresarial de opção pelo regime. Ser ME ou EPP não significa estar automaticamente no Simples.
+Nem todos os tributos estão incluídos no documento único. ICMS-ST, importação, ganho de capital e outras hipóteses seguem recolhimento próprio.
+A receita bruta acumulada e o anexo aplicável influenciam alíquota e valor devido. Leia com cuidado período de apuração e faixa.
+Impedimento à opção, exclusão e desenquadramento não são sinônimos. Observe causa, momento dos efeitos e possibilidade de regularização.
+Em operações interestaduais, substituição tributária, diferencial de alíquotas e ISS, não presuma que o recolhimento unificado elimina todas as obrigações.
+
+Resumo do conteúdo:
+NATUREZA DO REGIME: O Simples Nacional, instituído pela LC n. 123/2006, unifica a apuração e o recolhimento de diversos tributos devidos por ME e EPP. A gestão envolve União, Estados, Distrito Federal e Municípios.
+ME E EPP: O enquadramento considera receita bruta e demais requisitos legais. A opção depende de solicitação e ausência de vedações. Determinadas atividades, estruturas societárias, débitos ou participações podem impedir ingresso ou permanência.
+TRIBUTOS ABRANGIDOS: O documento único pode compreender IRPJ, IPI, CSLL, Cofins, PIS/Pasep, contribuição patronal previdenciária, ICMS e ISS, conforme regras do regime. Existem cobranças que permanecem fora da sistemática unificada.
+CÁLCULO: O valor depende da receita bruta acumulada, da receita do período, do anexo e da alíquota efetiva. A alíquota efetiva resulta da aplicação da fórmula legal sobre a receita acumulada, considerando parcela a deduzir.
+OPERAÇÕES ESPECÍFICAS: Compras, vendas interestaduais, importações, substituição tributária, antecipação, diferencial de alíquotas e prestações sujeitas ao ISS podem exigir tratamento próprio. A condição do remetente e do destinatário altera a análise.
+EXCLUSÃO: A exclusão pode ocorrer por comunicação do contribuinte ou de ofício. Os efeitos variam conforme motivo e data da ocorrência. A prova costuma explorar excesso de receita, atividade vedada, débitos e omissões.
+COMO CAI EM PROVA: A banca cobra conceito, tributos abrangidos, vedações, cálculo, exclusão e tratamento de operações específicas. Pegadinhas comuns: tratar o Simples como imposto único; considerar toda ME automaticamente optante; afirmar que todos os tributos estão no DAS; aplicar alíquota nominal diretamente sobre a receita sem observar a fórmula; ignorar ICMS-ST, DIFAL ou importação; confundir exclusão com perda automática da condição de ME ou EPP. Como resolver: identifique primeiro a situação empresarial, depois a opção e a vedação. No cálculo, organize receita acumulada, anexo, faixa, alíquota nominal e parcela a deduzir.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/%2BdmKmMj3%2Bn4%3D', description: 'Assistir Videoaula' },
+      { goalId: meta3[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/fqrDwen20Yk%3D', description: 'Acessar PDF' },
+      { goalId: meta3[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=407191&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Economia', subject: 'Teoria do Consumidor - Parte I', type: 'teoria', studyTip: `Dicas:
+A restrição orçamentária mostra combinações acessíveis; preferências mostram como o consumidor ordena essas combinações. Não confunda possibilidade com desejo.
+A inclinação da reta orçamentária é determinada pela razão entre os preços. Mudança de renda desloca a reta paralelamente; mudança de preço altera sua inclinação.
+Preferências completas permitem comparar cestas; transitivas preservam coerência; monotonicidade expressa preferência por mais, quando os bens são desejáveis.
+Curvas de indiferença não se cruzam quando as preferências são consistentes. Curvas mais altas representam maior utilidade sob monotonicidade.
+Convexidade traduz preferência por diversificação. Substitutos perfeitos geram retas; complementares perfeitos, curvas em L.
+Utilidade é representação ordinal: importa a ordenação das cestas, não a intensidade numérica absoluta.
+
+Resumo do conteúdo:
+ESCOLHA DO CONSUMIDOR: A teoria combina recursos limitados, preços e preferências para explicar escolhas. O consumidor seleciona a cesta mais preferida entre as que pode adquirir.
+RESTRIÇÃO ORÇAMENTÁRIA: Para dois bens, a despesa total não pode superar a renda. A reta orçamentária representa cestas que gastam toda a renda. Interceptos mostram a quantidade máxima de cada bem quando todo o orçamento é destinado a ele. A inclinação é o preço relativo, indicando quanto de um bem deve ser sacrificado para obter unidade adicional do outro.
+ALTERAÇÕES NA RESTRIÇÃO: Aumento de renda desloca a reta para fora de modo paralelo, se preços não mudam. Alteração no preço de um bem gira a reta em torno do intercepto do outro bem.
+PREFERÊNCIAS: Completude permite comparar quaisquer cestas; transitividade garante consistência; continuidade evita saltos; monotonicidade associa mais bens desejáveis a maior satisfação; convexidade favorece combinações diversificadas.
+CURVAS DE INDIFERENÇA: Reúnem cestas com a mesma satisfação. Em preferências usuais, são decrescentes, convexas e não se cruzam. A taxa marginal de substituição corresponde à inclinação e mede a disposição de troca entre bens.
+TIPOS DE PREFERÊNCIAS: Substitutos perfeitos apresentam taxa de substituição constante e curvas lineares. Complementares perfeitos são consumidos em proporções fixas e geram curvas em L. Bens neutros ou indesejáveis alteram o formato.
+UTILIDADE: A função utilidade representa a ordenação das preferências. Transformações monotônicas preservam essa ordem; os valores não devem ser interpretados como medida cardinal de felicidade.
+COMO CAI EM PROVA: A banca cobra deslocamentos da reta, axiomas das preferências, formatos de curvas e interpretação da taxa marginal de substituição. Pegadinhas comuns: confundir reta orçamentária com curva de indiferença; dizer que aumento de renda muda a inclinação; afirmar que curvas de indiferença podem cruzar; inverter substitutos e complementares perfeitos; interpretar utilidade ordinal como medida absoluta; esquecer o sinal negativo da inclinação orçamentária. Como resolver: separe o que vem de renda e preços do que vem das preferências. Desenhe os interceptos, identifique o tipo de mudança e só depois analise a cesta escolhida.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/m5n1NhPRkUQ%3D', description: 'Assistir Videoaula' },
+      { goalId: meta4[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/Ij3FR4RwfhI%3D', description: 'Acessar PDF' },
+      { goalId: meta4[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403956%2C412771%2C403960&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Contabilidade de Custos', subject: 'Controle de Custos', type: 'teoria', studyTip: `Dicas:
+Custo controlável depende do nível de responsabilidade e do horizonte de tempo. Um gestor pode controlar determinado gasto e outro não.
+Custo estimado projeta o que provavelmente ocorrerá; custo-padrão define referência técnica para controle e avaliação de desempenho.
+O padrão ideal pressupõe condições perfeitas; o padrão corrente admite perdas e ineficiências normais e tende a ser mais útil ao controle.
+Nas variações de materiais, separe preço e quantidade. Na mão de obra, separe taxa salarial e eficiência.
+Variação favorável não significa necessariamente boa gestão. Pode decorrer de material barato e inferior, afetando consumo ou qualidade.
+Em produção contínua, equivalentes de produção convertem unidades parcialmente acabadas em quantidade equivalente de unidades completas.
+
+Resumo do conteúdo:
+CUSTOS CONTROLÁVEIS: Custos controláveis podem ser influenciados pelo gestor em determinado nível e período. Não controláveis fogem de sua autoridade imediata. A classificação deve acompanhar a estrutura de responsabilidade.
+CUSTOS ESTIMADOS E PADRÃO: Custo estimado é previsão baseada em experiência e condições esperadas. Custo-padrão é referência predeterminada para mensuração, planejamento e análise das diferenças em relação ao realizado. O padrão ideal considera máxima eficiência e ausência de perdas. O padrão corrente incorpora condições normais de operação e oferece parâmetro mais atingível.
+VARIAÇÕES DE MATERIAIS: A variação de preço compara preço real e padrão, aplicada à quantidade real. A variação de quantidade compara quantidade real e padrão, valorizada ao preço padrão. O sinal deve ser interpretado conforme custo maior ou menor que o esperado.
+VARIAÇÕES DE MÃO DE OBRA: A variação de taxa compara remuneração real e padrão pelas horas reais. A variação de eficiência compara horas reais e padrão à taxa padrão. A soma explica a diferença total de mão de obra, ressalvadas decomposições adotadas.
+ANÁLISE GERENCIAL: Variações orientam investigação, mas não explicam sozinhas a causa. Preço, qualidade, desperício, treinamento, manutenção e planejamento podem interagir.
+EQUIVALENTES DE PRODUÇÃO: Unidades parcialmente processadas são convertidas conforme grau de acabamento. Materiais e custos de conversão podem possuir percentuais distintos, exigindo equivalentes separados.
+COMO CAI EM PROVA: A banca cobra classificação, comparação entre padrões, fórmulas de variações e cálculo de equivalentes. Pegadinhas comuns: tratar controlabilidade como característica absoluta; confundir estimado com padrão; chamar padrão ideal de meta normalmente atingível; usar quantidade padrão na variação de preço; usar taxa real na variação de eficiência; aplicar um único percentual a materiais e conversão. Como resolver: monte uma tabela com preço, quantidade, taxa e horas, nas colunas padrão e real. Identifique qual variável muda em cada fórmula e mantenha as demais no valor indicado.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/s9bAy91fqvI%3D', description: 'Assistir Videoaula' },
+      { goalId: meta5[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/40jzfwEy6eQ%3D', description: 'Acessar PDF' },
+      { goalId: meta5[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=416739&qd=0&qa=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Legislação Tributária', subject: 'IBS e CBS: Incidência e Imunidades', type: 'teoria', studyTip: `Dicas:
+IBS e CBS compartilham grande parte das regras materiais, mas não são o mesmo tributo: IBS tem competência compartilhada; CBS pertence à União.
+A incidência alcança operações com bens materiais, imateriais, direitos e serviços. Não limite o conceito à venda tradicional de mercadoria.
+Não incidência e imunidade possuem fundamentos diferentes. A primeira decorre da ausência legal de tributação; a segunda é limitação constitucional.
+Momento e local do fato gerador podem variar conforme a operação. Pagamento antecipado e fornecimento posterior exigem atenção especial.
+A base é, em regra, o valor da operação, com inclusões e exclusões previstas na LC n. 214/2025. Desconto incondicional merece destaque.
+Contribuinte, responsável e pessoa que pode optar pelo regime regular não se confundem. Leia cada hipótese antes de atribuir sujeição passiva.
+
+Resumo do conteúdo:
+ESTRUTURA GERAL: O IBS é imposto de competência compartilhada entre Estados, Distrito Federal e Municípios. A CBS é contribuição da União. Ambos seguem regras harmonizadas e o princípio da neutralidade, ressalvadas diferenças constitucionais e legais.
+INCIDÊNCIA: A LC n. 214/2025 alcança fornecimentos onerosos de bens e serviços e outras hipóteses expressamente previstas. Bens abrangem móveis, imóveis, materiais, imateriais e direitos; serviços compreendem operações que não se enquadram como bens. Aspectos formais, forma jurídica ou ausência de lucro podem ser irrelevantes quando a operação se enquadra na materialidade legal.
+NÃO INCIDÊNCIA E IMUNIDADES: A lei enumera operações não tributadas e situações que podem receber tratamento específico. Imunidades decorrem da Constituição e devem ser interpretadas segundo seu alcance e requisitos.
+MOMENTO DO FATO GERADOR: O momento relaciona-se ao fornecimento ou a eventos definidos em lei. Pagamentos antecipados podem gerar recolhimento antes da conclusão, com ajustes posteriores conforme a operação efetiva.
+LOCAL DA OPERAÇÃO: O local depende da natureza do bem ou serviço. Entrega não presencial, imóveis em mais de um Município, energia, água, gás, serviços e publicidade possuem critérios próprios, relevantes para distribuição da receita.
+BASE E ALÍQUOTAS: A base parte do valor da operação, com itens incluídos e excluídos pela lei. Descontos incondicionais podem ser excluídos quando preenchidos os requisitos. IBS resulta da soma das alíquotas estadual e municipal; CBS possui alíquota federal.
+SUJEIÇÃO PASSIVA: A lei define contribuintes, responsáveis solidários, não contribuintes e hipóteses de opção pelo regime regular. A responsabilidade depende de previsão expressa e do papel desempenhado na operação.
+COMO CAI EM PROVA: A cobrança tende a ser literal e comparativa: incidência, não incidência, imunidade, momento, local, base, alíquota e sujeição passiva. Pegadinhas comuns: dizer que IBS e CBS são idênticos; restringir bens a objetos materiais; confundir não incidência legal com imunidade constitucional; usar sempre o domicílio do fornecedor como local; incluir automaticamente qualquer valor na base; tratar todo adquirente como contribuinte. Como resolver: classifique a operação por objeto, onerosidade, momento e local. Depois verifique base, alíquota e sujeito passivo, seguindo a sequência da lei.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/GfPu1JqERIo%3D', description: 'Assistir Videoaula' },
+      { goalId: meta6[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/Rme0QZbZLvk%3D', description: 'Acessar PDF' },
+      { goalId: meta6[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=438078&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Economia', subject: 'Teoria do Consumidor - Parte II', type: 'teoria', studyTip: `Dicas:
+A escolha ótima combina preferência e restrição. Em solução interior, a taxa marginal de substituição se iguala à razão de preços.
+Utilidade é ordinal. Transformações monotônicas preservam escolhas e não alteram preferências representadas.
+Curva renda-consumo mostra cestas ótimas conforme a renda; curva de Engel relaciona renda e quantidade demandada de um bem.
+Curva preço-consumo acompanha escolhas quando muda o preço de um bem e ajuda a derivar sua demanda.
+Efeito substituição decorre da mudança de preços relativos; efeito renda decorre da alteração do poder de compra real.
+Para bens normais, os efeitos renda e substituição reforçam a lei da demanda. Em bens inferiores, atuam em direções opostas; Giffen é caso extremo.
+
+Resumo do conteúdo:
+UTILIDADE E ESCOLHA: A função utilidade representa preferências. O consumidor maximiza utilidade sujeito à renda e aos preços. Em solução interior diferenciável, a inclinação da curva de indiferença iguala a inclinação da restrição orçamentária. Soluções de canto ocorrem quando o ótimo está no eixo, comum em substitutos perfeitos ou quando a taxa marginal de substituição não se iguala à razão de preços.
+DEMANDA MARSHALLIANA: A escolha ótima produz funções de demanda dependentes de preços e renda. Mudanças nesses parâmetros alteram a cesta escolhida.
+CURVA RENDA-CONSUMO E ENGEL: A curva renda-consumo liga cestas ótimas para diferentes rendas, mantendo preços. A curva de Engel relaciona renda à quantidade demandada. Bem normal aumenta com renda; inferior pode diminuir.
+CURVA PREÇO-CONSUMO: Liga escolhas ótimas quando muda o preço de um bem. A partir dela, obtém-se relação entre preço e quantidade demandada.
+EFEITO SUBSTITUIÇÃO: Mede a mudança causada pelo preço relativo, compensando o consumidor para manter utilidade ou poder de compra segundo o método. O consumidor tende a substituir o bem relativamente mais caro.
+EFEITO RENDA: Mede a alteração decorrente da mudança do poder aquisitivo real. O sinal depende de o bem ser normal ou inferior.
+SLUTSKY E GIFFEN: A variação total da demanda decompõe-se em substituição e renda. Em bem de Giffen, o efeito renda negativo domina o substituição, permitindo relação positiva entre preço e quantidade em condições excepcionais.
+COMO CAI EM PROVA: A banca cobra condição de ótimo, curvas de consumo, classificação de bens e decomposição dos efeitos. Pegadinhas comuns: aplicar tangência a qualquer solução; confundir curva renda-consumo com Engel; atribuir efeito renda à mudança de preços relativos; afirmar que bem inferior é necessariamente Giffen; inverter Marshall e Hicks ou Slutsky; interpretar utilidade como medida cardinal. Como resolver: desenhe restrição e curvas, verifique solução interior ou canto e identifique a variável alterada. Na mudança de preço, separe substituição e renda antes de concluir o efeito total.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/m5n1NhPRkUQ%3D', description: 'Assistir Videoaula' },
+      { goalId: meta7[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/DK3q1XR%2Fw90%3D', description: 'Acessar PDF' },
+      { goalId: meta7[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403956%2C412771%2C403960&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Tecnologia da Informação', subject: 'Banco de Dados Relacionais - Parte V', type: 'teoria', studyTip: `Dicas:
+Classifique os comandos: DDL define estrutura; DML consulta e altera dados; DCL controla privilégios; TCL controla transações.
+DELETE remove linhas, TRUNCATE esvazia a tabela e DROP elimina o objeto. A banca troca efeitos e possibilidade de filtro.
+WHERE filtra linhas antes do agrupamento; HAVING filtra grupos depois do GROUP BY.
+Chave primária garante unicidade e não aceita nulo. Chave estrangeira implementa integridade referencial e pode admitir nulo conforme definição.
+Subconsulta pode retornar um valor, uma linha ou várias linhas. O operador deve ser compatível com a cardinalidade do resultado.
+Índice acelera determinadas consultas, mas ocupa espaço e pode aumentar o custo de inserções, atualizações e exclusões.
+
+Resumo do conteúdo:
+SQL: SQL é linguagem declarativa para definição, manipulação, controle e consulta em bancos relacionais. A implementação concreta pode variar entre SGBDs, mas os conceitos centrais são comuns.
+DDL: CREATE cria objetos; ALTER modifica estrutura; DROP remove o objeto. CREATE TABLE define colunas, tipos e restrições. TRUNCATE remove as linhas preservando a estrutura, com características específicas do SGBD.
+DML E CONSULTA: INSERT acrescenta linhas, UPDATE altera valores e DELETE remove linhas. SELECT recupera dados. WHERE restringe linhas; ORDER BY ordena; DISTINCT elimina duplicidades do resultado.
+OPERADORES E PADRÕES: LIKE realiza busca por padrões, normalmente usando % para qualquer sequência e _ para um caractere. Comparações com NULL exigem IS NULL ou IS NOT NULL.
+AGRUPAMENTO: Funções como COUNT, SUM, AVG, MIN e MAX agregam valores. GROUP BY forma grupos; HAVING aplica condição aos grupos. Colunas não agregadas selecionadas devem respeitar a regra de agrupamento.
+SUBCONSULTAS E VISÕES: Subconsultas alimentam outra instrução e podem ser correlacionadas ou não. Views representam consultas armazenadas logicamente, oferecendo abstração e controle de acesso, sem necessariamente armazenar os dados.
+INTEGRIDADE E PRIVILÉGIOS: PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL e CHECK protegem consistência. GRANT concede privilégios e REVOKE os retira, conforme permissões do usuário.
+ÍNDICES: Índices criam caminhos de acesso eficientes. Beneficiam filtros, junções e ordenações específicas, mas exigem manutenção e não substituem bom projeto de dados.
+COMO CAI EM PROVA: A banca apresenta comandos e pede efeito, categoria, resultado ou erro de integridade. Pegadinhas comuns: confundir DROP, DELETE e TRUNCATE; usar HAVING como sinônimo de WHERE; comparar NULL com sinal de igualdade; selecionar coluna não agrupada sem agregação; usar operador escalar para subconsulta com várias linhas; afirmar que índice sempre melhora qualquer operação. Como resolver: leia a instrução na ordem lógica — fonte, junções, filtro, agrupamento, filtro de grupos, seleção e ordenação. Em alterações, identifique estrutura, dados, privilégios ou transação.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/d3Lyfv2RjR4%3D', description: 'Assistir Videoaula' },
+      { goalId: meta8[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/3Gr7cJbrUDw%3D', description: 'Acessar PDF' },
+      { goalId: meta8[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?a=8065%2C8056&qd=0&qa=0&q=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Direito Empresarial', subject: 'Estabelecimento Empresarial, Registro de Empresa e Nome Empresarial', type: 'teoria', studyTip: `Dicas:
+Estabelecimento é o complexo organizado de bens destinado ao exercício da empresa; não é apenas o imóvel ou o endereço.
+Trespasse é a transferência do estabelecimento. Observe publicidade, consentimento de credores, responsabilidade por débitos contabilizados e cláusula de não concorrência.
+Ponto empresarial é o valor econômico da localização. A ação renovatória depende de requisitos legais cumulativos.
+Firma utiliza nome civil; denominação identifica objeto ou atividades conforme o tipo societário. Não escolha livremente sem observar a forma jurídica.
+Novidade impede colisão com nome já protegido; veracidade exige correspondência com os sócios e a realidade jurídica.
+Registro confere regularidade e publicidade, mas não cria a atividade empresarial em sentido material. Escrituração permanece obrigação do empresário.
+
+Resumo do conteúdo:
+ESTABELECIMENTO EMPRESARIAL: É o complexo de bens organizado para o exercício da empresa, reunindo elementos corpóreos e incorpóreos. Não se confunde com empresário, empresa, sociedade ou ponto físico.
+TRESPASSE: O contrato de alienação, usufruto ou arrendamento do estabelecimento produz efeitos perante terceiros após averbação e publicação nos termos legais. Se o alienante não conservar bens suficientes, a eficácia pode depender do pagamento ou consentimento dos credores. O adquirente responde por débitos anteriores regularmente contabilizados, e o alienante pode permanecer solidariamente obrigado pelo prazo legal. Em regra, o alienante não pode concorrer com o adquirente por cinco anos sem autorização.
+PONTO EMPRESARIAL: O ponto representa o valor da localização para a atividade. A renovação compulsória da locação empresarial exige contrato escrito e por prazo determinado, soma mínima dos contratos e exploração do mesmo ramo pelo período legal.
+NOME EMPRESARIAL: Nome empresarial identifica o sujeito que exerce a empresa. Firma utiliza nome civil; denominação pode empregar expressão vinculada ao objeto e deve observar o tipo societário. Princípios da novidade e veracidade orientam sua formação e proteção. Título do estabelecimento, marca e nome empresarial são institutos diferentes e possuem regimes de proteção próprios.
+REGISTRO DE EMPRESA: O sistema envolve órgão federal normativo e Juntas Comerciais. Atos incluem matrícula, arquivamento e autenticação. O registro dá publicidade e regularidade, mas a condição material de empresário decorre da atividade.
+ESCRITURAÇÃO: O empresário deve manter escrituração regular e levantar demonstrações, observadas as exceções legais. Livros e documentos possuem requisitos de autenticação, conservação e força probatória.
+COMO CAI EM PROVA: A banca cobra conceitos, efeitos do trespasse, renovação do ponto, formação do nome, atos de registro e obrigações de escrituração. Pegadinhas comuns: reduzir estabelecimento ao imóvel; confundir trespasse com venda de quotas; ignorar débitos contabilizados e publicidade; confundir nome empresarial, marca e título; inverter firma e denominação; afirmar que o registro cria a condição material de empresário. Como resolver: identifique o objeto — complexo de bens, localização, identificação do empresário ou sinal distintivo. Depois aplique os requisitos específicos de transferência, proteção ou registro.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/9nVHst%2BVIcI%3D', description: 'Assistir Videoaula' },
+      { goalId: meta9[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/%2Fm7ujqLyOkc%3D', description: 'Acessar PDF' },
+      { goalId: meta9[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=406940%2C406942%2C406941&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta10 = await db.insert(goals).values({ weekId, number: 10, discipline: 'Revisão Geral', subject: 'Revisão da Semana 10', type: 'revisao', studyTip: `Organização do dia: Tempo total: 4 a 5 horas líquidas. Divida a revisão em blocos de 25 a 35 minutos. Não releia os PDFs completos: recupere, teste e corrija. Ordem sugerida: Língua Portuguesa - Sintaxe do Período Composto; Auditoria Fiscal - Fraude e Erro em Auditoria; Direito Tributário - Simples Nacional; Economia - Teoria do Consumidor I; Contabilidade de Custos - Controle de Custos; Legislação Tributária - IBS e CBS: Incidência e Imunidades; Economia - Teoria do Consumidor II; Tecnologia da Informação - Banco de Dados V - SQL; Direito Empresarial - Estabelecimento, Registro e Nome. Metodologia de revisão:
+5 min: recupere sem consulta as definições, fórmulas, classificações ou sequências centrais.
+15 a 20 min: refaça questões erradas, marcadas ou respondidas com insegurança.
+5 min: consulte apenas o trecho que corrige a causa do erro.
+5 min: registre uma regra curta, comparação ou roteiro no caderno de erros. Destaques da semana:
+LÍNGUA PORTUGUESA - SINTAXE DO PERÍODO COMPOSTO: Comece contando as orações pelos verbos e locuções verbais. Depois identifique a relação entre elas; classificar conjunções antes de delimitar as orações costuma gerar erro. Coordenação reúne orações sintaticamente independentes. Subordinação cria dependência sintática: a oração subordinada exerce função dentro da principal.
+AUDITORIA FISCAL - FRAUDE E ERRO EM AUDITORIA: Evidência adequada trata de qualidade, relevância e confiabilidade; evidência suficiente trata de quantidade. Risco maior costuma exigir evidência mais persuasiva. Fontes externas e independentes tendem a ser mais confiáveis que fontes internas. Evidência obtida diretamente pelo auditor costuma superar a recebida indiretamente.
+DIREITO TRIBUTÁRIO - SIMPLES NACIONAL: O Simples Nacional é regime compartilhado de arrecadação, fiscalização e cobrança para microempresas e empresas de pequeno porte; não é um tributo novo. Separe enquadramento empresarial de opção pelo regime. Ser ME ou EPP não significa estar automaticamente no Simples.
+ECONOMIA - TEORIA DO CONSUMIDOR I: A restrição orçamentária mostra combinações acessíveis; preferências mostram como o consumidor ordena essas combinações. Não confunda possibilidade com desejo. A inclinação da reta orçamentária é determinada pela razão entre os preços. Mudança de renda desloca a reta paralelamente; mudança de preço altera sua inclinação.
+CONTABILIDADE DE CUSTOS - CONTROLE DE CUSTOS: Custo controlável depende do nível de responsabilidade e do horizonte de tempo. Um gestor pode controlar determinado gasto e outro não. Custo estimado projeta o que provavelmente ocorrerá; custo-padrão define referência técnica para controle e avaliação de desempenho.
+LEGISLAÇÃO TRIBUTÁRIA - IBS E CBS: INCIDÊNCIA E IMUNIDADES: IBS e CBS compartilham grande parte das regras materiais, mas não são o mesmo tributo: IBS tem competência compartilhada; CBS pertence à União. A incidência alcança operações com bens materiais, imateriais, direitos e serviços. Não limite o conceito à venda tradicional de mercadoria.
+ECONOMIA - TEORIA DO CONSUMIDOR II: A escolha ótima combina preferência e restrição. Em solução interior, a taxa marginal de substituição se iguala à razão de preços. Utilidade é ordinal. Transformações monotônicas preservam escolhas e não alteram preferências representadas.
+TECNOLOGIA DA INFORMAÇÃO - BANCO DE DADOS V - SQL: Classifique os comandos: DDL define estrutura; DML consulta e altera dados; DCL controla privilégios; TCL controla transações. DELETE remove linhas, TRUNCATE esvazia a tabela e DROP elimina o objeto. A banca troca efeitos e possibilidade de filtro.
+DIREITO EMPRESARIAL - ESTABELECIMENTO, REGISTRO E NOME: Estabelecimento é o complexo organizado de bens destinado ao exercício da empresa; não é apenas o imóvel ou o endereço. Trespasse é a transferência do estabelecimento. Observe publicidade, consentimento de credores, responsabilidade por débitos contabilizados e cláusula de não concorrência. Fechamento da semana: selecione os cinco erros com maior chance de repetição. Explique cada correção sem consultar o material e resolva uma questão semelhante. O que ainda exigir consulta imediata deverá retornar na próxima revisão acumulada. Constância constrói!` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Língua Portuguesa (Sintaxe do Período Composto)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Auditoria Fiscal (Fraude e Erro em Auditoria)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Tributário (Simples Nacional)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Teoria do Consumidor I)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Contabilidade de Custos (Controle de Custos)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Legislação Tributária (IBS e CBS: Incidência e Imunidades)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Teoria do Consumidor II)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Tecnologia da Informação (Banco de Dados V - SQL)' },
+      { goalId: meta10[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Empresarial (Estabelecimento, Registro e Nome)' },
+    ]);
+  }
+
   if (!existingWeeks.some(w => w.number === 11)) {
     console.log('Seeding Week 11...');
     
@@ -2740,6 +2979,213 @@ COMO CAI EM PROVA: A tendência é cobrança literal da LC n. 227/2026, com foco
   }
 
 
+
+  if (!existingWeeks.some(w => w.number === 14)) {
+    console.log('Seeding Week 14...');
+    
+    const insertedWeek = await db.insert(weeks).values({
+      number: 14,
+      title: 'Semana 14'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Auditoria Fiscal', subject: 'NBC TSP - Estrutura Conceitual, Partes Relacionadas e Demonstrações Sujeitas à Auditoria', type: 'teoria', studyTip: `Dicas:
+RCPGs são relatórios contábeis de propósito geral: atendem usuários que não conseguem exigir informação sob medida. Não os confunda com relatórios especiais produzidos para uma necessidade específica.
+O objetivo central é fornecer informação útil para prestação de contas e responsabilização (accountability) e para tomada de decisão. No setor público, desempenho dos serviços, orçamento e sustentabilidade financeira importam tanto quanto a posição patrimonial.
+Memorize as características qualitativas em conjunto: relevância, representação fidedigna, compreensibilidade, tempestividade, comparabilidade e verificabilidade. Materialidade, custo-benefício e equilíbrio entre as características funcionam como restrições.
+Elementos e bases de mensuração não são sinônimos. Primeiro identifique ativo, passivo, receita, despesa, contribuição ou distribuição; depois examine reconhecimento e mensuração.
+Em partes relacionadas, relacionamento não implica fraude. O risco surge porque transações podem ocorrer fora das condições normais; o auditor deve identificar relações, compreender controles, avaliar riscos e responder às distorções relevantes.
+A segunda metade do PDF é majoritariamente composta por revisão e questões. Use-a para testar a literalidade da NBC TSP, e não para prolongar uma releitura passiva.
+
+Resumo do conteúdo:
+RCPGs E FINALIDADE DA INFORMAÇÃO: Os Relatórios Contábeis de Propósito Geral das Entidades do Setor Público são o núcleo da transparência contábil governamental. Eles se destinam aos usuários dos serviços e aos provedores de recursos que não possuem prerrogativa para exigir relatórios específicos. Sua finalidade é apoiar a prestação de contas, a responsabilização e a tomada de decisão. No setor público, a avaliação não se limita a lucro ou geração de caixa; os relatórios devem permitir análise da situação patrimonial, desempenho financeiro, fluxos de caixa, execução orçamentária, capacidade de prestar serviços e sustentabilidade das atividades.
+CARACTERÍSTICAS DO SETOR PÚBLICO: Transações sem contraprestação, importância do orçamento aprovado, natureza e longevidade dos programas públicos e papel regulador do Estado influenciam a informação contábil. A comparação entre orçamento e execução fortalece accountability e subsidia decisões futuras.
+CARACTERÍSTICAS QUALITATIVAS: Relevância significa capacidade de influenciar avaliações e decisões. Representação fidedigna exige informação completa, neutra e livre de erro material. Compreensibilidade permite entendimento por usuários com conhecimento razoável; tempestividade disponibiliza a informação a tempo; comparabilidade permite reconhecer semelhanças e diferenças; verificabilidade ajuda a assegurar que o fenômeno foi representado adequadamente. Essas características atuam integradamente. Materialidade depende da natureza ou magnitude da informação. Custo-benefício limita a produção de informação, e conflitos entre características exigem equilíbrio profissional.
+ELEMENTOS, RECONHECIMENTO E MENSURAÇÃO: Ativo é recurso controlado no presente pela entidade como resultado de evento passado; passivo é obrigação presente de entregar recursos. Receita e despesa alteram a situação patrimonial líquida, ressalvadas contribuições e distribuições dos proprietários. Reconhecimento exige que o item satisfaça a definição e possa ser mensurado de modo compatível com as características qualitativas. As bases de mensuração de ativos incluem, conforme a finalidade, custo histórico, valor de mercado, custo de reposição ou substituição, preço líquido de venda e valor em uso. Para passivos, podem aparecer custo histórico, custo de cumprimento, valor de mercado, custo de liberação e preço presumido.
+PARTES RELACIONADAS E RISCO DE AUDITORIA: Partes relacionadas podem resultar de controle, influência significativa, pessoal-chave e vínculos próximos. Transações entre elas não são necessariamente irregulares, mas podem ser celebradas em condições distintas das de mercado. O auditor indaga a administração, compreende controles, permanece atento a contratos e confirmações, avalia transações significativas fora do curso normal e verifica apresentação e divulgação. Se a administração omite relações ou transações relevantes, a resposta do auditor cresce conforme risco e distorção: ampliar procedimentos, comunicar governança, avaliar fraude, considerar efeitos nas demonstrações e modificar a opinião quando necessário.
+DEMONSTRAÇÕES SUJEITAS À AUDITORIA: O auditor examina o conjunto aplicável de demonstrações e notas, verificando se foi elaborado conforme a estrutura de relatório financeiro pertinente. A opinião incide sobre apresentação adequada, em todos os aspectos relevantes; não garante ausência absoluta de erro nem substitui a responsabilidade da administração.
+COMO CAI EM PROVA: A prova costuma misturar conceitos da NBC TSP com linguagem da contabilidade privada e explorar listas, finalidades e definições literais. Pegadinhas comuns: afirmar que RCPGs atendem necessidades específicas de um único usuário; reduzir accountability à conformidade orçamentária; incluir materialidade entre as seis características qualitativas, sem tratá-la como restrição relevante; confundir relevância com representação fidedigna; trocar ativo por simples bem de propriedade formal, ignorando controle; presumir irregularidade em toda transação com parte relacionada; atribuir ao auditor a responsabilidade de elaborar as demonstrações. Como resolver: primeiro identifique o bloco — finalidade, característica qualitativa, elemento, mensuração ou auditoria. Em listas, reconstrua a função de cada termo. Em partes relacionadas, separe existência do vínculo, risco gerado, procedimento do auditor e efeito na opinião.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/meyO6tWfJxE%3D', description: 'Acessar PDF' },
+      { goalId: meta1[0].id, type: 'tarefa', link: '', description: 'Resolver questões do próprio PDF completo' }
+    ]);
+
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Legislação Tributária', subject: 'LC n. 227/2026 - CGIBS: Orçamento, Controle Externo e Transparência', type: 'teoria', studyTip: `Dicas:
+O controle externo do CGIBS não pertence ao TCU. Ele é coordenado, compartilhado e colegiado pelos Tribunais de Contas dos Estados, do Distrito Federal, dos Municípios e Municipais.
+Fixe a periodicidade dos instrumentos: RREO bimestral; RGF quadrimestral; relatório de arrecadação e distribuições mensal; demonstrações contábeis e prestação de contas anuais.
+As receitas e despesas orçamentárias do CGIBS aparecem em demonstrativos próprios. Valores apenas custodiados para sujeitos passivos ou entes federativos não são receita orçamentária do Comitê.
+Até 31 de julho, o Conselho Superior propõe percentual de financiamento e orçamento do exercício seguinte. O percentual da arrecadação do IBS não pode superar 0,2%.
+Rejeição exige manifestação da maioria absoluta dos Legislativos envolvidos; silêncio no prazo produz aprovação tácita. A banca certamente tentará inverter esses efeitos.
+Não confunda créditos suplementares previstos na proposta com créditos especiais, que dependem da aprovação legislativa disciplinada pela lei.
+
+Resumo do conteúdo:
+CONTROLE EXTERNO COMPARTILHADO: A fiscalização contábil, financeira, orçamentária, operacional e patrimonial do CGIBS é realizada de forma coordenada, compartilhada e colegiada pelos Tribunais de Contas dos Estados, do Distrito Federal, dos Municípios e Municipais, preferencialmente em ambiente virtual. A disciplina conjunta define conselheiro e substituto, relatoria, atuação dos auditores e uniformização vinculante de entendimentos. Atua o Ministério Público de Contas perante o tribunal do relator.
+INSTRUMENTOS DE TRANSPARÊNCIA: O RREO é elaborado até trinta dias após cada bimestre e apresenta balanço orçamentário, execução das receitas e despesas e restos a pagar. O RGF é elaborado ao final de cada quadrimestre e publicado em até trinta dias, abrangendo pessoal, dívida consolidada, operações de crédito e disponibilidade de caixa. Mensalmente, o CGIBS divulga arrecadação, retenções, compensações, ressarcimentos e valores distribuídos por ente. Anualmente, elabora balanço patrimonial, demonstração das variações patrimoniais, demonstração dos fluxos de caixa, balanço orçamentário e balanço financeiro. A prestação de contas do exercício anterior deve ser apresentada até 30 de abril e disponibilizada no sítio eletrônico.
+ORÇAMENTO E RECEITAS PRÓPRIAS: Receitas e despesas orçamentárias constam de demonstrativos próprios aprovados pelo Conselho Superior e submetidos a controles interno e externo. Recursos custodiados que pertencem a contribuintes ou entes não integram a receita orçamentária do Comitê. Entre as receitas próprias estão o percentual da arrecadação destinado por cada ente, rendimentos de aplicações próprias e outros recursos legalmente destinados.
+PROPOSTA, PERCENTUAL E APROVAÇÃO: Até 31 de julho, o Conselho Superior propõe o percentual do produto da arrecadação de cada ente destinado ao financiamento do CGIBS, limitado a 0,2%, e o orçamento do exercício seguinte. Após a publicação no Diário Oficial da União, os Legislativos dos entes de origem dos membros titulares têm trinta dias para se manifestar. A rejeição ocorre mediante manifestação da maioria absoluta desses Poderes Legislativos. A ausência de manifestação equivale à aprovação tácita. Se houver rejeição, aplicam-se valores da última proposta não rejeitada, corrigidos pelo IPCA, com execução mensal por duodécimos, até nova aprovação.
+CRÉDITOS, FINANCIAMENTO E PUBLICIDADE: A proposta pode prever créditos suplementares; créditos especiais seguem aprovação legislativa. O financiamento ocorre por retenção do percentual sobre a arrecadação corrente destinada aos entes e por outras receitas próprias. O Comitê deve dar publicidade a atos, relatórios, operações de crédito e informações previstas, preservadas as hipóteses legais de sigilo.
+COMO CAI EM PROVA: Como a LC n. 227/2026 é recente, a cobrança tende a ser literal, especialmente em órgãos, periodicidade, prazos, percentuais e efeitos do silêncio. Pegadinhas comuns: atribuir o controle externo ao TCU ou à CGU; trocar RREO bimestral por quadrimestral; incluir valores custodiados entre receitas próprias; elevar o limite de financiamento acima de 0,2%; considerar o silêncio como rejeição; exigir unanimidade para rejeitar a proposta; equiparar crédito suplementar e especial. Como resolver: monte quatro colunas — instrumento, periodicidade, responsável e conteúdo. Para o orçamento, desenhe a linha do tempo: proposta até 31 de julho, publicação, manifestação em trinta dias, rejeição por maioria absoluta ou aprovação tácita.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ABX5OD4mpyU%3D', description: 'Assistir Videoaula' },
+      { goalId: meta2[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/4NQ7elZQoLo%3D', description: 'Acessar PDF' },
+      { goalId: meta2[0].id, type: 'tarefa', link: '', description: 'Resolver questões do próprio PDF completo' }
+    ]);
+
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Economia', subject: 'Teoria da Firma segundo Ronald Coase e Oliver Williamson', type: 'teoria', studyTip: `Dicas:
+Coase pergunta por que firmas existem se o mercado coordena preços. A resposta é comparativa: organizar internamente pode custar menos que contratar cada transação no mercado.
+Custos de transação incluem busca, informação, negociação, redação, monitoramento e execução de contratos. Não os confunda com custos tecnológicos de produzir o bem.
+A firma cresce enquanto o custo de organizar internamente uma transação adicional for inferior ao custo de realizá-la no mercado ou em outra organização.
+Williamson transforma a ideia em escolha de governança. Especificidade dos ativos, incerteza e frequência indicam se mercado, forma híbrida ou hierarquia é mais eficiente.
+Racionalidade limitada impede contratos completos; oportunismo admite comportamento estratégico. Juntos, tornam salvaguardas e governança relevantes.
+Ativo específico perde valor fora da relação e cria dependência bilateral. Quanto maior a especificidade, maior o risco de hold-up e a necessidade de proteção contratual ou integração.
+
+Resumo do conteúdo:
+DA FIRMA COMO CAIXA-PRETA À NOVA ECONOMIA INSTITUCIONAL: A teoria neoclássica tradicional descreve a firma como unidade que transforma insumos em produto. Coase desloca a pergunta para a existência e os limites da organização. A Nova Economia Institucional incorpora contratos, direitos de propriedade, governança e instituições à análise dos custos.
+COASE E OS CUSTOS DE TRANSAÇÃO: Usar o mercado exige descobrir preços, localizar parceiros, negociar, redigir contratos, fiscalizar e exigir cumprimento. A firma substitui parte dessa coordenação por autoridade e rotinas internas. Ela existe quando essa solução reduz custos, mas não cresce indefinidamente: burocracia, perda de informação e erros gerenciais elevam o custo interno. O limite eficiente compara o custo marginal de organizar a transação dentro da firma com o custo de contratar no mercado ou em outra organização. Terceirização e integração vertical são decisões de make or buy orientadas por essa comparação.
+WILLIAMSON E ESTRUTURAS DE GOVERNANÇA: Williamson aprofunda a economia dos custos de transação ao comparar mercado, hierarquia e formas híbridas. Mercado usa preços e contratos mais simples; hierarquia usa controle e adaptação interna; híbridos combinam autonomia e coordenação, como franquias, alianças e contratos de longo prazo.
+ATRIBUTOS DAS TRANSAÇÕES: Especificidade de ativos é central: investimento dedicado, físico, humano, locacional ou temporal pode perder valor em uso alternativo. Incerteza dificulta prever contingências. Frequência torna salvaguardas mais compensadoras. A combinação desses elementos orienta a governança.
+RACIONALIDADE LIMITADA, OPORTUNISMO E HOLD-UP: Agentes pretendem ser racionais, mas não antecipam tudo; contratos ficam incompletos. Oportunismo permite exploração de lacunas por informação seletiva, ameaça ou renegociação estratégica. Depois de investimento específico, uma parte pode pressionar a outra, gerando hold-up. Salvaguardas, reputação, garantias e integração reduzem o risco.
+COASE E WILLIAMSON: CONTINUIDADE E DIFERENÇA: Coase explica por que firma e mercado coexistem e onde ficam seus limites. Williamson operacionaliza a escolha ao relacionar atributos da transação a estruturas de governança. Ambos rejeitam a ideia de mercado sem custo, mas Williamson oferece linguagem mais detalhada para contratos e arranjos híbridos.
+COMO CAI EM PROVA: A banca cobra autores, conceitos e escolha da estrutura mais adequada a um cenário. Pegadinhas comuns: tratar custo de transação como custo de matéria-prima; afirmar que firmas eliminam todos os custos; atribuir especificidade de ativos a Coase como modelo completo; dizer que mercado sempre supera hierarquia; confundir racionalidade limitada com irracionalidade; negar formas híbridas; ignorar dependência bilateral após investimento específico. Como resolver: identifique o problema — custo de usar mercado, atributo da transação ou risco contratual. Se a questão perguntar "por que a firma existe", pense em Coase. Se pedir "qual governança escolher", use especificidade, incerteza e frequência de Williamson.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/dfWzYFKejmE%3D', description: 'Acessar PDF' },
+      { goalId: meta3[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403963%2C412800%2C412801%2C412802%2C412803%2C412812%2C426733%2C426734%2C426735%2C426732%2C426736%2C426737%2C426738%2C426739%2C426740%2C426741%2C426744%2C426745%2C426746%2C426742%2C426743&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Direito Empresarial', subject: 'Sociedade Anônima - Parte II: Ações, Partes Beneficiárias e Debêntures', type: 'teoria', studyTip: `Dicas:
+Valor mobiliário é instrumento emitido para captação de recursos. A ação representa fração do capital e atribui condição de acionista; debênture cria direito de crédito; parte beneficiária confere participação eventual nos lucros, sem integrar o capital.
+Não misture espécie, forma e classe das ações. Ordinárias e preferenciais são espécies; classes subdividem direitos; nominatividade trata da identificação do titular.
+Ação preferencial pode ter vantagens econômicas e restrição de voto, mas a lei protege direitos essenciais do acionista e prevê hipóteses de aquisição ou recuperação do voto.
+Preço de emissão, valor nominal, valor patrimonial e valor de mercado respondem a perguntas diferentes. A banca troca esses conceitos para simular cálculo simples.
+Partes beneficiárias não podem ser emitidas por companhia aberta. Sua participação nos lucros possui limite legal e elas podem ser resgatadas ou convertidas conforme as condições da emissão.
+Debêntures são títulos de dívida. Estude escritura de emissão, espécies de garantia, agente fiduciário, conversibilidade e assembleia de debenturistas como um sistema único.
+
+Resumo do conteúdo:
+VALORES MOBILIÁRIOS: Companhias captam recursos por diferentes instrumentos. Ações representam o capital; partes beneficiárias conferem direito eventual contra a companhia; debêntures representam dívida. Bônus de subscrição e notas comerciais também integram o universo dos valores mobiliários, mas o PDF concentra-se nos três primeiros.
+AÇÕES E VALORES: A ação é a unidade do capital social e atribui ao titular a condição de acionista. Pode ter ou não valor nominal, conforme o estatuto. O preço de emissão é o montante pago na subscrição; o valor patrimonial resulta da relação entre patrimônio líquido e quantidade de ações; o valor de mercado decorre da negociação; o valor econômico depende da capacidade de geração de benefícios.
+ESPÉCIES, CLASSES E DIREITOS: Ações ordinárias asseguram os direitos comuns e, em regra, voto. Preferenciais podem atribuir prioridade em dividendos ou reembolso, outras vantagens e restrições políticas nos limites legais. Classes permitem diferenciar direitos dentro da espécie. Direitos essenciais não podem ser eliminados pelo estatuto ou assembleia, incluindo participação nos lucros, participação no acervo em liquidação, fiscalização, preferência nas hipóteses legais e retirada quando cabível. O voto não é direito essencial absoluto de toda ação.
+PARTES BENEFICIÁRIAS: Partes beneficiárias são títulos estranhos ao capital social que conferem direito eventual de crédito, consistente em participação nos lucros anuais. Não atribuem qualidade de acionista nem direito de voto. A companhia aberta não pode emiti-las. A emissão define prazo, participação, resgate e eventual conversão em ações.
+DEBÊNTURES: Debênture é título de crédito representativo de empréstimo feito à companhia. A escritura de emissão estabelece valor, remuneração, vencimento, garantias, conversibilidade e demais condições. Podem existir garantia real, garantia flutuante, debêntures quirografárias ou subordinadas, cada qual com posição própria diante do patrimônio e dos demais credores. O agente fiduciário protege os interesses coletivos dos debenturistas e acompanha as obrigações da emissão. Debêntures conversíveis podem transformar o crédito em ações nas condições previstas, sem perder sua natureza inicial de dívida.
+COMO CAI EM PROVA: A prova explora classificações, direitos e diferenças entre instrumentos de capital e de dívida. Pegadinhas comuns: tratar debenturista como acionista; afirmar que parte beneficiária integra o capital social; permitir emissão de partes beneficiárias por companhia aberta; considerar voto um direito essencial de toda ação; confundir preço de emissão com valor nominal; trocar garantia real por flutuante; atribuir ao agente fiduciário função de administrador da companhia. Como resolver: pergunte primeiro o que o título representa — capital, crédito eventual ou dívida. Depois identifique direitos políticos, econômicos, garantia e relação do titular com a companhia. Em ações, sempre classifique espécie, classe e valor separadamente.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/DpjQIWIgoA0%3D', description: 'Acessar PDF' },
+      { goalId: meta4[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=406949&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Economia', subject: 'Introdução à Macroeconomia, Fluxo Circular da Renda e Agregados', type: 'teoria', studyTip: `Dicas:
+Macroeconomia trabalha agregados: produto, renda, emprego, preços, moeda, juros e setor externo. Não transporte automaticamente a lógica de uma firma ou consumidor para a economia inteira.
+Produto, renda e despesa são três óticas do mesmo fluxo. Se os limites contábeis e o período forem os mesmos, os totais devem coincidir.
+Evite dupla contagem: some bens finais ou valores adicionados. Bem intermediário entra indiretamente no valor do produto final.
+Diferencie interno de nacional e bruto de líquido. Interno olha território; nacional ajusta rendas com o exterior; líquido deduz depreciação.
+No fluxo ampliado, poupança, tributos e importações são vazamentos; investimento, gastos públicos e exportações são injeções.
+Identidade contábil descreve igualdade ex post; não prova causalidade econômica. A banca costuma transformar identidade em relação comportamental.
+
+Resumo do conteúdo:
+OBJETO E OBJETIVOS DA MACROECONOMIA: Macroeconomia estuda a economia como conjunto. Seus objetivos incluem crescimento do produto, elevado emprego, estabilidade de preços, equilíbrio externo e distribuição compatível com as escolhas sociais. Políticas fiscal, monetária, cambial e de rendas afetam esses resultados, frequentemente com trade-offs.
+TRÊS ÓTICAS DE MENSURAÇÃO: Pela ótica do produto, somam-se valores adicionados ou bens e serviços finais. Pela renda, somam-se remunerações dos fatores, como salários, juros, aluguéis e lucros. Pela despesa, somam-se os gastos finais. Como produção gera renda e é adquirida por alguém, produto = renda = despesa.
+CONTAS DOS SETORES: A conta de produção registra geração do produto e valor adicionado. A apropriação mostra distribuição e uso da renda. A conta do governo reúne receitas e despesas públicas. A conta do setor externo registra transações com não residentes. A conta de capital relaciona poupança e formação de capital.
+AGREGADOS E TRANSFORMAÇÕES: PIB mede a produção final no território. O agregado nacional ajusta o resultado pelas rendas primárias líquidas recebidas do exterior. Passar de bruto para líquido exige deduzir depreciação. Passar de preços de mercado para custo de fatores envolve ajustar impostos indiretos e subsídios, conforme a convenção usada.
+FLUXO CIRCULAR SIMPLES E AMPLIADO: Famílias oferecem fatores e recebem renda; empresas contratam fatores e oferecem bens e serviços. Com governo, sistema financeiro e exterior, aparecem tributos, gastos públicos, poupança, investimento, exportações e importações. Vazamentos retiram gasto do fluxo; injeções o acrescentam.
+IDENTIDADE DA DEMANDA AGREGADA: Em economia aberta com governo, o produto pela despesa é Y = C + I + G + X - M. A identidade pode ser reorganizada para mostrar relações entre poupança privada, resultado fiscal, investimento e saldo externo.
+COMO CAI EM PROVA: A prova combina definições, conversões de agregados e pequenos cálculos. Pegadinhas comuns: somar insumo intermediário e produto final; confundir PIB com renda de residentes; deduzir depreciação para passar de líquido a bruto; classificar importação como injeção; esquecer que importações são subtraídas porque já aparecem no consumo, investimento ou governo; tratar igualdade contábil como causalidade; misturar preços de mercado e custo de fatores. Como resolver: anote quatro pares — interno/nacional, bruto/líquido, mercado/fatores e nominal/real. Em cálculos, parta da ótica pedida e faça um ajuste por vez, sempre escrevendo o sinal.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/LHFpOqSBR3I%3D', description: 'Assistir Videoaula' },
+      { goalId: meta5[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/u5t70O5C9v4%3D', description: 'Acessar PDF' },
+      { goalId: meta5[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403920&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Matemática Financeira', subject: 'Análise de Investimentos: Payback, VPL, TIR e Índices de Decisão', type: 'teoria', studyTip: `Dicas:
+Todo método deve ser comparado à Taxa Mínima de Atratividade. A TMA representa o retorno mínimo exigido e incorpora o custo de oportunidade do capital.
+Payback simples mede tempo de recuperação, mas ignora o valor do dinheiro no tempo e fluxos posteriores ao corte. Payback descontado corrige apenas a primeira limitação.
+VPL traz todos os fluxos para a data zero pela TMA. VPL positivo cria valor; zero iguala o retorno à TMA; negativo indica rejeição, quando o projeto é avaliado isoladamente.
+TIR é a taxa que zera o VPL. Aceite quando TIR superar a TMA, sob o padrão convencional. Fluxos não convencionais podem gerar múltiplas TIRs ou nenhuma solução economicamente útil.
+Em projetos mutuamente exclusivos, VPL e TIR podem divergir por escala ou momento dos fluxos. O VPL é o critério mais alinhado à criação absoluta de valor.
+Antes de calcular, desenhe o fluxo de caixa e confira sinais, datas e periodicidade da taxa. O erro mais comum ocorre antes da fórmula.
+
+Resumo do conteúdo:
+CUSTO DE OPORTUNIDADE E TMA: Investir significa trocar desembolso presente por benefícios futuros. O custo de oportunidade é o retorno da melhor alternativa abandonada. A Taxa Mínima de Atratividade traduz o retorno mínimo exigido para compensar tempo, risco e alternativas disponíveis e funciona como taxa de desconto do projeto.
+PAYBACK SIMPLES E DESCONTADO: Payback é o prazo necessário para recuperar o investimento inicial. No método simples, somam-se fluxos nominais até cobrir o desembolso; o método é intuitivo, mas ignora valor do dinheiro no tempo e fluxos posteriores ao corte. O payback descontado traz cada fluxo a valor presente antes de acumular, respeitando a TMA, mas ainda privilegia liquidez.
+VALOR PRESENTE LÍQUIDO: VPL é a soma dos valores presentes dos fluxos, incluindo o investimento inicial com sinal negativo. Com taxa igual à TMA, VPL maior que zero indica criação de valor; igual a zero indica indiferença financeira; menor que zero indica retorno inferior ao exigido.
+TAXA INTERNA DE RETORNO: TIR é a taxa que torna o VPL igual a zero. Para projeto convencional e independente, aceita-se quando TIR é maior que TMA. Em fluxos com mais de uma mudança de sinal, podem surgir múltiplas raízes; em comparação entre projetos de tamanhos ou durações diferentes, a ordenação pela TIR pode divergir do VPL.
+ÍNDICES E ESCOLHA DE PROJETOS: Índice de lucratividade relaciona valor presente das entradas ao investimento. Valor superior a um corresponde, em regra, a VPL positivo. Projetos independentes podem ser aceitos simultaneamente; projetos mutuamente exclusivos exigem escolher a alternativa que melhor atende ao critério e às restrições de capital.
+COMO CAI EM PROVA: A banca cobra montagem do fluxo, cálculo, interpretação e comparação entre critérios. Pegadinhas comuns: calcular payback simples com fluxos descontados; aceitar projeto com VPL negativo; comparar TIR diretamente com zero, e não com a TMA; inverter sinais do investimento e das entradas; usar taxa anual em fluxo mensal sem equivalência; escolher automaticamente a maior TIR em projetos excludentes; ignorar múltiplas TIRs em fluxo não convencional. Como resolver: desenhe a linha do tempo, padronize taxa e período e identifique o método pedido. No VPL, desconte todos os fluxos para a data zero. Na TIR, procure a taxa que zera o VPL e compare-a à TMA.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/PcQF1Bo2RQQ%3D', description: 'Assistir Videoaula' },
+      { goalId: meta6[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/vn6zDRoqHnM%3D', description: 'Acessar PDF' },
+      { goalId: meta6[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403819%2C403820%2C403822&desatualizada=0&anulada=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Legislação Tributária', subject: 'LC n. 227/2026 - Processo Administrativo Tributário do IBS no CGIBS', type: 'teoria', studyTip: `Dicas:
+O PAT do IBS é eletrônico e orientado por princípios como simplicidade, verdade material, oficialidade, cooperação, eficiência, contraditório e ampla defesa. Não aplique automaticamente regras de um PAT estadual antigo.
+A forma não prevalece cegamente sobre a finalidade. Denominação incorreta da peça não impede conhecimento quando conteúdo, prazo e requisitos permitem identificar a pretensão.
+Prazos são contados em dias úteis, com exclusão do dia inicial e inclusão do vencimento. O recesso processual e a indisponibilidade relevante do sistema merecem marcação específica.
+Provas acompanham a impugnação, salvo hipóteses excepcionais. Valor reconhecido pelo sujeito passivo torna-se incontroverso e não permanece protegido pelo litígio.
+A autoridade pode determinar diligências de ofício, mas deve motivar. Documentos novos exigem ciência da parte para manifestação.
+A ação judicial sobre a mesma matéria pode importar desistência do contencioso administrativo. Já as decisões vinculantes devem ser observadas nos limites previstos pela lei.
+
+Resumo do conteúdo:
+ABRANGÊNCIA E PRINCÍPIOS: O processo administrativo tributário do IBS alcança controvérsias sobre constituição e exigência do crédito e outras decisões administrativas previstas. É regido por legalidade, contraditório, ampla defesa, verdade material, oficialidade, cooperação, simplicidade, eficiência, segurança jurídica e duração razoável, entre outros vetores.
+PROCESSO ELETRÔNICO E ATOS: Os atos são formalizados, tramitados e comunicados eletronicamente no sistema gerido pelo CGIBS. A parte pode atuar diretamente ou por procurador. A instrumentalidade evita sacrificar ato que atingiu sua finalidade apenas por defeito formal sem prejuízo.
+PRECLUSÃO, PRAZOS E INTIMAÇÃO: O decurso do prazo gera preclusão, ressalvadas hipóteses legalmente justificadas. Os prazos processuais são contados em dias úteis, excluindo-se o dia do início e incluindo-se o vencimento. Comparecimento espontâneo pode suprir falta ou irregularidade de intimação.
+VÍCIOS, NULIDADES E IMPEDIMENTO: Nulidade exige análise do prejuízo e deve ser arguida na primeira oportunidade, salvo matéria cognoscível de ofício. O julgador impedido deve afastar-se nas hipóteses legais, protegendo imparcialidade e legitimidade do julgamento.
+IMPUGNAÇÃO, PROVAS E VALOR INCONTROVERSO: O contencioso nasce com a impugnação válida do sujeito passivo. Alegações e provas devem ser apresentadas no momento adequado, admitindo-se juntada posterior em situações como força maior, fato superveniente ou necessidade de contraposição. A parcela reconhecida não integra efetivamente a controvérsia e segue o tratamento de cobrança aplicável.
+DILIGÊNCIAS, DESISTÊNCIA E REVELIA: A autoridade julgadora pode determinar diligência para formar convicção, mediante motivação. Pagamento, parcelamento, compensação e ação judicial coincidente podem caracterizar desistência expressa ou tácita nos limites da matéria. Revelia decorre da falta de defesa tempestiva e produz os efeitos legais, sem transformar toda alegação fiscal em verdade absoluta.
+PRECEDENTES E DECISÕES VINCULANTES: Devem ser observadas súmulas vinculantes, decisões do STF em controle concentrado, precedentes de repercussão geral e recursos repetitivos, súmulas do CGIBS e decisões da Câmara Nacional de Integração nos termos legais. Fora dessas hipóteses, a autoridade administrativa não afasta lei por juízo próprio de inconstitucionalidade ou ilegalidade.
+COMO CAI EM PROVA: A cobrança deve concentrar-se em literalidade processual: princípios, formato eletrônico, prazos, preclusão, provas, desistência e precedentes. Pegadinhas comuns: exigir forma rígida mesmo quando a finalidade foi atingida; contar prazos em dias corridos; afirmar que erro no nome da peça impede conhecimento; admitir prova tardia sem hipótese legal; manter suspenso o valor confessado; considerar diligência ato imotivado; impedir que comparecimento espontâneo sane a intimação; autorizar julgador a afastar livremente a lei por inconstitucionalidade. Como resolver: reconstrua a sequência — ciência, impugnação, provas, admissibilidade, diligência, julgamento e recurso. Para cada alternativa, procure quatro pontos: prazo, efeito, exceção e sujeito competente.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/ABX5OD4mpyU%3D', description: 'Assistir Videoaula' },
+      { goalId: meta7[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/OriWUfnWgl4%3D', description: 'Acessar PDF' },
+      { goalId: meta7[0].id, type: 'tarefa', link: '', description: 'Resolver questões do próprio PDF completo' }
+    ]);
+
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Economia', subject: 'Contas Nacionais, TRU, CEI, Identidades e Matriz Insumo-Produto', type: 'teoria', studyTip: `Dicas:
+Valor nominal mistura quantidade e preço; valor real fixa preços de um período-base. Deflacionar não é simplesmente subtrair a inflação percentual em qualquer situação.
+A TRU mostra origem e destino de bens e serviços: recursos devem igualar usos. A CEI organiza produção, geração e distribuição da renda, acumulação e relações patrimoniais por setores institucionais.
+Valor adicionado é produção menos consumo intermediário. Somá-lo evita dupla contagem e conduz ao produto pela ótica da produção.
+Transferências não remuneram produção corrente e não entram diretamente no PIB; compra de bem ou serviço pelo governo entra.
+Formação bruta de capital fixo não é toda compra de ativo financeiro. Refere-se a ativos fixos produtivos, acrescida da variação de estoques na formação bruta de capital.
+Na matriz insumo-produto, coeficiente técnico mede insumo necessário por unidade produzida. A matriz inversa capta efeitos diretos e indiretos de uma variação da demanda final.
+
+Resumo do conteúdo:
+CONTABILIDADE NOMINAL E REAL: Valores nominais usam preços correntes; valores reais isolam variações de quantidade por preços constantes ou índices encadeados. O deflator implícito relaciona agregado nominal e real. Crescimento nominal pode decorrer de inflação, aumento de produção ou ambos.
+SISTEMA DE CONTAS NACIONAIS: O SCN fornece estrutura coerente para registrar produção, renda, consumo, acumulação e patrimônio. Unidades institucionais são agrupadas em setores, como famílias, empresas, governo e resto do mundo.
+TABELA DE RECURSOS E USOS: A TRU descreve oferta de bens e serviços, composta por produção e importações, e seus usos como consumo intermediário, consumo final, formação de capital, variação de estoques e exportações. Para cada produto, recursos e usos se equilibram.
+CONTAS ECONÔMICAS INTEGRADAS: As CEI apresentam, por setores institucionais, contas de produção, geração da renda, alocação e distribuição, uso da renda, capital e finanças. Cada conta produz um saldo que alimenta a seguinte, como valor adicionado, excedente operacional, renda disponível e poupança.
+IDENTIDADES CONTÁBEIS: Pela despesa, PIB = C + I + G + X - M. Pela produção, PIB corresponde à soma dos valores adicionados, ajustada por impostos líquidos sobre produtos. Pela renda, corresponde às remunerações geradas. Poupança financia investimento no agregado, com ajustes do governo e do setor externo.
+MATRIZ INSUMO-PRODUTO: A matriz mostra interdependência entre setores. Cada atividade demanda insumos de outras para produzir. Coeficientes técnicos formam a matriz A; com demanda final dada, a solução de Leontief usa (I - A)^-1 para captar necessidades totais, inclusive efeitos indiretos.
+O QUE ENTRA NO PIB: Entram bens e serviços finais produzidos no período e dentro do território. Revenda de bem usado não entra novamente, mas a comissão do intermediário entra. Ativos financeiros não são produção; serviços financeiros podem ser. Transferências não representam produção corrente. Variação de estoques integra investimento.
+COMO CAI EM PROVA: A banca cobra classificação, identidade, valor adicionado e leitura das tabelas. Pegadinhas comuns: usar valor nominal como medida pura de volume; somar produção bruta sem retirar consumo intermediário; incluir transferência governamental no PIB; excluir variação de estoques do investimento; tratar importações como produção doméstica; confundir setor institucional com atividade econômica; interpretar coeficiente técnico como participação na demanda final; considerar apenas efeito direto na matriz de Leontief. Como resolver: pergunte se houve produção corrente, onde ocorreu e se o valor já foi contabilizado. Na TRU, feche recursos = usos. Nas CEI, acompanhe o saldo de uma conta para a seguinte. Na matriz, diferencie demanda direta de necessidade total.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/LHFpOqSBR3I%3D', description: 'Assistir Videoaula' },
+      { goalId: meta8[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/niCb2quFFyI%3D', description: 'Acessar PDF' },
+      { goalId: meta8[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403922&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Revisão Geral', subject: 'Revisão da Semana 14', type: 'revisao', studyTip: `Organização do dia: Tempo total: 4 a 5 horas líquidas. Divida a revisão em blocos de 25 a 35 minutos. Não releia os PDFs completos: recupere, teste e corrija. Ordem sugerida: Auditoria Fiscal - NBC TSP - Estrutura Conceitual; Legislação Tributária - CGIBS: Orçamento e Controle; Economia - Teoria da Firma; Direito Empresarial - Sociedade Anônima II; Economia - Introdução à Macro; Matemática Financeira - Análise de Investimentos; Legislação Tributária - PAT no CGIBS; Economia - Contas Nacionais. Metodologia de revisão:
+5 min: recupere sem consulta as definições, fórmulas, classificações ou sequências centrais.
+15 a 20 min: refaça questões erradas, marcadas ou respondidas com insegurança.
+5 min: consulte apenas o trecho que corrige a causa do erro.
+5 min: registre uma regra curta, comparação ou roteiro no caderno de erros. Destaques da semana:
+AUDITORIA FISCAL - NBC TSP - ESTRUTURA CONCEITUAL: RCPGs são relatórios contábeis de propósito geral: atendem usuários que não conseguem exigir informação sob medida. Não os confunda com relatórios especiais produzidos para uma necessidade específica. O objetivo central é fornecer informação útil para prestação de contas e responsabilização (accountability) e para tomada de decisão.
+LEGISLAÇÃO TRIBUTÁRIA - CGIBS: ORÇAMENTO E CONTROLE: O controle externo do CGIBS não pertence ao TCU. Ele é coordenado, compartilhado e colegiado pelos Tribunais de Contas dos Estados, do Distrito Federal, dos Municípios e Municipais. Fixe a periodicidade dos instrumentos: RREO bimestral; RGF quadrimestral; relatório de arrecadação e distribuições mensal; demonstrações contábeis e prestação de contas anuais.
+ECONOMIA - TEORIA DA FIRMA: Coase pergunta por que firmas existem se o mercado coordena preços. A resposta é comparativa: organizar internamente pode custar menos que contratar cada transação no mercado. Custos de transação incluem busca, informação, negociação, redação, monitoramento e execução de contratos.
+DIREITO EMPRESARIAL - SOCIEDADE ANÔNIMA II: Valor mobiliário é instrumento emitido para captação de recursos. A ação representa fração do capital e atribui condição de acionista; debênture cria direito de crédito; parte beneficiária confere participação eventual nos lucros, sem integrar o capital. Não misture espécie, forma e classe das ações.
+ECONOMIA - INTRODUÇÃO À MACRO: Macroeconomia trabalha agregados: produto, renda, emprego, preços, moeda, juros e setor externo. Não transporte automaticamente a lógica de uma firma ou consumidor para a economia inteira. Produto, renda e despesa são três óticas do mesmo fluxo.
+MATEMÁTICA FINANCEIRA - ANÁLISE DE INVESTIMENTOS: Todo método deve ser comparado à Taxa Mínima de Atratividade. A TMA representa o retorno mínimo exigido e incorpora o custo de oportunidade do capital. Payback simples mede tempo de recuperação, mas ignora o valor do dinheiro no tempo e fluxos posteriores ao corte.
+LEGISLAÇÃO TRIBUTÁRIA - PAT NO CGIBS: O PAT do IBS é eletrônico e orientado por princípios como simplicidade, verdade material, oficialidade, cooperação, eficiência, contraditório e ampla defesa. Não aplique automaticamente regras de um PAT estadual antigo. A forma não prevalece cegamente sobre a finalidade.
+ECONOMIA - CONTAS NACIONAIS: Valor nominal mistura quantidade e preço; valor real fixa preços de um período-base. Deflacionar não é simplesmente subtrair a inflação percentual em qualquer situação. A TRU mostra origem e destino de bens e serviços: recursos devem igualar usos. Fechamento da semana: selecione os cinco erros com maior chance de repetição. Explique cada correção sem consultar o material e resolva uma questão semelhante. O que ainda exigir consulta imediata deverá retornar na próxima revisão acumulada. Constância constrói!` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Auditoria Fiscal (NBC TSP - Estrutura Conceitual)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Legislação Tributária (CGIBS: Orçamento e Controle)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Teoria da Firma)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Empresarial (Sociedade Anônima II)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Introdução à Macro)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Matemática Financeira (Análise de Investimentos)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Legislação Tributária (PAT no CGIBS)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Contas Nacionais)' },
+    ]);
+  }
+
   if (!existingWeeks.some(w => w.number === 15)) {
     console.log('Seeding Week 15...');
     
@@ -2922,8 +3368,191 @@ COMO CAI EM PROVA: A banca cobra competências, fases, indenização, modalidade
     
     console.log('Week 15 seed completed successfully!');
   }
+  if (!existingWeeks.some(w => w.number === 16)) {
+    console.log('Seeding Week 16...');
+    
+    const insertedWeek = await db.insert(weeks).values({
+      number: 16,
+      title: 'Semana 16'
+    }).returning();
+    const weekId = insertedWeek[0].id;
+
+    const meta1 = await db.insert(goals).values({ weekId, number: 1, discipline: 'Economia', subject: 'Inflação: Causas, Efeitos e Regime de Metas', type: 'teoria', studyTip: `Dicas:
+Inflação é aumento persistente e generalizado do nível de preços. Alta isolada de um produto ou mudança de preços relativos não basta.
+Inflação de demanda aparece quando o gasto agregado cresce além da capacidade produtiva; inflação de custos decorre de choques de oferta e elevação de custos.
+Inflação inercial depende de indexação e memória inflacionária. Mesmo sem novo choque, contratos reajustados reproduzem a inflação passada.
+Na visão monetária, expansão da moeda acima do crescimento do produto sustenta elevação de preços no longo prazo. Evite transformar essa relação em identidade mecânica de curto prazo.
+Imposto inflacionário reduz o poder de compra dos encaixes monetários e afeta mais quem não consegue proteger sua renda e seu patrimônio.
+No regime de metas, diferencie meta, intervalo de tolerância, índice de referência e instrumento operacional. A autoridade usa política monetária para reconduzir expectativas e inflação.
+
+Resumo do conteúdo:
+CONCEITO E MENSURAÇÃO: Inflação é a elevação generalizada e persistente do nível de preços. Índices diferem por população, cesta, abrangência e metodologia. A taxa de inflação mede variação de um índice entre períodos; não representa aumento idêntico de todos os preços.
+INFLAÇÃO DE DEMANDA E DE CUSTOS: Na inflação de demanda, consumo, investimento, governo ou setor externo pressionam a procura além da oferta disponível. Na inflação de custos, choques cambiais, energia, salários, tributos ou insumos deslocam a oferta agregada e podem elevar preços com redução do produto.
+INÉRCIA E INDEXAÇÃO: Contratos, salários e preços reajustados pela inflação passada propagam o processo. A desindexação busca quebrar essa memória, mas exige coordenação e credibilidade para não produzir apenas congelamento temporário.
+MOEDA E IMPOSTO INFLACIONÁRIO: A teoria quantitativa relaciona moeda, velocidade, preços e produto. No longo prazo, expansão monetária persistente sem correspondente crescimento real tende a elevar preços. A perda real sobre saldos monetários funciona como imposto inflacionário e redistribui recursos em favor do emissor da moeda.
+METAS E ESTABILIZAÇÃO: O regime de metas procura ancorar expectativas mediante objetivo público e atuação do banco central. A taxa de juros influencia crédito, demanda, câmbio e expectativas com defasagens. Credibilidade, comunicação e coordenação fiscal afetam a potência do regime.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta1[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/dlep%2FbdiDF0%3D', description: 'Acessar PDF' },
+      { goalId: meta1[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=413113%2C413122&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta2 = await db.insert(goals).values({ weekId, number: 2, discipline: 'Legislação Tributária', subject: 'Lei Complementar n. 24/1975 - Convênios de Benefícios do ICMS', type: 'teoria', studyTip: `Dicas:
+A LC n. 24/1975 exige convênio para concessão ou revogação de isenções e benefícios de ICMS. O benefício unilateral é a exceção problemática, não a regra.
+A reunião exige representação da maioria das unidades federadas. Concessão depende de unanimidade dos Estados representados; revogação total ou parcial, de quatro quintos.
+O convênio é publicado em até dez dias após a reunião. A ratificação estadual ocorre em quinze dias da publicação, e o silêncio produz ratificação tácita.
+A rejeição da concessão decorre da falta de ratificação por todas as unidades; na revogação, aplica-se o quórum de quatro quintos.
+Após o prazo de ratificação, a decisão nacional é publicada em até dez dias. Em regra, o convênio entra em vigor no trigésimo dia dessa publicação.
+Convênio ratificado obriga inclusive a unidade que não compareceu. Compare sempre a LC n. 24 com os quóruns excepcionais da LC n. 160.
+
+Resumo do conteúdo:
+BENEFÍCIOS ALCANÇADOS: Isenções de ICMS e benefícios fiscais ou financeiro-fiscais equivalentes dependem de convênios celebrados e ratificados pelos Estados e pelo Distrito Federal. Reduções de base, créditos presumidos, devoluções e outros favores que diminuam direta ou indiretamente o ônus também entram na disciplina.
+REUNIÃO E QUÓRUNS: As reuniões são convocadas com representantes de todas as unidades e realizam-se com presença da maioria. A concessão exige decisão unânime dos Estados representados. A revogação total ou parcial exige aprovação de, no mínimo, quatro quintos dos representantes presentes.
+PUBLICAÇÃO E RATIFICAÇÃO: O convênio é publicado no Diário Oficial da União em até dez dias do encerramento da reunião. Em quinze dias dessa publicação, cada Executivo publica decreto ratificando ou rejeitando. A ausência de manifestação no prazo equivale a ratificação tácita.
+REJEIÇÃO, VIGÊNCIA E EFEITOS: Convênio concessivo precisa de ratificação expressa ou tácita de todas as unidades. Para revogação, exige-se o patamar de quatro quintos. Encerrado o prazo, publica-se o resultado nacional em até dez dias. Em regra, a vigência começa no trigésimo dia dessa publicação.
+OBRIGAÇÃO NACIONAL E SANÇÕES: Uma vez ratificado, o convênio obriga todas as unidades, inclusive ausentes. A concessão unilateral pode gerar nulidade do ato, ineficácia do crédito fiscal e exigência do imposto, além de consequências previstas na legislação financeira e de responsabilidade.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta2[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/utDIa6qUFDo%3D', description: 'Assistir Videoaula' },
+      { goalId: meta2[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/Ngjwbw6WfbQ%3D', description: 'Acessar PDF' },
+      { goalId: meta2[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=395786&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta3 = await db.insert(goals).values({ weekId, number: 3, discipline: 'Direito Constitucional', subject: 'Controle de Constitucionalidade', type: 'teoria', studyTip: `Dicas:
+Comece pela supremacia da Constituição: o controle existe para afastar atos incompatíveis com a norma constitucional utilizada como parâmetro.
+Lei anterior à nova Constituição não sofre, tecnicamente, inconstitucionalidade superveniente. Ela é recepcionada ou não recepcionada conforme a compatibilidade material com a nova ordem.
+Controle difuso ocorre em caso concreto e a questão constitucional aparece incidentalmente. Controle concentrado discute a validade da norma em processo objetivo.
+Memorize o núcleo das ações: ADI combate ato normativo incompatível; ADC confirma constitucionalidade; ADO enfrenta omissão; ADPF protege preceito fundamental e possui caráter subsidiário.
+Nos legitimados do art. 103, separe universais e especiais. Os especiais precisam demonstrar pertinência temática.
+Antes de decorar efeitos, identifique o modelo de controle, o órgão julgador e se houve modulação. A banca mistura regra geral e exceção na mesma alternativa.
+
+Resumo do conteúdo:
+SUPREMACIA E BLOCO DE CONSTITUCIONALIDADE: O controle de constitucionalidade pressupõe Constituição rígida e superioridade hierárquica. O parâmetro pode incluir a Constituição e normas incorporadas com hierarquia constitucional, formando o bloco de constitucionalidade.
+NOVA CONSTITUIÇÃO E RECEPÇÃO: Normas infraconstitucionais anteriores permanecem válidas se materialmente compatíveis com a nova Constituição. A forma anterior, em regra, não impede a recepção. A Constituição anterior perde vigência; o Brasil não adota desconstitucionalização automática de suas normas.
+ESPÉCIES E MOMENTOS: A inconstitucionalidade pode decorrer de ação ou omissão, ser formal ou material, total ou parcial, originária ou superveniente em sistemas que a admitam. O controle preventivo atua durante a formação do ato; o repressivo ocorre após sua conclusão. Legislativo, Executivo e Judiciário possuem hipóteses próprias de atuação.
+CONTROLE DIFUSO: Pode ser realizado por juiz ou tribunal em caso concreto. A questão constitucional é prejudicial ao pedido principal. Nos tribunais, deve-se observar a cláusula de reserva de plenário. A decisão produz, como regra, efeitos entre as partes, sem prejuízo dos mecanismos constitucionais e jurisprudenciais de expansão de efeitos.
+CONTROLE CONCENTRADO: É processo objetivo, normalmente julgado pelo STF quando o parâmetro é a Constituição Federal. As decisões de mérito possuem eficácia contra todos e efeito vinculante nos limites constitucionais. A modulação exige quórum qualificado e razões de segurança jurídica ou excepcional interesse social.
+AÇÕES DO CONTROLE ABSTRATO: A ADI questiona lei ou ato normativo federal ou estadual perante a Constituição Federal. A ADC tem por objeto lei ou ato normativo federal. A ADO enfrenta omissão que impede a efetividade constitucional. A ADPF evita ou repara lesão a preceito fundamental e é subsidiária. A representação interventiva possui finalidade e legitimidade específicas.
+SÚMULA VINCULANTE E RECLAMAÇÃO: A súmula vinculante decorre de reiteradas decisões sobre matéria constitucional e exige quórum qualificado para aprovação, revisão ou cancelamento. A reclamação preserva competência e autoridade das decisões e garante observância de súmula vinculante, conforme requisitos próprios.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta3[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/l%2BNJTiK5y8c%3D', description: 'Assistir Videoaula' },
+      { goalId: meta3[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/9lJ%2BrdYp8WY%3D', description: 'Acessar PDF' },
+      { goalId: meta3[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?r=TODAS&a=405319&qd=0&qa=0&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta4 = await db.insert(goals).values({ weekId, number: 4, discipline: 'Economia', subject: 'Planos de Combate à Inflação no Brasil', type: 'teoria', studyTip: `Dicas:
+Não memorize os planos como uma lista de datas. Para cada um, identifique diagnóstico, moeda, congelamento, tratamento da indexação, política fiscal e resultado.
+Cruzado apostou em congelamento e desindexação, mas demanda aquecida, desequilíbrio fiscal e preços relativos reprimidos comprometeram o plano.
+Bresser e Verão combinaram novos congelamentos e ajustes, sem eliminar de forma duradoura os mecanismos fiscais e inerciais.
+Collor I distinguiu-se pelo bloqueio de ativos financeiros e forte contração de liquidez. A queda inicial da inflação não se sustentou.
+O Plano Real foi implantado em etapas: ajuste, unidade de conta estável e nova moeda. A URV coordenou preços sem congelamento generalizado.
+Estabilização duradoura exige coerência entre política monetária, fiscal, cambial e expectativas. Medida isolada pode apenas adiar a inflação.
+
+Resumo do conteúdo:
+INFLAÇÃO BRASILEIRA E PLANOS HETERODOXOS: A elevada indexação fazia a inflação passada alimentar reajustes futuros. Planos heterodoxos tentaram romper a inércia por congelamentos, mudanças de moeda e desindexação, mas frequentemente mantiveram desequilíbrios fiscais e monetários.
+CRUZADO I E II: O Cruzado substituiu a moeda, congelou preços e salários e buscou eliminar indexação. O aumento do poder de compra e a expansão da demanda produziram escassez e ágio. O Cruzado II reajustou preços e tributos, mas não recuperou a confiança.
+BRESSER E VERÃO: O Plano Bresser adotou congelamento temporário e medidas fiscais. O Plano Verão criou nova moeda e novo congelamento. Ambos reduziram a inflação por pouco tempo, sem remover seus fundamentos e a indexação de maneira consistente.
+COLLOR I E II: Collor I bloqueou parcela expressiva dos ativos financeiros para reduzir liquidez, além de alterar moeda e preços. A contração foi intensa, mas a inflação retornou. Collor II renovou congelamentos e tentativas de controle, novamente sem estabilização permanente.
+PLANO REAL: O Real avançou por etapas. A URV funcionou como unidade de conta e permitiu alinhar preços relativos antes da nova moeda. A combinação de desindexação, âncora nominal, abertura, política monetária e ajustes institucionais derrubou a inflação e alterou o ambiente econômico.
+LIÇÃO COMPARATIVA: Congelamentos podem conter preços temporariamente, mas geram distorções quando não acompanhados por equilíbrio fiscal, monetário e credibilidade. O Plano Real diferenciou-se pela transição coordenada e pela separação entre unidade de conta e meio de pagamento.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta4[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/R04a5V%2FYxgY%3D', description: 'Acessar PDF' },
+      { goalId: meta4[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=413113&desatualizada=0&anulada=0&query=combate&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta5 = await db.insert(goals).values({ weekId, number: 5, discipline: 'Estatística', subject: 'Técnicas de Amostragem', type: 'teoria', studyTip: `Dicas:
+Censo examina toda a população; amostra examina parte dela para inferir características do conjunto. Mesmo uma amostra correta mantém risco de amostragem.
+Erro amostral decorre da seleção da amostra e tende a diminuir com planejamento e tamanho adequado. Erro não amostral nasce de coleta, registro, não resposta ou análise e pode existir até em censo.
+Na amostragem aleatória simples, unidades ou amostras possuem probabilidade conhecida de seleção. Com reposição e sem reposição são desenhos distintos.
+Estratificação seleciona elementos de todos os estratos e busca homogeneidade dentro deles. Conglomerados selecionam grupos inteiros ou estágios e tendem a ser heterogêneos internamente.
+Na sistemática, sorteia-se o início e aplica-se um intervalo de seleção. Periodicidade escondida na lista pode comprometer a representatividade.
+Técnicas não probabilísticas, como conveniência, julgamento e quotas, não permitem controlar probabilidades de inclusão da mesma forma que os desenhos probabilísticos.
+
+Resumo do conteúdo:
+POPULAÇÃO, CENSO E AMOSTRA: Amostragem seleciona parte representativa da população para estimar parâmetros ou produzir inferências. Censo observa todos os elementos e pode ser preferível quando a população é pequena, a mensuração é simples ou se exige alta precisão. Custo, tempo, destruição da unidade e inacessibilidade podem tornar a amostra necessária.
+RISCO E ERROS: Risco de amostragem é a possibilidade de a conclusão baseada na amostra diferir daquela obtida com toda a população. Ele não desaparece mesmo com método correto, mas pode ser controlado. Erro amostral liga-se ao processo de seleção e à diferença entre estimativa e parâmetro. Erros não amostrais decorrem de não resposta, medição, registro, questionário, cobertura ou análise e não são eliminados por um censo.
+AMOSTRAGEM PROBABILÍSTICA: Nos métodos probabilísticos, probabilidades de seleção são conhecidas. Na amostragem aleatória simples, a escolha ocorre ao acaso, com ou sem reposição. Ela exige uma base de seleção adequada e serve como referência para os demais desenhos. Na amostragem estratificada, a população é dividida em estratos internamente homogêneos e selecionam-se elementos em cada estrato. A alocação pode ser uniforme, proporcional ou ótima, como a de Neyman, conforme tamanho e variabilidade. Na amostragem por conglomerados, a população é dividida em grupos que devem reproduzir sua diversidade interna; selecionam-se conglomerados inteiros ou unidades em múltiplos estágios. O método reduz custo operacional, embora possa perder precisão. Na amostragem sistemática, escolhe-se aleatoriamente um ponto inicial e selecionam-se unidades em intervalos regulares. A ordenação da lista e eventual periodicidade devem ser examinadas.
+MÉTODOS NÃO PROBABILÍSTICOS: Conveniência escolhe unidades mais acessíveis; julgamento depende de escolha intencional; quotas reproduzem proporções definidas, mas sem seleção aleatória dentro dos grupos. Esses métodos podem ser úteis operacionalmente, porém limitam a inferência estatística.
+TAMANHO DA AMOSTRA: O tamanho depende do erro tolerável, nível de confiança, variabilidade, desenho e tamanho da população. Em geral, menor erro e maior confiança exigem amostra maior. Para população finita, aplica-se correção quando sua dimensão é relevante.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta5[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/lJL0%2BeBgfUk%3D', description: 'Acessar PDF' },
+      { goalId: meta5[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=7132&desatualizada=0&anulada=0&query=tecnicas&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta6 = await db.insert(goals).values({ weekId, number: 6, discipline: 'Auditoria Fiscal', subject: 'LC n. 105/2001 - Sigilo das Operações Financeiras', type: 'teoria', studyTip: `Dicas:
+A regra é conservação do sigilo pelas instituições financeiras e por quem recebe legitimamente os dados. A lei, porém, distingue compartilhamentos autorizados, fiscalização e quebra por autoridade competente.
+Não trate toda entrega de informação ao Fisco como quebra de sigilo. O STF reconhece, observados requisitos legais, transferência do dever de sigilo para a Administração Tributária.
+BACEN e CVM acessam informações no exercício de fiscalização. Comissões Parlamentares de Inquérito e Poder Judiciário atuam dentro de suas competências e mediante fundamentação aplicável.
+Administração Tributária somente examina documentos, livros e registros financeiros quando houver processo administrativo instaurado ou procedimento fiscal em curso e a medida for considerada indispensável.
+Informações recebidas continuam protegidas. Agente público que divulga ou utiliza dados fora das finalidades legais pode responder administrativa, civil e penalmente.
+Diferencie comunicação de operações suspeitas ao COAF/UIF, prestação de informações cadastrais e acesso a movimentação financeira detalhada. O sujeito, a finalidade e o conteúdo mudam o regime jurídico.
+
+Resumo do conteúdo:
+DEVER DE SIGILO E INSTITUIÇÕES ABRANGIDAS: A LC n. 105/2001 determina que instituições financeiras conservem sigilo sobre operações ativas e passivas e serviços prestados. O conceito legal alcança bancos, distribuidoras, corretoras, cooperativas de crédito, administradoras e outras entidades equiparadas. Administradores, empregados e agentes que conhecem os dados também se submetem ao dever.
+SITUAÇÕES LEGALMENTE AUTORIZADAS: A lei prevê hipóteses que não constituem violação, como troca de informações para fins cadastrais nas condições admitidas, fornecimento com consentimento expresso, comunicação de ilícitos e operações suspeitas às autoridades competentes e informações determinadas por regimes legais específicos. A existência de autorização não elimina dever de finalidade e proteção.
+BACEN, CVM E OUTROS ÓRGÃOS EXECUTIVOS: Banco Central e Comissão de Valores Mobiliários podem examinar operações e documentos no exercício de suas atribuições de fiscalização. Informações compartilhadas permanecem sigilosas. Comunicações ao COAF/UIF ligadas à prevenção de lavagem seguem legislação própria e não se confundem com divulgação pública.
+PODER JUDICIÁRIO E PODER LEGISLATIVO: O Poder Judiciário pode determinar acesso quando necessário à apuração de ilícito, com preservação do caráter sigiloso e restrição aos interessados legitimados. Comissões Parlamentares de Inquérito exercem poderes investigatórios constitucionais e devem fundamentar a medida, respeitando competência e pertinência com o objeto investigado.
+ADMINISTRAÇÕES TRIBUTÁRIAS: Autoridades e agentes fiscais tributários podem examinar documentos, livros e registros de instituições financeiras, inclusive contas e aplicações, quando houver processo administrativo instaurado ou procedimento fiscal em curso e o exame for considerado indispensável pela autoridade competente. O acesso transfere os dados para ambiente fiscal protegido; não autoriza divulgação. A jurisprudência do STF reconhece a constitucionalidade desse acesso administrativo nos termos legais, compreendendo-o como transferência do sigilo bancário para sigilo fiscal, acompanhada de deveres de segurança, motivação, finalidade e responsabilização.
+RESPONSABILIDADE E SANÇÕES: Quebra ou divulgação fora das hipóteses legais pode gerar responsabilidade penal, civil e administrativa. A obrigação de sigilo acompanha o dado mesmo depois de seu compartilhamento legítimo. A análise sempre exige identificar quem forneceu, quem recebeu, a base legal, a finalidade e a proteção posterior.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta6[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/qEHZoOod7j0%3D', description: 'Assistir Videoaula' },
+      { goalId: meta6[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/XdBsx5DhfTQ%3D', description: 'Acessar PDF' },
+      { goalId: meta6[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=396358&desatualizada=0&anulada=0&query=&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta7 = await db.insert(goals).values({ weekId, number: 7, discipline: 'Economia', subject: 'Economia Aberta e Modelo IS-LM-BP', type: 'teoria', studyTip: `Dicas:
+O modelo Mundell-Fleming amplia IS-LM com balanço de pagamentos, câmbio e mobilidade de capitais.
+A curva BP reúne combinações de renda e juros compatíveis com equilíbrio externo. Maior mobilidade de capitais torna a BP mais horizontal.
+Sob câmbio fixo, o Banco Central compra ou vende reservas para sustentar a taxa; a oferta monetária torna-se endógena ao compromisso cambial.
+Sob câmbio flexível, o câmbio ajusta o setor externo. Apreciação tende a reduzir exportações líquidas; depreciação tende a aumentá-las.
+Com mobilidade perfeita e câmbio fixo, política monetária perde autonomia e política fiscal ganha força.
+Com mobilidade perfeita e câmbio flexível, política monetária tende a ser eficaz e expansão fiscal pode ser compensada por apreciação cambial.
+
+Resumo do conteúdo:
+ECONOMIA ABERTA E BALANÇO DE PAGAMENTOS: O setor externo adiciona exportações, importações e fluxos de capitais ao equilíbrio interno. A conta corrente registra bens, serviços, rendas e transferências; a conta financeira registra operações com ativos. O resultado afeta reservas ou câmbio conforme o regime.
+CURVA BP E MOBILIDADE DE CAPITAIS: A BP indica equilíbrio externo. Renda maior eleva importações e exige juros mais altos ou câmbio compatível para atrair capitais. Com alta mobilidade, pequenas diferenças de juros geram fluxos elevados; com baixa mobilidade, a curva é mais inclinada.
+CÂMBIO FIXO: O Banco Central intervém para manter a paridade. Pressão de apreciação leva à compra de moeda estrangeira e expansão da base; pressão de depreciação leva à venda de reservas e contração. Com mobilidade perfeita, a política monetária independente é incompatível com o compromisso cambial.
+CÂMBIO FLEXÍVEL: A taxa varia para equilibrar oferta e demanda de divisas. Expansão monetária reduz juros, provoca saída de capitais e depreciação, estimulando exportações líquidas. Expansão fiscal eleva juros, atrai capitais e aprecia a moeda, reduzindo parte do impulso fiscal.
+MUNDELL-FLEMING E EFICÁCIA DAS POLÍTICAS: Com câmbio fixo, política fiscal tende a ser potente e monetária, limitada. Com câmbio flexível, política monetária tende a ser potente e fiscal sofre compensação cambial. Os resultados dependem das hipóteses de preços, mobilidade e tamanho da economia.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta7[0].id, type: 'videoaula', link: 'https://www.grancursosonline.com.br/aluno/curso/video/codigo/FKuOwzb74N0%3D/v/LHFpOqSBR3I%3D', description: 'Assistir Videoaula' },
+      { goalId: meta7[0].id, type: 'pdf', link: 'https://www.grancursosonline.com.br/aluno/aula-pdf/curso/codigo/FKuOwzb74N0%3D/a/EzQfD34clHo%3D', description: 'Acessar PDF' },
+      { goalId: meta7[0].id, type: 'questoes', link: 'https://questoes.grancursosonline.com.br/aluno/filtro/concursos?assunto=403919&desatualizada=0&anulada=0&query=aberta&auth=force&auth=force', description: 'Resolver Questões' }
+    ]);
+
+    const meta8 = await db.insert(goals).values({ weekId, number: 8, discipline: 'Revisão Geral', subject: 'Revisão dos erros da Semana 16', type: 'revisao', studyTip: `Dicas:
+Tempo total sugerido: 4 a 5 horas líquidas, divididas em blocos de 25 a 35 minutos. Não releia os PDFs completos: recupere, teste e corrija.
+Ordem sugerida: Economia - Inflação; Legislação Tributária - LC n. 24/1975; Direito Constitucional - Controle Constitucional; Economia - Combate à Inflação; Estatística - Técnicas de Amostragem; Auditoria Fiscal - LC n. 105/2001 - Sigilo Bancário; Economia - Modelo IS-LM-BP.
+Metodologia por bloco: 5 min recuperando definições e classificações sem consulta; 15 a 20 min refazendo questões erradas ou marcadas com insegurança; 5 min consultando apenas o trecho que corrige a causa do erro; 5 min registrando uma regra curta no caderno de erros.
+No fechamento, selecione os cinco erros com maior chance de repetição, explique cada correção sem consultar o material e resolva uma questão semelhante.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Inflação)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Legislação Tributária (LC n. 24/1975)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Direito Constitucional (Controle de Constitucionalidade)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Combate à Inflação)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Estatística (Técnicas de Amostragem)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Auditoria Fiscal (LC n. 105/2001 - Sigilo Bancário)' },
+      { goalId: meta8[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Modelo IS-LM-BP)' }
+    ]);
+
+    const meta9 = await db.insert(goals).values({ weekId, number: 9, discipline: 'Revisão Geral', subject: 'Revisão geral das 16 semanas e encerramento', type: 'revisao', studyTip: `Dicas:
+Tempo sugerido: 6 a 8 horas líquidas, distribuídas em dois ou três dias, adaptando o tempo por disciplina conforme o diagnóstico pessoal (forte, intermediária ou fraca).
+Primeira etapa: diagnóstico — classifique cada disciplina usando questões recentes e o caderno de erros, não pela sensação de leitura.
+Segunda etapa: recuperação por eixos (Base, Jurídico, Contábil e Fiscal, Tecnologia, Economia), recuperando conceitos centrais e refazendo questões mistas sem reler PDFs completos.
+Terceira etapa: reserve cerca de 60% do tempo para as Semanas 13 a 16 e 40% para erros acumulados das semanas anteriores.
+Quarta etapa: selecione de dez a quinze erros de alto risco, escreva a regra correta e a causa do erro, e resolva uma questão semelhante antes de considerar o ponto encerrado.
+Esta é a última semana do ciclo de 16 semanas do Guia do Aprovado: concluir esta etapa marca o fim da primeira passagem estruturada pelo programa, não o domínio completo do conteúdo — a preparação continua com revisões futuras.` }).returning();
+    await db.insert(materials).values([
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Base (Português, Raciocínio Lógico, Matemática Financeira, Estatística)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Jurídico (Constitucional, Administrativo, Tributário, Legislação Tributária, Empresarial)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Contábil e Fiscal (Contabilidade Geral, Contabilidade de Custos, Auditoria Fiscal)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Tecnologia (banco de dados, SQL, modelagem, segurança, governança, desenvolvimento, LGPD)' },
+      { goalId: meta9[0].id, type: 'tarefa', link: '', description: 'Revisar Economia (Microeconomia, Macroeconomia, moeda, inflação, políticas, economia aberta)' }
+    ]);
+  }
+
+
 
 }
+
 
 export { seed };
 
